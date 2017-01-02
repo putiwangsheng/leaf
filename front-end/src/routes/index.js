@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { Router, Route, IndexRoute, Link } from 'react-router';
-import App from '../components/App';
+import App from '../App';
 import NotFound from '../components/NotFound';
 
 const Routes = ({ history }) =>

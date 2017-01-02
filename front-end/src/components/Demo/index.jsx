@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 
+import styles from './index.less';
+
 class Demo extends Component {
   constructor() {
     super()
@@ -9,7 +11,7 @@ class Demo extends Component {
 
     return (
       <div>
-        {this.props.location}
+        {JSON.stringify(this.props.location)}
       </div>
     )
   }

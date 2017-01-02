@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
-import Demo from './Demo';
-import MainLayout from '../layouts/MainLayout/MainLayout';
+import Demo from './components/Demo';
+import MainLayout from './layouts/MainLayout';
 
 const App = ({ location }) => {
   return (
