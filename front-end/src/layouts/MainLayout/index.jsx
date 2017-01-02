@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Router, Route, IndexRoute, Link } from 'react-router';
-import styles from './MainLayout.less';
+import styles from './index.less';
 
 class MainLayout extends Component {
   constructor(props) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'antd';
-import styles from './NotFound.less';
+import styles from './index.less';
 
 const NotFound = () => {
   return (
