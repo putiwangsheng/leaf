@@ -38,6 +38,8 @@ class MainLayout extends Component {
                 </a>
               </Dropdown>
             </Col>
+
+            <Col span="8"><Link to='/personal'>我</Link></Col>
           </Row>
         </div>
 
