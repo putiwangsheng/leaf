@@ -1,15 +1,24 @@
-import React, { PropTypes } from 'react';
-import { Router, Route, IndexRoute, Link } from 'react-router';
-import App from '../App';
+import React, { Component, PropTypes } from 'react';
+import { Router, Route} from 'react-router';
+import MainLayout from '../layouts/MainLayout';
+import EditDoc from '../components/EditDoc';
 import NotFound from '../components/NotFound';
 
-const Routes = ({ history }) =>
-  <Router history={history}>
-    <Route path="/" component={App} />
-    <Route path="/actived" component={App} />
-    <Route path="/completed" component={App} />
-    <Route path="*" component={NotFound}/>
-  </Router>;
+class Routes extends Component {
+  constructor() {
+    super();
+  }
+  render() {
+    return (
+      <Router history={this.props.history}>
+        <Route path="/" component={MainLayout}>
+          <Route path="/editdoc" component={EditDoc} />
+        </Route>
+        <Route path="*" component={NotFound}/>
+      </Router>
+    );
+  }
+}
 
 Routes.propTypes = {
   history: PropTypes.any,

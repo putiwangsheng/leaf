@@ -1,6 +1,8 @@
 {
 	"asi": false,
   "esnext": true,
+	"node": true,
+	"browser": true,
 
 	"boss": false,
 	"couch": false,
@@ -63,7 +65,7 @@
 	"maxlen": 120,
 	"indent": 2,
 	"maxerr": 250,
-	"predef": [ "require", "define" ],
+	"predef": [ "require", "define", "__dirname" ],
 	"quotmark": "single",
 	"maxcomplexity": 10
 }

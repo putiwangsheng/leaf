@@ -15,7 +15,6 @@ app.use(compress())
 const model = require('./model');
 model.setRestApi(app);
 
-
 // render
 app.engine('.html', require('ejs').__express);
 // 设置视图模板的默认后缀名为.html,避免了每次res.Render("xx.html")的尴尬

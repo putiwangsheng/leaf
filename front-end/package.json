@@ -2,7 +2,7 @@
   "private": true,
   "entry": {},
   "dependencies": {
-    "antd": "^1.1.0",
+    "antd": "^2.6.0",
     "atool-build": "0.7.x",
     "babel-plugin-antd": "0.4.x",
     "babel-plugin-transform-runtime": "^6.8.0",
@@ -14,7 +14,10 @@
     "js-cookie": "^2.1.1",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
-    "react-router": "^2.0.1"
+    "react-router": "^2.0.1",
+    "react-simplemde-editor": "^3.6.8",
+    "react-simplemde-v1": "0.0.6",
+    "simplemde": "^1.11.2"
   },
   "devDependencies": {
     "atool-test-mocha": "^0.1.4",
