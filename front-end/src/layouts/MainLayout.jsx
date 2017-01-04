@@ -12,7 +12,7 @@ class MainLayout extends Component {
     const menu = (
       <Menu>
         <Menu.Item>
-          <Link to='/editdoc'>创建文档</Link>
+          <Link to='/doc/edit'>创建文档</Link>
         </Menu.Item>
         <Menu.Item>
           <Link to='/createteam'>创建团队</Link>
@@ -39,7 +39,7 @@ class MainLayout extends Component {
               </Dropdown>
             </Col>
 
-            <Col span="8"><Link to='/personal'>我</Link></Col>
+            <Col span="8"><Link to='/person'>我</Link></Col>
           </Row>
         </div>
 
