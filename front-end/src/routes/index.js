@@ -1,9 +1,13 @@
 import React, { Component, PropTypes } from 'react';
-import { Router, Route} from 'react-router';
+import { Router, Route } from 'react-router';
+
 import MainLayout from '../layouts/MainLayout';
-import NotFound from '../components/NotFound';
-import EditDoc from '../components/EditDoc';
-import Personal from '../components/Personal';
+
+import NotFound from '../common/NotFound';
+import EditDoc from '../components/doc/EditDoc';
+import Personal from '../components/person/Personal';
+import EditContentTable from '../components/repo/EditContentTable'
+
 
 class Routes extends Component {
   constructor() {
@@ -13,8 +17,15 @@ class Routes extends Component {
     return (
       <Router history={this.props.history}>
         <Route path="/" component={MainLayout}>
-          <Route path="/editdoc" component={EditDoc} />
+
+          {/* doc: */}
+          <Route path="/doc/edit" component={EditDoc} />
+
+          {/* person: */}
           <Route path="/personal" component={Personal} />
+
+          {/* repo: */}
+          <Route path="/repo/editContentTable" component={EditContentTable} />
 
         </Route>
         <Route path="*" component={NotFound}/>
