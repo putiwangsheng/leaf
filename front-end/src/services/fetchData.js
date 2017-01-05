@@ -9,3 +9,19 @@ export function saveDoc(body) {
     body: body
   });
 }
+
+export function createRepo(body){
+  return request({
+    url: `${API}/api/repo`,
+    method: 'post',
+    body: body
+  });
+}
+
+export function createTeam(body){
+  return request({
+    url: `${API}/api/team`,
+    method: 'post',
+    body: body
+  });
+}

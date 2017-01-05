@@ -12,10 +12,10 @@ class MainLayout extends Component {
     const menu = (
       <Menu>
         <Menu.Item>
-          <Link to='/doc/edit'>创建文档</Link>
+          <Link to='/repo/create'>创建仓库</Link>
         </Menu.Item>
         <Menu.Item>
-          <Link to='/createteam'>创建团队</Link>
+          <Link to='/team/create'>创建团队</Link>
         </Menu.Item>
       </Menu>
     );
