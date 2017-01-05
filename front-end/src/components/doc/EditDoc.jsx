@@ -1,13 +1,15 @@
 import React, {Component} from 'react';
 import SimpleMDE from 'react-simplemde-v1';
-import {Button} from 'antd';
+import {Button, Input, message} from 'antd';
 import styles from './EditDoc.less';
+import { saveDoc } from '../../services/fetchData';
 
 class EditDoc extends Component {
   constructor() {
     super();
     this.state = {
-      docContent: ''
+      docContent: '',
+      title: ''
     };
   }
 
@@ -16,25 +18,44 @@ class EditDoc extends Component {
     const option = {};
     const onEvents = {
       'change': function() {
-        console.log(this.value());
         that.setState({docContent: this.value()});
       }
     };
     return (
       <div className={styles.container}>
-        <Button type="primary" size="small" className="publish">发布</Button>
-        <Button type="primary" size="small" className="save">保存</Button>
+        <Input placeholder="请输入标题" style={{width: 300}} className="title" onChange={this.getTitle.bind(this)}/>
+
+        <Button type="primary" size="small" className="publish">发布文档</Button>
+        <Button type="primary" size="small" className="save" onClick={this.saveDoc.bind(this)}>保存草稿</Button>
 
         <div className="editor">
-          <SimpleMDE option={option} text='' onReady={this.onReady.bind(this)} onEvents={onEvents}/>
+          <SimpleMDE option={option} text='' onEvents={onEvents}/>
         </div>
 
       </div>
     );
   }
 
-  onReady(instance) {
-    console.log(instance.value());
+  getTitle(e){
+    this.setState({
+      title: e.target.value
+    });
+  }
+
+  saveDoc(){
+    let { title, docContent } = this.state;
+    let body = {
+      repoId: '1',
+      creatorId: '1',
+      info: {
+        title,
+        draftContent: docContent
+      }
+    };
+    saveDoc(body).then(data => {
+      console.log(data);
+      message.success('保存成功');
+    });
   }
 }
 

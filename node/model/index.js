@@ -1,11 +1,24 @@
 const mongoose = require('mongoose');
 const mongoUrl = require('../config').mongoUrl;
 const restful = require('node-restful');
+const schemas = require('./schema.js');
 
 const models = [
   {
     name: 'user',
-    schema: require('./user.js').userSchema
+    schema: schemas.userSchema
+  },
+  {
+    name: 'repo',
+    schema: schemas.repoSchema
+  },
+  {
+    name: 'doc',
+    schema: schemas.docSchema
+  },
+  {
+    name: 'team',
+    schema: schemas.teamSchema
   }
 ];
 
