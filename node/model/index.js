@@ -6,7 +6,8 @@ const schemas = require('./schema.js');
 const models = [
   {
     name: 'user',
-    schema: schemas.userSchema
+    schema: schemas.userSchema,
+    dbModel: undefined, // defined in init models
   },
   {
     name: 'repo',
@@ -26,8 +27,10 @@ const db = mongoose.connect(mongoUrl);
 
 // init models
 models.forEach(function (item) {
-  db.model(item.name, item.schema);
+  item.dbModel = db.model(item.name, item.schema);
 });
+
+const service = require('./service').createService(models);
 
 
 // set rest api
@@ -39,6 +42,13 @@ exports.setRestApi = function (app) {
       item.name, item.schema
     ).methods(['get', 'put', 'post', 'delete']);
 
+
+    if (item.name === 'doc') {
+      service.addIndexInDoc(resource);
+      console.log('doc');
+    }
+
+    // must register at end
     resource.register(app, '/api/' + item.name);
   });
 

@@ -31,6 +31,6 @@ exports.docSchema = new mongoose.Schema({
     publishContent: { type: String },
     draftContent: { type: String },
     repoIndex: { type: String },
-    rank: { type: String }
+    rank: { type: Number, default: 1 }
   }
 });
