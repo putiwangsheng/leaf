@@ -6,7 +6,7 @@ import MainLayout from '../layouts/MainLayout';
 import NotFound from '../common/NotFound';
 import EditDoc from '../components/doc/EditDoc';
 import Personal from '../components/person/Personal';
-// import EditContentTable from '../components/repo/EditContentTable';
+import EditContentTable from '../components/repo/EditContentTable';
 
 
 class Routes extends Component {
@@ -25,6 +25,7 @@ class Routes extends Component {
           <Route path="/person" component={Personal} />
 
           {/* repo: */}
+          <Route path="/repo/editContentTable" component={EditContentTable} />
 
         </Route>
         <Route path="*" component={NotFound}/>

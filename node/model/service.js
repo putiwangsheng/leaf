@@ -17,7 +17,6 @@ exports.createService = function(models) {
 
 function addIndexInDoc(resource) {
   resource.after('post', function(req, res, next) {
-    console.log('after post');
     const repoId = req.body.repoId;
     docDbModel.find({ repoId: repoId }, (err, docs) => {
       const index = docs.length + 1;

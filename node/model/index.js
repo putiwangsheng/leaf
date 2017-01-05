@@ -45,7 +45,6 @@ exports.setRestApi = function (app) {
 
     if (item.name === 'doc') {
       service.addIndexInDoc(resource);
-      console.log('doc');
     }
 
     // must register at end
