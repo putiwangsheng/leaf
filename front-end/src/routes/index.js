@@ -5,6 +5,9 @@ import MainLayout from '../layouts/MainLayout';
 
 import NotFound from '../common/NotFound';
 import EditDoc from '../components/doc/EditDoc';
+import CreateTeam from '../components/team/CreateTeam';
+import CreateRepo from '../components/repo/CreateRepo';
+
 import Personal from '../components/person/Personal';
 import EditContentTable from '../components/repo/EditContentTable';
 
@@ -21,10 +24,14 @@ class Routes extends Component {
           {/* doc: */}
           <Route path="/doc/edit" component={EditDoc} />
 
+          {/* team: */}
+          <Route path="/team/create" component={CreateTeam} />
+
           {/* person: */}
           <Route path="/person" component={Personal} />
 
           {/* repo: */}
+          <Route path="/repo/create" component={CreateRepo} />
           <Route path="/repo/editContentTable" component={EditContentTable} />
 
         </Route>

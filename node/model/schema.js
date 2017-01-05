@@ -13,14 +13,18 @@ exports.userSchema = new mongoose.Schema({
 });
 
 exports.teamSchema = new mongoose.Schema({
-  membersIds: [{ type: String, require: true }]
+  membersIds: [{ type: String, require: true }],
+  name: {type: String, require: true},
+  avatar: {type: String},
+  intro: {type: String},
+  isPrivate: {type: Boolean, default: false}
 });
 
 exports.repoSchema = new mongoose.Schema({
   creatorId: { type: String, require: true },
   repoName: { type: String, require: true },
   intro: { type: String },
-  isPublic: { type: Boolean, default: true }
+  isPrivate: { type: Boolean, default: false }
 });
 
 exports.docSchema = new mongoose.Schema({
