@@ -23,9 +23,9 @@ class MainLayout extends Component {
     return (
       <div className={styles.container}>
         <div className={styles.head}>
-          <h2 className="title">
+          <p className="title">
             <Link to='/'>青 叶</Link>
-          </h2>
+          </p>
           <Row className="right">
             <Col span="8">
               <Link to='/'>探索</Link>
