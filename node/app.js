@@ -11,8 +11,9 @@ setHeader(app);
 
 // use mid
 app.use(compress())
-  .use(express.static(__dirname + '/public'))
-  .use(bodyParser.json());
+  .use(bodyParser.json())
+  .use(express.static(__dirname + '/public'));
+
 
 const model = require('./model');
 model.setRestApi(app);
@@ -33,6 +34,7 @@ function setHeader(app) {
       'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
     if (req.method === 'OPTIONS') {
       res.sendStatus(200);
+      return;
     }
     next();
   });
