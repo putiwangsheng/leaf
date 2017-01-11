@@ -28,7 +28,7 @@ class EditContentTable extends Component {
         title: '要学好英语'
       },
       {
-        rank: 2,
+        rank: 3,
         title: '要学能阅读英语'
       }
     ];
@@ -36,7 +36,10 @@ class EditContentTable extends Component {
 
   render() {
     return (
-      <div>
+      <div className={styles.container}>
+        <p className="notice">
+          <span className="star">*</span>拖动进行目录设置
+        </p>
         {this.renderContentList()}
       </div>
     );
@@ -55,13 +58,13 @@ class EditContentTable extends Component {
 
 function getRankClassName(rank) {
   if (rank === 1) {
-    return styles.rank1;
+    return 'rank1';
   }
   if (rank === 2) {
-    return styles.rank2;
+    return 'rank2';
   }
   if (rank === 3) {
-    return styles.rank3;
+    return 'rank3';
   }
 }
 

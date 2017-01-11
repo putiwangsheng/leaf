@@ -7,7 +7,6 @@ const config = require('./config');
 
 const app = express();
 
-
 setHeader(app);
 
 // use mid

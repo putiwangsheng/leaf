@@ -5,8 +5,12 @@ import MainLayout from '../layouts/MainLayout';
 
 import NotFound from '../common/NotFound';
 import EditDoc from '../components/doc/EditDoc';
+
 import CreateTeam from '../components/team/CreateTeam';
+
 import CreateRepo from '../components/repo/CreateRepo';
+import Repo from '../components/repo/Repo';
+
 
 import Personal from '../components/person/Personal';
 import EditContentTable from '../components/repo/EditContentTable';
@@ -32,6 +36,7 @@ class Routes extends Component {
 
           {/* repo: */}
           <Route path="/repo/create" component={CreateRepo} />
+          <Route path="/repo" component={Repo} />
           <Route path="/repo/editContentTable" component={EditContentTable} />
 
         </Route>

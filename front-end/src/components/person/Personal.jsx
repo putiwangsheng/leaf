@@ -1,14 +1,29 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router';
 import {Tabs} from 'antd';
 import styles from './Personal.less';
+import { getPersonalRepoList } from '../../services/fetchData';
 
 class Personal extends Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      repoList: []
+    };
+  }
+
+  componentDidMount(){
+    getPersonalRepoList().then(data => {
+      console.log(data);
+      this.setState({
+        repoList: data
+      });
+    });
   }
 
   render() {
+    let { repoList } = this.state;
+
     return (
       <div className={styles.container}>
         <div className="left-side">
@@ -31,9 +46,23 @@ class Personal extends Component {
             </p>
           </div>
         </div>
+
         <div className="right-side">
           <Tabs defaultActiveKey="1" onChange={this.changeTab.bind(this)}>
-            <Tabs.TabPane tab="仓库列表" key="1">Content of Tab Pane 1</Tabs.TabPane>
+            <Tabs.TabPane tab="仓库列表" key="1">
+              <div className="repos">
+                {
+                  repoList.map(item => {
+                    return (
+                      <Link to='/repo'>
+                        {item.repoName}
+                      </Link>
+                    );
+                  })
+                }
+              </div>
+
+            </Tabs.TabPane>
             <Tabs.TabPane tab="收藏列表" key="2">Content of Tab Pane 2</Tabs.TabPane>
           </Tabs>
         </div>
@@ -42,7 +71,7 @@ class Personal extends Component {
   }
 
   changeTab(){
-    
+
   }
 
 }
