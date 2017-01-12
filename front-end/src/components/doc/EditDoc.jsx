@@ -1,16 +1,19 @@
 import React, {Component} from 'react';
+import {browserHistory} from 'react-router';
 import SimpleMDE from 'react-simplemde-v1';
 import {Button, Input, message} from 'antd';
 import styles from './EditDoc.less';
-import { saveDoc } from '../../services/fetchData';
+import { API, saveDoc } from '../../services/fetchData';
 
 class EditDoc extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       docContent: '',
       title: ''
     };
+
+    this.repoId = this.props.location.query.repoid;
   }
 
   render() {
@@ -25,8 +28,8 @@ class EditDoc extends Component {
       <div className={styles.container}>
         <Input placeholder="请输入标题" style={{width: 300}} className="title" onChange={this.getTitle.bind(this)}/>
 
-        <Button type="primary" size="small" className="publish">发布文档</Button>
-        <Button type="primary" size="small" className="save" onClick={this.saveDoc.bind(this)}>保存草稿</Button>
+        <Button type="primary" size="small" className="publish" onClick={this.saveDoc.bind(this, 'publish')}>发布文档</Button>
+        <Button type="primary" size="small" className="save" onClick={this.saveDoc.bind(this, 'save')}>保存草稿</Button>
 
         <div className="editor">
           <SimpleMDE option={option} text='' onEvents={onEvents}/>
@@ -42,19 +45,25 @@ class EditDoc extends Component {
     });
   }
 
-  saveDoc(){
+  saveDoc(flag){
     let { title, docContent } = this.state;
     let body = {
-      repoId: '1',
-      creatorId: '1',
+      repoId: this.repoId,
+      creatorId: '7',
       info: {
         title,
         draftContent: docContent
       }
     };
+
+    if(flag === 'publish'){
+      body.info.publishContent = docContent;
+    }
+
     saveDoc(body).then(data => {
       console.log(data);
       message.success('保存成功');
+      browserHistory.push(`${API}/repo?repoid=${this.repoId}`);
     });
   }
 }

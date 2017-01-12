@@ -54,9 +54,11 @@ class Personal extends Component {
                 {
                   repoList.map(item => {
                     return (
-                      <Link to='/repo'>
-                        {item.repoName}
-                      </Link>
+                      <p>
+                        <Link to={`/repo?repoid=${item._id}`}>
+                          {item.repoName}
+                        </Link>
+                      </p>
                     );
                   })
                 }
