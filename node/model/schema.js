@@ -24,7 +24,13 @@ exports.repoSchema = new mongoose.Schema({
   creatorId: { type: String, require: true },
   repoName: { type: String, require: true },
   intro: { type: String },
-  isPrivate: { type: Boolean, default: false }
+  isPrivate: { type: Boolean, default: false },
+  tableOfContents: [
+    {
+      rank: { type: Number, default: 1 },
+      docId: { type: String, require: true }
+    }
+  ]
 });
 
 exports.docSchema = new mongoose.Schema({
@@ -33,8 +39,6 @@ exports.docSchema = new mongoose.Schema({
   info: {
     title: { type: String },
     publishContent: { type: String },
-    draftContent: { type: String },
-    repoIndex: { type: String },
-    rank: { type: Number, default: 1 }
+    draftContent: { type: String }
   }
 });
