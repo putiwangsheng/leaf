@@ -5,10 +5,10 @@ exports.createService = function(models) {
   // const teamDbModel = getDbModel(models, 'team');
 
   return {
-    addIndexInDoc
+    createTableOfContents
   };
 
-  function addIndexInDoc(resource) {
+  function createTableOfContents(resource) {
     resource.after('post', function(req, res, next) {
       const repoId = req.body.repoId;
 
