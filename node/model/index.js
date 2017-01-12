@@ -11,15 +11,18 @@ const models = [
   },
   {
     name: 'repo',
-    schema: schemas.repoSchema
+    schema: schemas.repoSchema,
+    dbModel: undefined, // defined in init models
   },
   {
     name: 'doc',
-    schema: schemas.docSchema
+    schema: schemas.docSchema,
+    dbModel: undefined, // defined in init models
   },
   {
     name: 'team',
-    schema: schemas.teamSchema
+    schema: schemas.teamSchema,
+    dbModel: undefined, // defined in init models
   }
 ];
 
