@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
+
 import {Link} from 'react-router';
 import {Button, Tabs} from 'antd';
-import styles from './index.less';
+import EditContentTable from './EditContentTable';
+
 import {getRepoInfo, getRepoDoc} from '../../services/fetchData';
+
+import styles from './index.less';
+
 
 class Repo extends Component {
   constructor(props) {
@@ -46,7 +51,7 @@ class Repo extends Component {
                   {repoData.intro}
                 </p>
                 <div className="docs">
-                  {this.getRepoDocList()}
+                  <EditContentTable />
                 </div>
               </div>
 
