@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {Button, Tabs} from 'antd';
-import styles from './index.less';
+import styles from './Repo.less';
 import {getRepoInfo, getRepoDoc} from '../../services/fetchData';
 
 class Repo extends Component {
@@ -10,7 +10,8 @@ class Repo extends Component {
     this.repoId = this.props.location.query.repoid;
     this.state = {
       repoData: {},
-      repoDocs: []
+      repoDocs: [],
+      draftDocs: []
     };
   }
 
@@ -20,7 +21,7 @@ class Repo extends Component {
       getRepoDoc(this.repoId)
     ]).then(data => {
       console.log(data);
-      this.setState({repoData: data[0], repoDocs: data[1]});
+      this.setState({repoData: data[0], repoDocs: data[1], draftDocs: data[1]});
     });
   }
 
@@ -38,7 +39,7 @@ class Repo extends Component {
         <div className="repo-content">
           <Tabs defaultActiveKey="1" onChange={this.changeTab.bind(this)}>
             <Tabs.TabPane tab="目录" key="1">
-              <div className="">
+              <div className="tab-pane-content">
                 <p className="repoName">
                   {repoData.repoName}
                 </p>
@@ -58,7 +59,7 @@ class Repo extends Component {
                   {repoData.repoName}
                 </p>
                 <div className="docs">
-                  {this.getRepoDocList()}
+                  {this.getDraftDocList()}
                 </div>
               </div>
 
@@ -73,6 +74,16 @@ class Repo extends Component {
 
   getRepoDocList() {
     return this.state.repoDocs.map(item => {
+      return (
+        <p>
+          {item.info.title}
+        </p>
+      );
+    });
+  }
+
+  getDraftDocList() {
+    return this.state.draftDocs.map(item => {
       return (
         <p>
           {item.info.title}

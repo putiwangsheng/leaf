@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Row, Col, Form, Input, Checkbox, Button} from 'antd';
-import styles from './index.less';
+import styles from './CreateRepo.less';
 import { createRepo } from '../../services/fetchData';
 
 const FormItem = Form.Item;
