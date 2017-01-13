@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import {Tabs} from 'antd';
+import {Tabs, Icon} from 'antd';
 import styles from './Personal.less';
 import { getPersonalRepoList } from '../../services/fetchData';
 
@@ -28,6 +28,7 @@ class Personal extends Component {
       <div className={styles.container}>
         <div className="left-side">
           <div className="personal-info">
+            <Icon type="edit" className="icon-edit"/>
             <p className="name">
               测试
             </p>
