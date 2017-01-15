@@ -10,9 +10,6 @@ import Card from './Card';
 
 import styles from './index.less';
 
-const lineUpStyle = 'line-up';
-const lineDownStyle = 'line-down'
-const borderStyle = 'border';
 
 @DragDropContext(HTML5Backend)
 class EditContentTable extends Component {
@@ -27,29 +24,31 @@ class EditContentTable extends Component {
         id: 1,
         rank: 1,
         title: '编程',
-        hoverStyle: lineUpStyle,
+        hoverStyle: styles.lineUp,
       },
       {
         id: 2,
         rank: 1,
         title: 'js 大法好',
-        hoverStyle: lineDownStyle,
+        hoverStyle: '',
       },
       {
         id: 3,
         rank: 1,
-        title: '英语'
+        title: '英语',
+        hoverStyle: styles.lineDown,
       },
       {
         id: 4,
         rank: 1,
         title: '要学好英语',
-        hoverStyle: borderStyle
+        hoverStyle: '',
       },
       {
         id: 5,
         rank: 1,
-        title: '要学能阅读英语'
+        title: '要学能阅读英语',
+        hoverStyle: styles.border
       }
     ];
   }
@@ -167,7 +166,7 @@ class EditContentTable extends Component {
   renderContentList() {
     return this.state.cards.map((item, i) => {
       return (
-        <div className={`rank${item.rank}`}>
+        <div className={`rank${item.rank} ${item.hoverStyle}`}>
           <Card
             key={item.id}
             index={i}
