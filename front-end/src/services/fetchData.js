@@ -34,6 +34,21 @@ export function saveDoc(body) {
   });
 }
 
+// 获得文档
+export function getDocInfo(docId){
+  return request({
+    url: `${API}/api/doc/${docId}`,
+  });
+}
+
+// 删除文档
+export function deleteRepoDoc(docId){
+  return request({
+    url: `${API}/api/doc/${docId}`,
+    method: 'delete'
+  });
+}
+
 // 创建仓库
 export function createRepo(body){
   return request({

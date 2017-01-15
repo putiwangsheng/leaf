@@ -12,7 +12,7 @@ export function request(option) {
     // credentials: 'include'
   };
 
-  if(method !== 'get'){
+  if(method !== 'get' && method !== 'delete'){
     fetchOption.headers = {
       'Content-Type': 'application/json'
     };

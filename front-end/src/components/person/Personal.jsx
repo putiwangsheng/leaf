@@ -28,7 +28,9 @@ class Personal extends Component {
       <div className={styles.container}>
         <div className="left-side">
           <div className="personal-info">
-            <Icon type="edit" className="icon-edit"/>
+            <Link to={`/person/edit`}>
+              <Icon type="edit" className="icon-edit"/>
+            </Link>
             <p className="name">
               测试
             </p>

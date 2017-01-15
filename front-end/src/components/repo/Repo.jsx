@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import {Button, Tabs} from 'antd';
+import {Button, Tabs, Icon, Popconfirm, message} from 'antd';
 import styles from './Repo.less';
-import {getRepoInfo, getRepoDoc} from '../../services/fetchData';
+import {getRepoInfo, getRepoDoc, deleteRepoDoc} from '../../services/fetchData';
 
 class Repo extends Component {
   constructor(props) {
@@ -37,6 +37,8 @@ class Repo extends Component {
         </Link>
 
         <div className="repo-content">
+          <Icon type="smile-o" className="icon-collect"/>
+
           <Tabs defaultActiveKey="1" onChange={this.changeTab.bind(this)}>
             <Tabs.TabPane tab="目录" key="1">
               <div className="tab-pane-content">
@@ -62,7 +64,6 @@ class Repo extends Component {
                   {this.getDraftDocList()}
                 </div>
               </div>
-
             </Tabs.TabPane>
 
             <Tabs.TabPane tab="设置" key="3">Content of Tab Pane 3</Tabs.TabPane>
@@ -75,7 +76,7 @@ class Repo extends Component {
   getRepoDocList() {
     return this.state.repoDocs.map(item => {
       return (
-        <p>
+        <p key={item._id}>
           {item.info.title}
         </p>
       );
@@ -85,10 +86,27 @@ class Repo extends Component {
   getDraftDocList() {
     return this.state.draftDocs.map(item => {
       return (
-        <p>
-          {item.info.title}
-        </p>
+        <Link to={`/doc/view?docid=${item._id}&flag=draft`}>
+          <p key={item._id}>
+            {item.info.title}
+
+            <Popconfirm title="确定删除该文档吗？" onConfirm={this.confirmDelete.bind(this, item._id)} okText="Yes" cancelText="No">
+              <Icon type="close" className="icon-delete-doc"/>
+            </Popconfirm>
+
+            <Link to={`/doc/edit`}>
+              <Icon type="edit" className="icon-edit-doc"/>
+            </Link>
+          </p>
+        </Link>
       );
+    });
+  }
+
+  confirmDelete(docId) {
+    deleteRepoDoc(docId).then(data => {
+      console.log(data);
+      message.success('删除成功');
     });
   }
 
