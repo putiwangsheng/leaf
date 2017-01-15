@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
+
 import {Link} from 'react-router';
 import {Button, Tabs, Icon, Popconfirm, message} from 'antd';
+
+import EditContentTable from './EditContentTable';
+
 import styles from './Repo.less';
 import {getRepoInfo, getRepoDoc, deleteRepoDoc} from '../../services/fetchData';
+
 
 class Repo extends Component {
   constructor(props) {
@@ -49,7 +54,7 @@ class Repo extends Component {
                   {repoData.intro}
                 </p>
                 <div className="docs">
-                  {this.getRepoDocList()}
+                  <EditContentTable />
                 </div>
               </div>
 

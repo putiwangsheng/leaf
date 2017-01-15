@@ -15,8 +15,6 @@ import Repo from '../components/repo/Repo';
 import Personal from '../components/person/Personal';
 import EditPersonInfo from '../components/person/EditPersonInfo';
 
-import EditContentTable from '../components/repo/EditContentTable';
-
 
 class Routes extends Component {
   constructor() {
@@ -42,7 +40,6 @@ class Routes extends Component {
           {/* repo: */}
           <Route path="/repo/create" component={CreateRepo} />
           <Route path="/repo" component={Repo} />
-          <Route path="/repo/editContentTable" component={EditContentTable} />
 
         </Route>
         <Route path="*" component={NotFound}/>
