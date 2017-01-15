@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
+import {browserHistory} from 'react-router';
 import {Form, Input, Checkbox, Button} from 'antd';
-import styles from './index.less';
-import { createTeam } from '../../services/fetchData';
+import styles from './CreateTeam.less';
+import { API, createTeam } from '../../services/fetchData';
 
 const FormItem = Form.Item;
 
@@ -30,12 +31,15 @@ class CreateTeam extends Component {
           </FormItem>
 
           <FormItem label="简介">
-            <Input type="textarea" placeholder="简介" rows={6}/>
+            {
+              getFieldDecorator('intro')
+              (<Input type="textarea" placeholder="简介" rows={6}/>)
+            }
           </FormItem>
 
           <FormItem style={{ marginBottom: 8 }}>
             {
-              getFieldDecorator ('agreement', {
+              getFieldDecorator ('isPrivate', {
                 initialValue: false,
                 valuePropName: 'checked',
               })
@@ -61,8 +65,11 @@ class CreateTeam extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        createTeam().then(data => {
+        values.avatar = 'https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg';
+        values.membersIds = ['7'];
+        createTeam(values).then(data => {
           console.log(data);
+          browserHistory.push(`${API}/`);
         });
       }
     });

@@ -1,82 +1,98 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
-import {Tabs, Icon} from 'antd';
-import styles from './Personal.less';
-import { getPersonalRepoList } from '../../services/fetchData';
+import {browserHistory} from 'react-router';
+import {Form, Input, Button} from 'antd';
+import { API, createTeam } from '../../services/fetchData';
+import styles from './EditPersonInfo.less';
+
+const FormItem = Form.Item;
 
 class EditPersonInfo extends Component {
-  constructor() {
-    super();
-    this.state = {
-      repoList: []
-    };
-  }
-
-  componentDidMount(){
-    getPersonalRepoList().then(data => {
-      console.log(data);
-      this.setState({
-        repoList: data
-      });
-    });
+  constructor(props) {
+    super(props);
   }
 
   render() {
-    let { repoList } = this.state;
+    const { getFieldDecorator  } = this.props.form;
+    const formItemLayout = {
+      labelCol: { span: 6 },
+      wrapperCol: { span: 14 },
+    };
 
     return (
       <div className={styles.container}>
-        <div className="left-side">
-          <div className="personal-info">
-            <Icon type="edit" className="icon-edit"/>
-            <p className="name">
-              测试
-            </p>
-            <p>
-              <span>邮箱：</span>
-              <span>2026929156@qq.com</span>
-            </p>
-            <p>
-              <span>职位：</span>
-              <span>前端</span>
-            </p>
-          </div>
-          <div className="personal-team">
-            <p className="title">
-              团队
-            </p>
-          </div>
-        </div>
+        <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
+          <FormItem label="头像" {...formItemLayout}>
+            <Input placeholder="头像"/>
+          </FormItem>
 
-        <div className="right-side">
-          <Tabs defaultActiveKey="1" onChange={this.changeTab.bind(this)}>
-            <Tabs.TabPane tab="仓库列表" key="1">
-              <div className="repos">
-                {
-                  repoList.map(item => {
-                    return (
-                      <p>
-                        <Link to={`/repo?repoid=${item._id}`}>
-                          {item.repoName}
-                        </Link>
-                      </p>
-                    );
-                  })
-                }
-              </div>
+          <FormItem label="昵称" {...formItemLayout}>
+            {
+              getFieldDecorator ('nickName', {
+                rules: [{ required: true, message: '请输入昵称' }],
+              })
+              (<Input placeholder="昵称"/>)
+            }
+          </FormItem>
 
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="收藏列表" key="2">Content of Tab Pane 2</Tabs.TabPane>
-          </Tabs>
-        </div>
+          <FormItem label="姓名" {...formItemLayout}>
+            {
+              getFieldDecorator('name')
+              (<Input placeholder="姓名"/>)
+            }
+          </FormItem>
+
+          <FormItem label="邮箱" {...formItemLayout}>
+            {
+              getFieldDecorator('email', {
+                rules: [{ required: true, message: '请输入邮箱' }],
+              })
+              (<Input placeholder="邮箱"/>)
+            }
+          </FormItem>
+
+          <FormItem label="职位" {...formItemLayout}>
+            {
+              getFieldDecorator('job')
+              (<Input placeholder="职位"/>)
+            }
+          </FormItem>
+
+          <FormItem label="所属部门" {...formItemLayout}>
+            {
+              getFieldDecorator('department')
+              (<Input placeholder="所属部门"/>)
+            }
+          </FormItem>
+
+          <FormItem wrapperCol={{
+            span: 14,
+            offset: 6
+          }}>
+            <Button type="primary" htmlType="submit">
+              修改
+            </Button>
+          </FormItem>
+        </Form>
       </div>
     );
   }
 
-  changeTab(){
-
+  handleSubmit(e){
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        values.avatar = 'https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg';
+        values.membersIds = ['7'];
+        createTeam(values).then(data => {
+          console.log(data);
+          browserHistory.push(`${API}/`);
+        });
+      }
+    });
   }
-
 }
+
+EditPersonInfo = Form.create()(EditPersonInfo);
 
 export default EditPersonInfo;
