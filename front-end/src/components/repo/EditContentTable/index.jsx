@@ -10,6 +10,10 @@ import Card from './Card';
 
 import styles from './index.less';
 
+const lineUpStyle = 'line-up';
+const lineDownStyle = 'line-down'
+const borderStyle = 'border';
+
 @DragDropContext(HTML5Backend)
 class EditContentTable extends Component {
   constructor() {
@@ -17,16 +21,19 @@ class EditContentTable extends Component {
 
     // repoIndex is list index
     this.state = {}
+
     this.state.cards = [
       {
         id: 1,
         rank: 1,
-        title: '编程'
+        title: '编程',
+        hoverStyle: lineUpStyle,
       },
       {
         id: 2,
         rank: 1,
-        title: 'js 大法好'
+        title: 'js 大法好',
+        hoverStyle: lineDownStyle,
       },
       {
         id: 3,
@@ -36,7 +43,8 @@ class EditContentTable extends Component {
       {
         id: 4,
         rank: 1,
-        title: '要学好英语'
+        title: '要学好英语',
+        hoverStyle: borderStyle
       },
       {
         id: 5,
