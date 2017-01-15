@@ -30,6 +30,7 @@ class EditContentTable extends Component {
         id: 2,
         rank: 1,
         title: 'js 大法好',
+        hoverStyle: '',
       },
       {
         id: 3,
@@ -41,6 +42,7 @@ class EditContentTable extends Component {
         id: 4,
         rank: 1,
         title: '要学好英语',
+        hoverStyle: '',
       },
       {
         id: 5,
