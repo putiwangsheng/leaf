@@ -14,7 +14,8 @@ const cardSource = {
   },
 
   endDrag: function (props, monitor, component) {
-    if (!monitor.didDrop() || monitor.getDropResult() === undefined) {
+    const result = monitor.getDropResult()
+    if (!monitor.didDrop() || !result || result.dropIndex === undefined) {
       return;
     }
 
