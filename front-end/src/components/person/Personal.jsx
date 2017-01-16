@@ -2,27 +2,30 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {Tabs, Icon} from 'antd';
 import styles from './Personal.less';
-import { getPersonalRepoList } from '../../services/fetchData';
+import { getPersonalRepoList, getTeamInfo, getUserInfo } from '../../services/fetchData';
 
 class Personal extends Component {
   constructor() {
     super();
     this.state = {
-      repoList: []
+      repoList: [],
+      teams: [],
+      userInfo: {}
     };
   }
 
   componentDidMount(){
-    getPersonalRepoList().then(data => {
-      console.log(data);
+    Promise.all([getPersonalRepoList(), getTeamInfo(), getUserInfo()]).then(data => {
       this.setState({
-        repoList: data
+        repoList: data[0],
+        teams: data[1],
+        userInfo: data[2][0].info
       });
     });
   }
 
   render() {
-    let { repoList } = this.state;
+    let { repoList, teams, userInfo } = this.state;
 
     return (
       <div className={styles.container}>
@@ -32,21 +35,32 @@ class Personal extends Component {
               <Icon type="edit" className="icon-edit"/>
             </Link>
             <p className="name">
-              测试
+              {userInfo.nickName}（{userInfo.name}）
             </p>
             <p>
               <span>邮箱：</span>
-              <span>2026929156@qq.com</span>
+              <span>{userInfo.email}</span>
             </p>
             <p>
               <span>职位：</span>
-              <span>前端</span>
+              <span>{userInfo.job}</span>
             </p>
           </div>
           <div className="personal-team">
             <p className="title">
               团队
             </p>
+            <div className="avatars">
+              {
+                teams.map(item => {
+                  return (
+                    <img src={item.avatar} alt="" className="team-avatar"/>
+                  );
+                })
+              }
+            </div>
+
+
           </div>
         </div>
 

@@ -66,3 +66,26 @@ export function createTeam(body){
     body: body
   });
 }
+
+// 获取团队信息
+export function getTeamInfo(){
+  return request({
+    url: `${API}/api/team`,
+  });
+}
+
+// 获取个人信息
+export function getUserInfo(){
+  return request({
+    url: `${API}/api/user`,
+  });
+}
+
+// 修改个人信息
+export function modifyUserInfo(userId, body){
+  return request({
+    url: `${API}/api/user/${userId}`,
+    method: 'put',
+    body: body
+  });
+}
