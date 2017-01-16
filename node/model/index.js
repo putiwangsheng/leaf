@@ -47,7 +47,8 @@ exports.setRestApi = function (app) {
 
 
     if (item.name === 'doc') {
-      service.createTableOfContents(resource);
+      service.addDocInTOC(resource);
+      service.deleteDocInTOC(resource);
     }
 
     // must register at end
