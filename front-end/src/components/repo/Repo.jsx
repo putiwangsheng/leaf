@@ -91,8 +91,8 @@ class Repo extends Component {
   getDraftDocList() {
     return this.state.draftDocs.map(item => {
       return (
-        <Link to={`/doc/view?docid=${item._id}&flag=draft`}>
-          <p key={item._id}>
+        <Link to={`/doc/view?docid=${item._id}&flag=draft`} key={item._id}>
+          <p>
             {item.info.title}
 
             <Popconfirm title="确定删除该文档吗？" onConfirm={this.confirmDelete.bind(this, item._id)} okText="Yes" cancelText="No">
@@ -112,6 +112,10 @@ class Repo extends Component {
     deleteRepoDoc(docId).then(data => {
       console.log(data);
       message.success('删除成功');
+      
+      getRepoDoc(this.repoId).then(data => {
+        this.setState({draftDocs: data});
+      });
     });
   }
 

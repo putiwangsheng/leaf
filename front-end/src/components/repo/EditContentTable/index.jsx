@@ -166,7 +166,7 @@ class EditContentTable extends Component {
   renderContentList() {
     return this.state.cards.map((item, i) => {
       return (
-        <div className={`rank${item.rank} ${item.hoverStyle}`}>
+        <div className={`rank${item.rank} ${item.hoverStyle}`} key={i}>
           <Card
             key={item.id}
             index={i}

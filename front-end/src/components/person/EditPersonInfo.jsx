@@ -103,12 +103,16 @@ class EditPersonInfo extends Component {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
         values.avatar = 'https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg';
-        values.membersIds = ['7'];
-        modifyUserInfo(this.userId, values).then(data => {
+
+        let body = {
+          collectedReposIds:[],
+          info: values
+        };
+        
+        modifyUserInfo(this.userId, body).then(data => {
           console.log(data);
-          // browserHistory.push(`${API}/`);
+          browserHistory.push(`${API}/`);
         });
       }
     });
