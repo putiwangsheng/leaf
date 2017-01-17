@@ -3,7 +3,6 @@ import { findDOMNode } from 'react-dom';
 
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-
 import update from 'react/lib/update';
 
 import Card from './Card';
@@ -98,7 +97,7 @@ class EditContentTable extends Component {
     };
 
     // 1. get rectHeight
-    const hoverBoundingRect = findDOMNode(component).getBoundingClientRect();
+    const hoverBoundingRect = findDOMNode(component).parentElement.getBoundingClientRect();
     const rectHeight = hoverBoundingRect.bottom - hoverBoundingRect.top;
 
     // 2. get hoverClientHeight
@@ -115,10 +114,10 @@ class EditContentTable extends Component {
       moveInfo.newRank = hoverRectRank;
       moveInfo.isFirstBlock = true;
     }
-    else if (hoverClientHeight > rectHeight/4 && hoverClientHeight < rectHeight * 3/4) {
+    else if (hoverClientHeight => rectHeight/4 && hoverClientHeight < rectHeight * 3/4) {
       moveInfo.newRank = 2;
     }
-    else if (hoverClientHeight > rectHeight*3/4) {
+    else if (hoverClientHeight => rectHeight*3/4) {
       // 不存在下一行的特殊情况。
       if (cards[hoverIndex + 1] === undefined) {
         moveInfo.newRank = 1;
