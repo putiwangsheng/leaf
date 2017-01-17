@@ -35,7 +35,7 @@ class Repo extends Component {
 
     return (
       <div className={styles.repoContainer}>
-        <Link to={`/doc/edit?repoid=${this.repoId}`}>
+        <Link to={`/doc/edit?repoid=${this.repoId}&flag=c`}>
           <Button type="primary" className="create-doc-button">
             新建文档
           </Button>
@@ -99,7 +99,7 @@ class Repo extends Component {
               <Icon type="close" className="icon-delete-doc"/>
             </Popconfirm>
 
-            <Link to={`/doc/edit`}>
+            <Link to={`/doc/edit?docid=${item._id}&flag=e`}>
               <Icon type="edit" className="icon-edit-doc"/>
             </Link>
           </p>
@@ -112,7 +112,7 @@ class Repo extends Component {
     deleteRepoDoc(docId).then(data => {
       console.log(data);
       message.success('删除成功');
-      
+
       getRepoDoc(this.repoId).then(data => {
         this.setState({draftDocs: data});
       });
