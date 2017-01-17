@@ -1,7 +1,10 @@
+@border-width: 2px;
+@line-height: 28px;
+
 .container{
   margin-left: 3%;
   font-size: 14px;
-  line-height: 1.8;
+  line-height: @line-height;
 
   :global{
     .notice{
@@ -10,7 +13,7 @@
       color: #8e8e8e;
     }
 
-    .star{
+    .star {
       margin-right: 5px;
       color: red;
     }
@@ -26,14 +29,17 @@
 
    // background-color: #dafccc;
   .lineUp {
-    border-top: 2px solid #21c97e;
+    border-top: @border-width solid #21c97e;
+    line-height: @line-height - @border-width;
   }
 
   .lineDown {
-    border-bottom: 2px solid #21c97e;
+    border-bottom: @border-width solid #21c97e;
+    line-height: @line-height - @border-width;
   }
 
   .border {
-    border: 2px solid #21c97e;
+    border: @border-width solid #21c97e;
+    line-height: @line-height - 2 * @border-width;
   }
 }

@@ -14,6 +14,8 @@ const cardSource = {
   },
 
   endDrag: function (props, monitor, component) {
+    props.resetHoverStyle()
+
     const result = monitor.getDropResult()
     if (!monitor.didDrop() || !result || result.dropIndex === undefined) {
       return;
@@ -25,14 +27,19 @@ const cardSource = {
   }
 };
 
-let oldStyleInfo = {
-  style: '',
-  isFirstBlock: undefined
-}
 
-// 当位置和 style 未改变的时候，不用更新 style
-function needChangeStyle(oldInfo, newInfo) {
-  return oldInfo.style !== newInfo.style || oldInfo.isFirstBlock !== newInfo.isFirstBlock;
+function getHoverStyle(styleInfo, styles) {
+  if (styleInfo.style === 'line') {
+    if (styleInfo.isFirstBlock) {
+      return styles.lineUp;
+    } else {
+      return styles.lineDown
+    }
+  }
+
+  if (styleInfo.style === 'border') {
+    return styles.border;
+  }
 }
 
 const cardTarget = {
@@ -41,12 +48,15 @@ const cardTarget = {
   hover(props, monitor, component) {
     const dragIndex = monitor.getItem().index;
     const hoverIndex = props.index;
-
-    if (dragIndex === hoverIndex) {
-      return
-    }
+    const { isHasChild } = props;
 
     const hoverInfo = props.getHoverInfo(monitor, component, hoverIndex);
+
+    if (isDisableDrop(dragIndex, hoverIndex, props.cards, isHasChild, hoverInfo.isFirstBlock)) {
+      props.resetHoverStyle();
+      return;
+    }
+
     const styleInfo = {
       isFirstBlock: hoverInfo.isFirstBlock
     };
@@ -58,35 +68,25 @@ const cardTarget = {
       styleInfo.style = 'border';
     }
 
-    // 如果不需要更新样式，则结束
-    if (!needChangeStyle(oldStyleInfo, styleInfo)) {
-      return;
-    }
+    const hoverStyle = getHoverStyle(styleInfo, props.hoverStyles)
 
-    // 在需要更新样式的前体下，更新样式
-    if (styleInfo.style === 'line') {
-      console.log('line');
-    } else {
-      console.log('border')
-    }
-
-    oldStyleInfo = styleInfo;
+    props.changeHoverStyle(hoverStyle, hoverIndex);
   },
 
   // drop 时 move card， 需要改变 容器的 state，根据 newRank 来
   drop(props, monitor, component) {
     const dragIndex = monitor.getItem().index;
     const dropIndex = props.index;
-
-    // Don't replace items with themselves
-    if (dragIndex === dropIndex) {
-      return;
-    }
+    const { isHasChild } = props;
 
     // 1. get newRank
     let { newRank, isFirstBlock } = props.getMoveInfo(monitor, component, dropIndex);
-    if (props.isHasChild(dragIndex)) {
+    if (isHasChild(dragIndex)) {
       newRank = 1;
+    }
+
+    if (isDisableDrop(dragIndex, dropIndex, props.cards, isHasChild, isFirstBlock)) {
+      return;
     }
 
     return {
@@ -94,10 +94,45 @@ const cardTarget = {
       isFirstBlock,
       dragIndex,
       dropIndex
-    }
+    };
   }
 };
 
+
+function isDisableDrop(dragIndex, dropIndex, cards, isHasChild, isFirstBlock) {
+  if (dragIndex === dropIndex) {
+    return true;
+  }
+
+
+  // 当有子 card 的 card 在 drop 时，有一些禁止的边界情况
+  if (isHasChild(dragIndex)) {
+    // dropCard rank 为 2
+    if (cards[dropIndex].rank === 2) {
+      return true;
+    }
+
+    // dropCard 有子 card，并且 isFirstBlock = false
+    if (isHasChild(dropIndex) && isFirstBlock === false) {
+      return true;
+    }
+
+    // dropCard 就是 dragCard 的子 card
+    if (isChild(dropIndex, dragIndex, cards)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function isChild(childCardIndex, cardIndex, cards) {
+  if (childCardIndex < cardIndex) {
+    const childCards = cards.slice(cardIndex + 1, childCardIndex + 1);
+    return childCards.every(item => item.rank === 1);
+  }
+  return false;
+}
 
 @DropTarget(CARD_TYPE, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
@@ -113,10 +148,12 @@ class Card extends Component {
 
   render() {
     const { text, isDragging, connectDragSource, connectDropTarget } = this.props;
-    const opacity = isDragging ? 0 : 1;
+    const drapingSytle = {
+      opacity: isDragging ? 0.1 : 1
+    }
 
     return connectDragSource(connectDropTarget(
-      <div className={styles.card} style={{ opacity }}>
+      <div className={styles.card} style={drapingSytle}>
         {text}
       </div>
     ));

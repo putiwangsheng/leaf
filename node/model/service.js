@@ -1,14 +1,15 @@
 exports.createService = function(models) {
   // const userDbModel = getDbModel(models, 'user');
   const repoDbModel = getDbModel(models, 'repo');
-  // const docDbModel = getDbModel(models, 'doc');
+  const docDbModel = getDbModel(models, 'doc');
   // const teamDbModel = getDbModel(models, 'team');
 
   return {
-    createTableOfContents
+    addDocInTOC,
+    deleteDocInTOC
   };
 
-  function createTableOfContents(resource) {
+  function addDocInTOC(resource) {
     resource.after('post', function(req, res, next) {
       const repoId = req.body.repoId;
 
@@ -23,6 +24,31 @@ exports.createService = function(models) {
         docs[0].save();
 
         next(); // Don't forget to call next!
+      });
+    });
+  }
+
+  function deleteDocInTOC(resource) {
+    resource.before('delete', function (req, res, next) {
+      const docId = req.params.id;
+
+      docDbModel.find({ _id: docId }, (err, docs) => {
+        const repoId = docs[0].repoId;
+
+        repoDbModel.find({ _id: repoId }, (err, repoDocs) => {
+          const tableOfContents = repoDocs[0].tableOfContents;
+          const index = tableOfContents.findIndex(item => item.docId === docId);
+
+          if (index === -1) {
+            next();
+            return;
+          }
+
+          tableOfContents.splice(index, 1);
+          repoDocs[0].save();
+
+          next();
+        });
       });
     });
   }

@@ -16,7 +16,6 @@ class EditContentTable extends Component {
   constructor() {
     super();
 
-    // repoIndex is list index
     this.state = {}
 
     this.state.cards = [
@@ -24,33 +23,61 @@ class EditContentTable extends Component {
         id: 1,
         rank: 1,
         title: '编程',
-        hoverStyle: styles.lineUp,
+        hoverStyle: undefined
       },
       {
         id: 2,
+        rank: 2,
+        title: 'js 大法好1',
+        hoverStyle: undefined
+      },
+      {
+        id: 11,
         rank: 1,
-        title: 'js 大法好',
-        hoverStyle: '',
+        title: '编程',
+        hoverStyle: undefined
+      },
+      {
+        id: 22,
+        rank: 2,
+        title: 'js 大法好2',
+        hoverStyle: undefined
       },
       {
         id: 3,
         rank: 1,
         title: '英语',
-        hoverStyle: styles.lineDown,
+        hoverStyle: undefined
       },
       {
         id: 4,
-        rank: 1,
+        rank: 2,
         title: '要学好英语',
-        hoverStyle: '',
+        hoverStyle: undefined
       },
       {
         id: 5,
-        rank: 1,
+        rank: 2,
         title: '要学能阅读英语',
-        hoverStyle: styles.border
+        hoverStyle: undefined
       }
     ];
+  }
+
+  changeHoverStyle(style, index) {
+    if (this.state.cards[index].hoverStyle === style) {
+      return;
+    }
+
+    const newCards = this.state.cards.slice();
+
+    newCards.forEach(item => item.hoverStyle = undefined);
+
+    newCards[index].hoverStyle = style;
+
+    this.setState({
+      cards: newCards
+    })
   }
 
   isHasChild(index) {
@@ -147,6 +174,18 @@ class EditContentTable extends Component {
     // 3. insert moveCards
     newCards.splice(insertIndex, 0, ...moveCards);
 
+    newCards.forEach(item => item.hoverStyle = undefined);
+
+    this.setState({
+      cards: newCards
+    });
+  }
+
+  resetHoverStyle() {
+    const newCards = this.state.cards.slice();
+
+    newCards.forEach(item => item.hoverStyle = undefined);
+
     this.setState({
       cards: newCards
     });
@@ -166,19 +205,27 @@ class EditContentTable extends Component {
   renderContentList() {
     return this.state.cards.map((item, i) => {
       return (
-        <div className={`rank${item.rank} ${item.hoverStyle}`} key={i}>
+        <div className={`rank${item.rank}${this.getHoverClass(item)}`} key={i}>
           <Card
             key={item.id}
             index={i}
             id={item.id}
             text={item.title}
+            cards={this.state.cards}
             moveCard={this.moveCard.bind(this)}
             getMoveInfo={this.getMoveInfo.bind(this)}
             getHoverInfo={this.getHoverInfo.bind(this)}
+            hoverStyles={styles}
+            changeHoverStyle={this.changeHoverStyle.bind(this)}
+            resetHoverStyle={this.resetHoverStyle.bind(this)}
             isHasChild={this.isHasChild.bind(this)} />
         </div>
       );
     });
+  }
+
+  getHoverClass(item) {
+    return item.hoverStyle ? ` ${item.hoverStyle}` : '';
   }
 }
 
