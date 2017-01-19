@@ -41,6 +41,15 @@ export function getDocInfo(docId){
   });
 }
 
+// 修改文档
+export function modifyDoc(docId, body){
+  return request({
+    url: `${API}/api/doc/${docId}`,
+    method: 'put',
+    body: body
+  });
+}
+
 // 删除文档
 export function deleteRepoDoc(docId){
   return request({

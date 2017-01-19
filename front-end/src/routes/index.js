@@ -8,6 +8,7 @@ import EditDoc from '../components/doc/EditDoc';
 import DocContent from '../components/doc/DocContent';
 
 import CreateTeam from '../components/team/CreateTeam';
+import TeamInfo from '../components/team/TeamInfo';
 
 import CreateRepo from '../components/repo/CreateRepo';
 import Repo from '../components/repo/Repo';
@@ -31,6 +32,7 @@ class Routes extends Component {
 
           {/* team: */}
           <Route path="/team/create" component={CreateTeam} />
+          <Route path="/team" component={TeamInfo} />
 
           {/* person: */}
           <Route path="/person" component={Personal} />

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {Tabs, Icon} from 'antd';
 import styles from './Personal.less';
-import { getPersonalRepoList, getTeamInfo, getUserInfo } from '../../services/fetchData';
+import {getPersonalRepoList, getTeamInfo, getUserInfo} from '../../services/fetchData';
 
 class Personal extends Component {
   constructor() {
@@ -14,18 +14,15 @@ class Personal extends Component {
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     Promise.all([getPersonalRepoList(), getTeamInfo(), getUserInfo()]).then(data => {
-      this.setState({
-        repoList: data[0],
-        teams: data[1],
-        userInfo: data[2][0].info
+      this.setState({repoList: data[0], teams: data[1], userInfo: data[2][0].info
       });
     });
   }
 
   render() {
-    let { repoList, teams, userInfo } = this.state;
+    let {repoList, teams, userInfo} = this.state;
 
     return (
       <div className={styles.container}>
@@ -54,13 +51,12 @@ class Personal extends Component {
               {
                 teams.map(item => {
                   return (
-                    <img src={item.avatar} alt="" className="team-avatar"/>
+                    <Link to={`/team`}><img src={item.avatar} alt="" className="team-avatar"/>
+                    </Link>
                   );
                 })
               }
             </div>
-
-
           </div>
         </div>
 
@@ -89,9 +85,7 @@ class Personal extends Component {
     );
   }
 
-  changeTab(){
-
-  }
+  changeTab() {}
 
 }
 

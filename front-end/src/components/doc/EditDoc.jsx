@@ -3,7 +3,7 @@ import {browserHistory} from 'react-router';
 import SimpleMDE from 'react-simplemde-v1';
 import {Button, Input, message} from 'antd';
 import styles from './EditDoc.less';
-import {API, saveDoc, getDocInfo} from '../../services/fetchData';
+import {API, saveDoc, getDocInfo, modifyDoc} from '../../services/fetchData';
 
 class EditDoc extends Component {
   constructor(props) {
@@ -22,7 +22,6 @@ class EditDoc extends Component {
   componentDidMount() {
     if (this.flag === 'e') {
       getDocInfo(this.docId).then(data => {
-        console.log(data);
         this.setState({docContent: data.info.draftContent, title: data.info.title});
       });
     }
@@ -90,7 +89,12 @@ class EditDoc extends Component {
         message.success('保存成功');
         browserHistory.push(`${API}/repo?repoid=${this.repoId}`);
       });
-    } else if (flag === 'e') {}
+    } else if (this.flag === 'e') {
+      console.log(body);
+      modifyDoc(this.docId, body).then(data => {
+        console.log(data);
+      });
+    }
 
   }
 }

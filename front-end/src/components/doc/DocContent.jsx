@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import styles from './DocContent.less';
+import '../../lib/github-markdown.css';
 import { getDocInfo } from '../../services/fetchData';
+import ReactMarkdown from 'react-markdown';
 
 class DocContent extends Component {
   constructor(props) {
@@ -37,9 +39,10 @@ class DocContent extends Component {
 
         </div>
         <div className="doc">
-          <h1>{docContent.title}</h1>
-          <div className="content">
-            {content}
+          <p className="title">{docContent.title}</p>
+
+          <div className="content markdown-body">
+            <ReactMarkdown source={content} />
           </div>
         </div>
       </div>

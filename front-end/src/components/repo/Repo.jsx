@@ -99,7 +99,7 @@ class Repo extends Component {
               <Icon type="close" className="icon-delete-doc"/>
             </Popconfirm>
 
-            <Link to={`/doc/edit?docid=${item._id}&flag=e`}>
+            <Link to={`/doc/edit?repoid=${this.repoId}&docid=${item._id}&flag=e`}>
               <Icon type="edit" className="icon-edit-doc"/>
             </Link>
           </p>
