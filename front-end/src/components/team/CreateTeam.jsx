@@ -66,7 +66,7 @@ class CreateTeam extends Component {
       if (!err) {
         console.log('Received values of form: ', values);
         values.avatar = 'https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg';
-        values.membersIds = ['7'];
+        values.membersIds = ['587c81421407a634241e77cf'];
         createTeam(values).then(data => {
           console.log(data);
           browserHistory.push(`${API}/`);

@@ -1,11 +1,22 @@
 .container{
   :global{
+    .button-wrapper{
+      width: 60%;
+    }
+
+    .add-button{
+      float: right;
+    }
+
     .left-side,
     .right-side{
-      float: left;
+      margin-top: 10px;
+      display: inline-block;
+      vertical-align: top;
       border: 1px solid #eee;
       border-radius: 5px;
       background-color: #fff;
+      clear: both;
     }
 
     .left-side{
@@ -28,6 +39,34 @@
 
     .members{
       padding: 10px 15px;
+    }
+
+    .member-list{
+      font-size: 14px;
+    }
+
+    .avatars{
+      width: 35px;
+      height: 35px;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+
+    .user-avatar{
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+
+    .role{
+      margin-left: 180px;
+    }
+
+    .delete{
+      float: right;
+      margin-right: 10px;
     }
   }
 }

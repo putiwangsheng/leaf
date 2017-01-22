@@ -72,7 +72,7 @@ class EditDoc extends Component {
     let {title, docContent} = this.state;
     let body = {
       repoId: this.repoId,
-      creatorId: '7',
+      creatorId: '587c81421407a634241e77cf',
       info: {
         title,
         draftContent: docContent

@@ -73,7 +73,7 @@ class CreateRepo extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        values.creatorId = '7';
+        values.creatorId = '587c81421407a634241e77cf';
         createRepo(values).then(data => {
           console.log(data);
         });

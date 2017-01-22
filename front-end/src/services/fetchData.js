@@ -77,16 +77,16 @@ export function createTeam(body){
 }
 
 // 获取团队信息
-export function getTeamInfo(){
+export function getTeamInfo(teamId){
   return request({
-    url: `${API}/api/team`,
+    url: `${API}/api/team/${teamId}`,
   });
 }
 
 // 获取个人信息
-export function getUserInfo(){
+export function getUserInfo(userId){
   return request({
-    url: `${API}/api/user`,
+    url: `${API}/api/user/${userId}`,
   });
 }
 

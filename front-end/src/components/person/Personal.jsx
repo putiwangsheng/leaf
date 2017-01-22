@@ -15,8 +15,8 @@ class Personal extends Component {
   }
 
   componentDidMount() {
-    Promise.all([getPersonalRepoList(), getTeamInfo(), getUserInfo()]).then(data => {
-      this.setState({repoList: data[0], teams: data[1], userInfo: data[2][0].info
+    Promise.all([getPersonalRepoList(), getTeamInfo('58831384399ff81d6c69c14f'), getUserInfo('587c81421407a634241e77cf')]).then(data => {
+      this.setState({repoList: data[0], teams: [data[1]], userInfo: data[2].info
       });
     });
   }
@@ -51,7 +51,7 @@ class Personal extends Component {
               {
                 teams.map(item => {
                   return (
-                    <Link to={`/team`}><img src={item.avatar} alt="" className="team-avatar"/>
+                    <Link to={`/team?teamid=${item._id}`}><img src={item.avatar} alt="" className="team-avatar"/>
                     </Link>
                   );
                 })
