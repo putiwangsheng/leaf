@@ -10,25 +10,35 @@ class Personal extends Component {
     this.state = {
       repoList: [],
       teams: [],
-      userInfo: {}
+      userInfo: {},
+      userId: ''
     };
   }
 
   componentDidMount() {
-    Promise.all([getPersonalRepoList(), getTeamInfo('58831384399ff81d6c69c14f'), getUserInfo('587c81421407a634241e77cf')]).then(data => {
-      this.setState({repoList: data[0], teams: [data[1]], userInfo: data[2].info
+    Promise.all([getPersonalRepoList(), getTeamInfo(), getUserInfo('587c81421407a634241e77cf')]).then(data => {
+      let teamsArr = allMyTeams(data[2]._id, data[1]);
+
+      this.setState({
+        repoList: data[0],
+        teams: teamsArr,
+        userInfo: data[2].info,
+        userId: data[2]._id
       });
     });
   }
 
   render() {
-    let {repoList, teams, userInfo} = this.state;
+    let {repoList, teams, userInfo, userId} = this.state;
+
+    const jobLabel = userInfo.job ? (<span>职位：</span>) : '';
+    const depLabel = userInfo.department ? (<span>部门：</span>) : '';
 
     return (
       <div className={styles.container}>
         <div className="left-side">
           <div className="personal-info">
-            <Link to={`/person/edit`}>
+            <Link to={`/person/edit?userid=${userId}`}>
               <Icon type="edit" className="icon-edit"/>
             </Link>
             <p className="name">
@@ -39,8 +49,12 @@ class Personal extends Component {
               <span>{userInfo.email}</span>
             </p>
             <p>
-              <span>职位：</span>
+              {jobLabel}
               <span>{userInfo.job}</span>
+            </p>
+            <p>
+              {depLabel}
+              <span>{userInfo.department}</span>
             </p>
           </div>
           <div className="personal-team">
@@ -51,7 +65,7 @@ class Personal extends Component {
               {
                 teams.map(item => {
                   return (
-                    <Link to={`/team?teamid=${item._id}`}><img src={item.avatar} alt="" className="team-avatar"/>
+                    <Link to={`/team?teamid=${item._id}`} key={item._id}><img src={item.avatar} alt="" className="team-avatar"/>
                     </Link>
                   );
                 })
@@ -67,8 +81,8 @@ class Personal extends Component {
                 {
                   repoList.map(item => {
                     return (
-                      <p>
-                        <Link to={`/repo?repoid=${item._id}`}>
+                      <p key={item._id}>
+                        <Link to={`/repo?repoid=${item._id}`} >
                           {item.repoName}
                         </Link>
                       </p>
@@ -87,6 +101,19 @@ class Personal extends Component {
 
   changeTab() {}
 
+}
+
+// 获取个人的所有团队
+function allMyTeams(userId, teams){
+  let teamsArr = [];
+  teams.forEach(team => {
+    let membersIds = team.membersIds;
+    if(membersIds.indexOf(userId) !== -1){
+      teamsArr.push(team);
+    }
+  });
+
+  return teamsArr;
 }
 
 export default Personal;

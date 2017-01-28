@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {Tabs, Button, Modal, Form, Input} from 'antd';
+import {
+  Tabs,
+  Button,
+  Modal,
+  Form,
+  Input,
+  Tag
+} from 'antd';
 import styles from './TeamInfo.less';
 import {getTeamInfo, getUserInfo} from '../../services/fetchData';
 const FormItem = Form.Item;
@@ -11,6 +18,7 @@ class TeamInfo extends Component {
 
     this.state = {
       members: [],
+      teamName: '',
       visible: false
     };
   }
@@ -18,6 +26,7 @@ class TeamInfo extends Component {
   componentDidMount() {
     getTeamInfo(this.teamId).then(data => {
       let memberIds = data.membersIds;
+      let teamName = data.name;
 
       let memberArr = [];
       memberIds.forEach(item => {
@@ -26,7 +35,7 @@ class TeamInfo extends Component {
 
       Promise.all(memberArr).then(data => {
         console.log(data);
-        this.setState({members: data, isRepo: true});
+        this.setState({members: data, isRepo: true, teamName});
       });
     });
   }
@@ -69,11 +78,7 @@ class TeamInfo extends Component {
           </p>
           <div className="members">
             {members.map((item, index) => {
-              return (
-                <div key={index}>
-                  <img src={item.info.avatar} alt="avatar" className="avatars"/>
-                </div>
-              );
+              return (<img key={index} src={item.info.avatar} alt="avatar" className="avatars"/>);
             })
 }
           </div>
@@ -86,10 +91,10 @@ class TeamInfo extends Component {
   renderMemberList(members) {
     return (members.map((item, index) => {
       return (
-        <div key={index}>
+        <div key={index} className="member">
           <img src={item.info.avatar} alt="avatar" className="user-avatar"/>
-          <span>{item.info.nickName}</span>
-          <span className="role">Owner</span>
+          <span className="nickName">{item.info.nickName}</span>
+          <span>Owner</span>
           <span className="delete">删除</span>
         </div>
       );
@@ -97,25 +102,36 @@ class TeamInfo extends Component {
   }
 
   renderModal() {
-    const { getFieldDecorator  } = this.props.form;
+    const {getFieldDecorator} = this.props.form;
 
     return (
       <Modal title="添加成员" visible={this.state.visible} onOk={this.handleOk.bind(this)} onCancel={this.handleCancel.bind(this)}>
         <Form horizontal>
           <FormItem label="团队名称">
-            {
-              getFieldDecorator ('name', {
-                rules: [{ required: true, message: '请输入团队名称' }],
-              })
-              (<Input placeholder="团队名称"/>)
-            }
+            {getFieldDecorator('name', {
+              initialValue: this.state.teamName,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入团队名称'
+                }
+              ]
+            })(<Input placeholder="团队名称"/>)
+}
           </FormItem>
 
           <FormItem label="团队成员">
-            {
-              getFieldDecorator('member')
-              (<Input placeholder="团队成员"/>)
-            }
+            {getFieldDecorator('member')(
+              <div className="">
+                {this.state.members.map((item, index) => {
+                  return (
+                    <Tag key={index}>{item.info.nickName}</Tag>
+                  );
+                })}
+                <Input placeholder="添加成员"/>
+              </div>
+            )
+}
           </FormItem>
         </Form>
       </Modal>
@@ -131,22 +147,22 @@ class TeamInfo extends Component {
   }
 
   addMember() {
-    this.setState({
-      visible: true
-    });
+    this.setState({visible: true});
   }
 
   handleOk() {
-    this.setState({
-      visible: false,
+    this.setState({visible: false});
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+
+      }
     });
   }
 
   handleCancel(e) {
     console.log(e);
-    this.setState({
-      visible: false,
-    });
+    this.setState({visible: false});
   }
 }
 

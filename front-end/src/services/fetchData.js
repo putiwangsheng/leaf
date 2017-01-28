@@ -13,6 +13,10 @@ export function getPersonalRepoList(){
 
 // 获取仓库
 export function getRepoInfo(repoId){
+  if(!repoId){
+    repoId = '';
+  }
+
   return request({
     url: `${API}/api/repo/${repoId}`
   });
@@ -20,6 +24,10 @@ export function getRepoInfo(repoId){
 
 // 获取仓库文档
 export function getRepoDoc(repoId){
+  if(!repoId){
+    repoId = '';
+  }
+
   return request({
     url: `${API}/api/doc?repoId=${repoId}`
   });
@@ -36,6 +44,9 @@ export function saveDoc(body) {
 
 // 获得文档
 export function getDocInfo(docId){
+  if(!docId){
+    docId = '';
+  }
   return request({
     url: `${API}/api/doc/${docId}`,
   });
@@ -78,6 +89,9 @@ export function createTeam(body){
 
 // 获取团队信息
 export function getTeamInfo(teamId){
+  if(!teamId){
+    teamId = '';
+  }
   return request({
     url: `${API}/api/team/${teamId}`,
   });
@@ -85,6 +99,9 @@ export function getTeamInfo(teamId){
 
 // 获取个人信息
 export function getUserInfo(userId){
+  if(!userId){
+    userId = '';
+  }
   return request({
     url: `${API}/api/user/${userId}`,
   });

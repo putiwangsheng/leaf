@@ -16,6 +16,9 @@ class CreateTeam extends Component {
 
     return (
       <div className={styles.container}>
+        <p className="title">
+          创建团队
+        </p>
         <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
           <FormItem label="头像">
             <Input placeholder="头像"/>

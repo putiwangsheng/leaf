@@ -9,18 +9,17 @@ const FormItem = Form.Item;
 class EditPersonInfo extends Component {
   constructor(props) {
     super(props);
-    this.userId = '';
+    this.userId = this.props.location.query.userid;
     this.state = {
       userInfo: {}
     };
   }
 
   componentDidMount(){
-    getUserInfo().then(data => {
+    getUserInfo(this.userId).then(data => {
       this.setState({
-        userInfo: data[0].info
+        userInfo: data.info
       });
-      this.userId = data[0]._id;
     });
   }
 
@@ -34,6 +33,9 @@ class EditPersonInfo extends Component {
 
     return (
       <div className={styles.container}>
+        <p className="title">
+          修改个人信息
+        </p>
         <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
           <FormItem label="头像" {...formItemLayout}>
             <Input placeholder="头像"/>
@@ -109,7 +111,7 @@ class EditPersonInfo extends Component {
           collectedReposIds:[],
           info: values
         };
-        
+
         modifyUserInfo(this.userId, body).then(data => {
           console.log(data);
           browserHistory.push(`${API}/`);
