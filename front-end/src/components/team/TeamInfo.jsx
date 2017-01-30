@@ -8,7 +8,7 @@ import {
   Tag
 } from 'antd';
 import styles from './TeamInfo.less';
-import {getTeamInfo, getUserInfo} from '../../services/fetchData';
+import {getTeamInfo, getUserInfo, modifyTeamInfo} from '../../services/fetchData';
 const FormItem = Form.Item;
 
 class TeamInfo extends Component {
@@ -18,26 +18,14 @@ class TeamInfo extends Component {
 
     this.state = {
       members: [],
-      teamName: '',
-      visible: false
+      teamInfo: {},
+      visible: false,
+      isRepo: true
     };
   }
 
   componentDidMount() {
-    getTeamInfo(this.teamId).then(data => {
-      let memberIds = data.membersIds;
-      let teamName = data.name;
-
-      let memberArr = [];
-      memberIds.forEach(item => {
-        memberArr.push(getUserInfo(item));
-      });
-
-      Promise.all(memberArr).then(data => {
-        console.log(data);
-        this.setState({members: data, isRepo: true, teamName});
-      });
-    });
+    this.fetchData();
   }
 
   render() {
@@ -95,7 +83,7 @@ class TeamInfo extends Component {
           <img src={item.info.avatar} alt="avatar" className="user-avatar"/>
           <span className="nickName">{item.info.nickName}</span>
           <span>Owner</span>
-          <span className="delete">删除</span>
+          <span className="delete" onClick={this.deleteMember.bind(this, item._id)}>删除</span>
         </div>
       );
     }));
@@ -109,7 +97,7 @@ class TeamInfo extends Component {
         <Form horizontal>
           <FormItem label="团队名称">
             {getFieldDecorator('name', {
-              initialValue: this.state.teamName,
+              initialValue: this.state.teamInfo.name,
               rules: [
                 {
                   required: true,
@@ -121,14 +109,14 @@ class TeamInfo extends Component {
           </FormItem>
 
           <FormItem label="团队成员">
-            {getFieldDecorator('member')(
+            {getFieldDecorator('memberName')(
               <div className="">
                 {this.state.members.map((item, index) => {
                   return (
                     <Tag key={index}>{item.info.nickName}</Tag>
                   );
                 })}
-                <Input placeholder="添加成员"/>
+                <Input placeholder="成员昵称"/>
               </div>
             )
 }
@@ -136,6 +124,21 @@ class TeamInfo extends Component {
         </Form>
       </Modal>
     );
+  }
+
+  fetchData(){
+    getTeamInfo(this.teamId).then(teamData => {
+      let memberIds = teamData.membersIds;
+
+      let memberArr = [];
+      memberIds.forEach(item => {
+        memberArr.push(getUserInfo(item));
+      });
+
+      Promise.all(memberArr).then(data => {
+        this.setState({members: data, teamInfo: teamData});
+      });
+    });
   }
 
   changeTab(key) {
@@ -152,9 +155,24 @@ class TeamInfo extends Component {
 
   handleOk() {
     this.setState({visible: false});
+
+    let that = this;
+
     this.props.form.validateFields((err, values) => {
       if (!err) {
-        console.log('Received values of form: ', values);
+        getUserInfo().then(allMembers => {
+          allMembers.forEach(item => {
+            if(item.info.nickName === values.memberName || item.info.name === values.memberName) {
+              let addMemberId = item._id;
+              let body = that.state.teamInfo;
+              body.membersIds.push(addMemberId);
+              modifyTeamInfo(body._id, body).then(data => {
+                console.log(data);
+                that.fetchData();
+              });
+            }
+          });
+        });
 
       }
     });
@@ -162,7 +180,23 @@ class TeamInfo extends Component {
 
   handleCancel(e) {
     console.log(e);
+    this.props.form.resetFields();
     this.setState({visible: false});
+  }
+
+  deleteMember(memberId){
+    let memberIds = this.state.teamInfo.membersIds;
+    let index;
+    memberIds.forEach((item, itemIndex) => {
+      if(item === memberId){
+        index = itemIndex;
+      }
+    });
+    memberIds.splice(index, 1);
+    modifyTeamInfo(this.state.teamInfo._id, this.state.teamInfo).then(data => {
+      console.log(data);
+      this.fetchData();
+    });
   }
 }
 

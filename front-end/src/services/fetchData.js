@@ -97,6 +97,15 @@ export function getTeamInfo(teamId){
   });
 }
 
+// 修改个人信息
+export function modifyTeamInfo(teamId, body){
+  return request({
+    url: `${API}/api/team/${teamId}`,
+    method: 'put',
+    body: body
+  });
+}
+
 // 获取个人信息
 export function getUserInfo(userId){
   if(!userId){
