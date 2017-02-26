@@ -7,6 +7,8 @@ import NotFound from '../common/NotFound';
 import EditDoc from '../components/doc/EditDoc';
 import DocContent from '../components/doc/DocContent';
 
+import Catagory from '../components/catagory/index';
+
 import CreateTeam from '../components/team/CreateTeam';
 import TeamInfo from '../components/team/TeamInfo';
 
@@ -25,6 +27,7 @@ class Routes extends Component {
     return (
       <Router history={this.props.history}>
         <Route path="/" component={MainLayout}>
+          <Route path="/index" component={Catagory} />
 
           {/* doc: */}
           <Route path="/doc/edit" component={EditDoc} />

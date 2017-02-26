@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import {Link} from 'react-router';
-import {Button, Tabs, Icon, Popconfirm, message} from 'antd';
+import {Button, Tabs, Icon, Popconfirm, message, Tooltip } from 'antd';
 
 import EditContentTable from './EditContentTable';
 
@@ -42,9 +42,9 @@ class Repo extends Component {
         </Link>
 
         <div className="repo-content">
-          <Icon type="smile-o" className="icon-collect"/>
+          <div><Icon type="smile-o" className="icon-collect" onClick={this.collectRepo.bind(this)}/><p className="word-collect">收藏</p></div>
 
-          <Tabs defaultActiveKey="1" onChange={this.changeTab.bind(this)}>
+          <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="目录" key="1">
               <div className="tab-pane-content">
                 <p className="repoName">
@@ -119,7 +119,9 @@ class Repo extends Component {
     });
   }
 
-  changeTab() {}
+  collectRepo() {
+    console.log('s');
+  }
 }
 
 export default Repo;

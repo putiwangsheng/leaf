@@ -20,7 +20,6 @@ class DocContent extends Component {
   componentDidMount() {
     getDocInfo(this.docId).then(data => {
       console.log(data);
-      // this.setState({docContent: data.info});
       marked.setOptions({
         highlight: function (code) {
           return require('highlight.js').highlightAuto(code).value;
