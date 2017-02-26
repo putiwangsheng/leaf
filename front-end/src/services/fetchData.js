@@ -5,9 +5,15 @@ const API = 'http://localhost:8002';
 export { API };
 
 // 获取仓库列表
-export function getPersonalRepoList(){
+export function getRepoList(creatorId){
+  let url = `${API}/api/repo?creatorId=${creatorId}`;
+
+  if(!creatorId) {
+    url = `${API}/api/repo`;
+  }
+
   return request({
-    url: `${API}/api/repo`,
+    url: url
   });
 }
 
@@ -24,12 +30,14 @@ export function getRepoInfo(repoId){
 
 // 获取仓库文档
 export function getRepoDoc(repoId){
+  let url = `${API}/api/doc?repoId=${repoId}`;
+
   if(!repoId){
-    repoId = '';
+    url = `${API}/api/doc`;
   }
 
   return request({
-    url: `${API}/api/doc?repoId=${repoId}`
+    url: url
   });
 }
 

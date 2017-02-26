@@ -14,22 +14,22 @@ class Catagory extends Component {
       }} className={styles.container}>
         <Row>
           <Col span="8">
-            <Card title="Card title" bordered={false}>Card content</Card>
+            <Card title="Card title">Card content</Card>
           </Col>
           <Col span="8">
-            <Card title="Card title" bordered={false}>Card content</Card>
+            <Card title="Card title">Card content</Card>
           </Col>
           <Col span="8">
-            <Card title="Card title" bordered={false}>Card content</Card>
+            <Card title="Card title">Card content</Card>
           </Col>
           <Col span="8">
-            <Card title="Card title" bordered={false}>Card content</Card>
+            <Card title="Card title">Card content</Card>
           </Col>
           <Col span="8">
-            <Card title="Card title" bordered={false}>Card content</Card>
+            <Card title="Card title">Card content</Card>
           </Col>
           <Col span="8">
-            <Card title="Card title" bordered={false}>Card content</Card>
+            <Card title="Card title">Card content</Card>
           </Col>
         </Row>
       </div>

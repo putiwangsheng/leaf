@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {Tabs, Icon} from 'antd';
 import styles from './Personal.less';
-import {getPersonalRepoList, getTeamInfo, getUserInfo} from '../../services/fetchData';
+import {getRepoList, getTeamInfo, getUserInfo} from '../../services/fetchData';
+
+const userId = '58b27acd766cf80822353e7f';
 
 class Personal extends Component {
   constructor() {
@@ -11,21 +13,37 @@ class Personal extends Component {
       repoList: [],
       teams: [],
       userInfo: {},
+      collections: [],
+      allRepos: [],
       userId: ''
     };
   }
 
   componentDidMount() {
-    Promise.all([getPersonalRepoList(), getTeamInfo(), getUserInfo('587c81421407a634241e77cf')]).then(data => {
-      let teamsArr = allMyTeams(data[2]._id, data[1]);
+    Promise.all([getRepoList(userId), getTeamInfo(), getUserInfo(userId), getRepoList()]).then(data => {
+      let teamsArr = getAllMyTeams(data[2]._id, data[1]);
 
       this.setState({
         repoList: data[0],
         teams: teamsArr,
         userInfo: data[2].info,
+        collections: data[2].collectedReposIds,
+        allRepos: data[3],
         userId: data[2]._id
       });
     });
+  }
+
+  renderCollectionList() {
+    let collections = getCollectedRepos(this.state.collections, this.state.allRepos);
+    console.log(this.state.collections, this.state.allRepos)
+    return collections.map((item, index) => {
+      return (
+        <Link to={`/repo?repoid=${item._id}`} key={item._id}>
+          {item.repoName}
+        </Link>
+      )
+    })
   }
 
   render() {
@@ -92,7 +110,7 @@ class Personal extends Component {
               </div>
 
             </Tabs.TabPane>
-            <Tabs.TabPane tab="收藏列表" key="2">Content of Tab Pane 2</Tabs.TabPane>
+            <Tabs.TabPane tab="收藏列表" key="2">{this.renderCollectionList()}</Tabs.TabPane>
           </Tabs>
         </div>
       </div>
@@ -100,20 +118,34 @@ class Personal extends Component {
   }
 
   changeTab() {}
-
 }
 
 // 获取个人的所有团队
-function allMyTeams(userId, teams){
+function getAllMyTeams(userId, teams){
   let teamsArr = [];
   teams.forEach(team => {
     let membersIds = team.membersIds;
+    console.log(membersIds, userId)
     if(membersIds.indexOf(userId) !== -1){
       teamsArr.push(team);
     }
   });
 
   return teamsArr;
+}
+
+// 获得收藏的仓库信息
+function getCollectedRepos(repoIds, repos) {
+  let collectionArr = [];
+  repoIds.forEach(id => {
+    repos.forEach(repo => {
+      if(id === repo._id) {
+        collectionArr.push(repo);
+      }
+    })
+  })
+
+  return collectionArr;
 }
 
 export default Personal;
