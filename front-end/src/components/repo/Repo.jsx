@@ -54,7 +54,7 @@ class Repo extends Component {
                   {repoData.intro}
                 </p>
                 <div className="docs">
-                  <EditContentTable />
+                  <EditContentTable repoId={this.repoId} />
                 </div>
               </div>
 

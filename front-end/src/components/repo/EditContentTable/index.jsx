@@ -7,60 +7,95 @@ import update from 'react/lib/update';
 
 import Card from './Card';
 
+import { getRepoInfo, API, request } from '../../../services/fetchData.js';
+
 import styles from './index.less';
 
-
+/*jshint ignore:start*/
 @DragDropContext(HTML5Backend)
+/*jshint ignore:end*/
 class EditContentTable extends Component {
   constructor() {
     super();
 
-    this.state = {}
+    this.state = {};
 
-    this.state.cards = [
-      {
-        id: 1,
-        rank: 1,
-        title: '编程',
-        hoverStyle: undefined
-      },
-      {
-        id: 2,
-        rank: 2,
-        title: 'js 大法好1',
-        hoverStyle: undefined
-      },
-      {
-        id: 11,
-        rank: 1,
-        title: '编程',
-        hoverStyle: undefined
-      },
-      {
-        id: 22,
-        rank: 2,
-        title: 'js 大法好2',
-        hoverStyle: undefined
-      },
-      {
-        id: 3,
-        rank: 1,
-        title: '英语',
-        hoverStyle: undefined
-      },
-      {
-        id: 4,
-        rank: 2,
-        title: '要学好英语',
-        hoverStyle: undefined
-      },
-      {
-        id: 5,
-        rank: 2,
-        title: '要学能阅读英语',
-        hoverStyle: undefined
-      }
-    ];
+    // this.state.cards = [
+    //   {
+    //     id: 1,
+    //     rank: 1,
+    //     title: '编程',
+    //     hoverStyle: undefined
+    //   },
+    //   {
+    //     id: 2,
+    //     rank: 2,
+    //     title: 'js 大法好1',
+    //     hoverStyle: undefined
+    //   },
+    //   {
+    //     id: 11,
+    //     rank: 1,
+    //     title: '编程',
+    //     hoverStyle: undefined
+    //   },
+    //   {
+    //     id: 22,
+    //     rank: 2,
+    //     title: 'js 大法好2',
+    //     hoverStyle: undefined
+    //   },
+    //   {
+    //     id: 3,
+    //     rank: 1,
+    //     title: '英语',
+    //     hoverStyle: undefined
+    //   },
+    //   {
+    //     id: 4,
+    //     rank: 2,
+    //     title: '要学好英语',
+    //     hoverStyle: undefined
+    //   },
+    //   {
+    //     id: 5,
+    //     rank: 2,
+    //     title: '要学能阅读英语',
+    //     hoverStyle: undefined
+    //   }
+    // ];
+
+  }
+
+  componentDidMount() {
+    const that = this;
+
+    getRepoInfo(this.props.repoId)
+      .then(repo => {
+        const { tableOfContents } = repo;
+        const docsIds = tableOfContents.map(item => item.docId);
+
+        const qureyStr = `?_id__in=${docsIds.join(',')}&select=title`;
+
+        return request({
+          url: `${API}/api/doc${qureyStr}`
+        }).then(docs => {
+
+          const contentOfTable = docs.map(doc => ({
+            id: doc._id,
+            title: doc.title,
+            rank: tableOfContents.filter(item => item.docId === doc._id)[0].rank,
+            hoverStyle: undefined
+          }));
+
+          return contentOfTable
+
+        }).then(contentOfTable => {
+          that.setState({
+            cards: contentOfTable
+          })
+        })
+      })
   }
 
   changeHoverStyle(style, index) {
@@ -110,14 +145,14 @@ class EditContentTable extends Component {
     const nextRectRank = cards[hoverIndex + 1] && cards[hoverIndex + 1].rank;
 
     // 4. judge newRank:三种情况分别讨论。整个判断逻辑请看 doc.md
-    if (hoverClientHeight < rectHeight/4) {
+    if (hoverClientHeight >= 0 && hoverClientHeight < rectHeight/4) {
       moveInfo.newRank = hoverRectRank;
       moveInfo.isFirstBlock = true;
     }
     else if (hoverClientHeight => rectHeight/4 && hoverClientHeight < rectHeight * 3/4) {
       moveInfo.newRank = 2;
     }
-    else if (hoverClientHeight => rectHeight*3/4) {
+    else if (hoverClientHeight => rectHeight*3/4 && hoverClientHeight <= rectHeight) {
       // 不存在下一行的特殊情况。
       if (cards[hoverIndex + 1] === undefined) {
         moveInfo.newRank = 1;
@@ -178,6 +213,20 @@ class EditContentTable extends Component {
     this.setState({
       cards: newCards
     });
+
+    // put data to server
+    const contentOfTable = newCards.map(item => ({
+      rank: item.rank,
+      docId: item.id
+    }))
+
+    request({
+      url: `${API}/api/repo/${this.props.repoId}`,
+      method: 'PUT',
+      body: {
+        contentOfTable
+      }
+    })
   }
 
   resetHoverStyle() {

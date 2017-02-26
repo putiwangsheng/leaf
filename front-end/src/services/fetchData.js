@@ -2,7 +2,7 @@ import { request } from './common';
 
 const API = 'http://localhost:8002';
 
-export { API };
+export { API, request };
 
 // 获取仓库列表
 export function getPersonalRepoList(){
