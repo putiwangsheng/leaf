@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Row, Col, Form, Input, Checkbox, Button} from 'antd';
+import {browserHistory} from 'react-router';
+
 import styles from './CreateRepo.less';
 import { createRepo } from '../../services/fetchData';
 
@@ -73,9 +75,10 @@ class CreateRepo extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        values.creatorId = '587c81421407a634241e77cf';
+        values.creatorId = '58b27acd766cf80822353e7f';
         createRepo(values).then(data => {
           console.log(data);
+          browserHistory.push(`${API}/`);
         });
       }
     });

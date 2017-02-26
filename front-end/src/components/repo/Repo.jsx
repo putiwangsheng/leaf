@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
-
 import {Link} from 'react-router';
 import {Button, Tabs, Icon, Popconfirm, message, Tooltip } from 'antd';
 
 import EditContentTable from './EditContentTable';
 
 import styles from './Repo.less';
-import {getRepoInfo, getRepoDoc, deleteRepoDoc} from '../../services/fetchData';
-
+import {getRepoInfo, getRepoDoc, deleteRepoDoc, getUserInfo, modifyUserInfo} from '../../services/fetchData';
 
 class Repo extends Component {
   constructor(props) {
@@ -81,9 +79,11 @@ class Repo extends Component {
   getRepoDocList() {
     return this.state.repoDocs.map(item => {
       return (
-        <p key={item._id}>
-          {item.info.title}
-        </p>
+        <Link to={`/doc/view?docid=${item._id}&flag=publish`} key={item._id}>
+          <p>
+            {item.info.title}
+          </p>
+        </Link>
       );
     });
   }
@@ -119,8 +119,18 @@ class Repo extends Component {
     });
   }
 
+  // 收藏仓库
   collectRepo() {
     console.log('s');
+    getUserInfo('58b27acd766cf80822353e7f').then(userData => {
+      let collectionIds = userData.collectedReposIds;
+      collectionIds.push(this.repoId);
+
+      modifyUserInfo('58b27acd766cf80822353e7f', userData).then(data => {
+        console.log(data);
+        message.success('收藏成功');
+      })
+    })
   }
 }
 

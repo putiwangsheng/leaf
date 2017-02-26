@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { Router, Route } from 'react-router';
+import { Router, Route, IndexRoute } from 'react-router';
 
 import MainLayout from '../layouts/MainLayout';
 
@@ -7,7 +7,7 @@ import NotFound from '../common/NotFound';
 import EditDoc from '../components/doc/EditDoc';
 import DocContent from '../components/doc/DocContent';
 
-import Catagory from '../components/catagory/index';
+import Catagory from '../components/homePage/index';
 
 import CreateTeam from '../components/team/CreateTeam';
 import TeamInfo from '../components/team/TeamInfo';
@@ -27,7 +27,7 @@ class Routes extends Component {
     return (
       <Router history={this.props.history}>
         <Route path="/" component={MainLayout}>
-          <Route path="/index" component={Catagory} />
+          <IndexRoute component={Catagory} />
 
           {/* doc: */}
           <Route path="/doc/edit" component={EditDoc} />
