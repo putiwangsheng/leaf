@@ -7,29 +7,35 @@ import EditContentTable from './EditContentTable';
 import styles from './Repo.less';
 import {getRepoInfo, getRepoDoc, deleteRepoDoc, getUserInfo, modifyUserInfo} from '../../services/fetchData';
 
+const userId = '58b27acd766cf80822353e7f';
+
 class Repo extends Component {
   constructor(props) {
     super(props);
     this.repoId = this.props.location.query.repoid;
     this.state = {
       repoData: {},
-      repoDocs: [],
-      draftDocs: []
+      draftDocs: [],
+      userInfo: {},
+      isCollected: false
     };
   }
 
   componentDidMount() {
     Promise.all([
       getRepoInfo(this.repoId),
-      getRepoDoc(this.repoId)
+      getRepoDoc(this.repoId),
+      getUserInfo(userId)
     ]).then(data => {
-      console.log(data);
-      this.setState({repoData: data[0], repoDocs: data[1], draftDocs: data[1]});
+      let isCollected = this.judgeIsCollected(data[2]);
+      this.setState({repoData: data[0], draftDocs: data[1], userInfo: data[2], isCollected});
     });
   }
 
   render() {
-    let {repoData} = this.state;
+    let {repoData, isCollected} = this.state;
+
+    let iconColorClass = isCollected ? 'collected' : '';
 
     return (
       <div className={styles.repoContainer}>
@@ -40,7 +46,7 @@ class Repo extends Component {
         </Link>
 
         <div className="repo-content">
-          <div><Icon type="smile-o" className="icon-collect" onClick={this.collectRepo.bind(this)}/><p className="word-collect">收藏</p></div>
+          <div><Icon type="smile-o" className={`icon-collect ${iconColorClass}`} onClick={this.collectRepo.bind(this)}/><p className="word-collect">收藏</p></div>
 
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="目录" key="1">
@@ -55,7 +61,6 @@ class Repo extends Component {
                   <EditContentTable repoId={this.repoId} />
                 </div>
               </div>
-
             </Tabs.TabPane>
 
             <Tabs.TabPane tab="草稿" key="2">
@@ -76,6 +81,7 @@ class Repo extends Component {
     );
   }
 
+  // 草稿列表
   getDraftDocList() {
     return this.state.draftDocs.map(item => {
       return (
@@ -109,16 +115,30 @@ class Repo extends Component {
 
   // 收藏仓库
   collectRepo() {
-    console.log('s');
-    getUserInfo('58b27acd766cf80822353e7f').then(userData => {
-      let collectionIds = userData.collectedReposIds;
-      collectionIds.push(this.repoId);
+    let { userInfo, isCollected } = this.state;
 
-      modifyUserInfo('58b27acd766cf80822353e7f', userData).then(data => {
-        console.log(data);
-        message.success('收藏成功');
-      })
+    if(isCollected) {
+      message.warning('该仓库您已收藏', 1.5);
+
+      return;
+    }
+
+    let collectionIds = userInfo.collectedReposIds;
+    collectionIds.push(this.repoId);
+
+    modifyUserInfo(userId, userInfo).then(data => {
+      console.log(data);
+      message.success('收藏成功');
     })
+  }
+
+  // 判断该仓库是否被收藏
+  judgeIsCollected(userInfo) {
+    let collectionIds = userInfo.collectedReposIds;
+
+    if(collectionIds.indexOf(this.repoId) !== -1) {
+      return true;
+    }
   }
 }
 

@@ -19,52 +19,6 @@ class EditContentTable extends Component {
     super();
 
     this.state = {};
-
-    // this.state.cards = [
-    //   {
-    //     id: 1,
-    //     rank: 1,
-    //     title: '编程',
-    //     hoverStyle: undefined
-    //   },
-    //   {
-    //     id: 2,
-    //     rank: 2,
-    //     title: 'js 大法好1',
-    //     hoverStyle: undefined
-    //   },
-    //   {
-    //     id: 11,
-    //     rank: 1,
-    //     title: '编程',
-    //     hoverStyle: undefined
-    //   },
-    //   {
-    //     id: 22,
-    //     rank: 2,
-    //     title: 'js 大法好2',
-    //     hoverStyle: undefined
-    //   },
-    //   {
-    //     id: 3,
-    //     rank: 1,
-    //     title: '英语',
-    //     hoverStyle: undefined
-    //   },
-    //   {
-    //     id: 4,
-    //     rank: 2,
-    //     title: '要学好英语',
-    //     hoverStyle: undefined
-    //   },
-    //   {
-    //     id: 5,
-    //     rank: 2,
-    //     title: '要学能阅读英语',
-    //     hoverStyle: undefined
-    //   }
-    // ];
-
   }
 
   componentDidMount() {
@@ -242,7 +196,7 @@ class EditContentTable extends Component {
     return (
       <div className={styles.container}>
         <p className="notice">
-          <span className="star">*</span>拖动进行目录设置
+          <span className="star">*</span>拖动可进行目录设置
         </p>
         {this.renderContentList()}
       </div>
