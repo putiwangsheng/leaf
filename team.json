@@ -1,0 +1,27 @@
+{
+  "_id": "5885fab3399ff81d6c69c152",
+  "name": "test team",
+  "intro": "dafddsgfg",
+  "avatar": "https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg",
+  "isPrivate": false,
+  "membersIds": [
+    "587c81421407a634241e77cf",
+    "5885ee02399ff81d6c69c150",
+    "5885ee67399ff81d6c69c151"
+  ],
+  "__v": 0
+}
+
+{
+  "_id": "5885fab3399ff81d6c69c152",
+  "name": "test team",
+  "intro": "dafddsgfg",
+  "avatar": "https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg",
+  "isPrivate": false,
+  "membersIds": [
+    "587c81421407a634241e77cf",
+    "5885ee02399ff81d6c69c150",
+    "5885ee67399ff81d6c69c151"
+  ],
+  "__v": 0
+}

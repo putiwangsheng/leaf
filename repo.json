@@ -1,0 +1,20 @@
+{
+  "_id": "5877690a275d150ccc15da16",
+  "repoName": "test1",
+  "intro": "test1 repo",
+  "creatorId": "587c81421407a634241e77cf",
+  "tableOfContents": [
+    {
+      "docId": "587db30a7b37bd3aa8c4a49d",
+      "_id": "587db30a7b37bd3aa8c4a49e",
+      "rank": 1
+    },
+    {
+      "docId": "587db3167b37bd3aa8c4a49f",
+      "_id": "587db3167b37bd3aa8c4a4a0",
+      "rank": 1
+    }
+  ],
+  "isPrivate": false,
+  "__v": 12
+}
