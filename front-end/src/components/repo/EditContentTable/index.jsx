@@ -72,27 +72,26 @@ class EditContentTable extends Component {
 
     getRepoInfo(this.props.repoId)
       .then(repo => {
-        const { tableOfContents } = repo;
+        let { tableOfContents } = repo;
         const docsIds = tableOfContents.map(item => item.docId);
 
-        const qureyStr = `?_id__in=${docsIds.join(',')}&select=title`;
+        const qureyStr = `?_id__in=${docsIds.join(',')}&select=info`;
 
         return request({
           url: `${API}/api/doc${qureyStr}`
         }).then(docs => {
-
-          const contentOfTable = docs.map(doc => ({
-            id: doc._id,
-            title: doc.title,
-            rank: tableOfContents.filter(item => item.docId === doc._id)[0].rank,
-            hoverStyle: undefined
-          }));
-
-          return contentOfTable
-
-        }).then(contentOfTable => {
+          console.log(tableOfContents);
+          return tableOfContents.map(item => {
+            return {
+              id: item.docId,
+              rank: item.rank,
+              title: docs.filter(doc => item.docId === doc._id)[0].info.title,
+              hoverStyle: undefined
+          }})
+        }).then(tableOfContents => {
+          console.log(tableOfContents);
           that.setState({
-            cards: contentOfTable
+            cards: tableOfContents
           })
         })
       })
@@ -215,16 +214,16 @@ class EditContentTable extends Component {
     });
 
     // put data to server
-    const contentOfTable = newCards.map(item => ({
+    const tableOfContents = newCards.map(item => ({
       rank: item.rank,
       docId: item.id
     }))
 
     request({
       url: `${API}/api/repo/${this.props.repoId}`,
-      method: 'PUT',
+      method: 'put',
       body: {
-        contentOfTable
+        tableOfContents
       }
     })
   }
@@ -251,6 +250,10 @@ class EditContentTable extends Component {
   }
 
   renderContentList() {
+    if (!this.state.cards) {
+      return;
+    }
+
     return this.state.cards.map((item, i) => {
       return (
         <div className={`rank${item.rank}${this.getHoverClass(item)}`} key={i}>

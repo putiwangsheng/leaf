@@ -27,7 +27,6 @@ app.set('views', path.join(__dirname, 'public'));
 function setHeader(app) {
   app.all('*', function(req, res, next) {
     // for local dev
-    // res.header("Access-Control-Allow-Origin", "http://localhost:8080")
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods','PUT,POST,GET,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers',

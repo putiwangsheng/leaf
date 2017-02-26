@@ -76,18 +76,6 @@ class Repo extends Component {
     );
   }
 
-  getRepoDocList() {
-    return this.state.repoDocs.map(item => {
-      return (
-        <Link to={`/doc/view?docid=${item._id}&flag=publish`} key={item._id}>
-          <p>
-            {item.info.title}
-          </p>
-        </Link>
-      );
-    });
-  }
-
   getDraftDocList() {
     return this.state.draftDocs.map(item => {
       return (
