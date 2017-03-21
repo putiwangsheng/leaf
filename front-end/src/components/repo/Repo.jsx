@@ -46,7 +46,7 @@ class Repo extends Component {
         </Link>
 
         <div className="repo-content">
-          <div><Icon type="smile-o" className={`icon-collect ${iconColorClass}`} onClick={this.collectRepo.bind(this)}/><p className="word-collect">收藏</p></div>
+          <div><Icon type="smile-o" className={`icon-collect ${iconColorClass}`} onClick={this.handleCollectRepo.bind(this)}/><p className="word-collect">收藏</p></div>
 
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="目录" key="1">
@@ -113,22 +113,25 @@ class Repo extends Component {
     });
   }
 
-  // 收藏仓库
-  collectRepo() {
+  // 收藏仓库 & 取消收藏
+  handleCollectRepo() {
     let { userInfo, isCollected } = this.state;
+    let collectionIds = userInfo.collectedReposIds;
 
     if(isCollected) {
-      message.warning('该仓库您已收藏', 1.5);
-
-      return;
+      let index = collectionIds.indexOf(this.repoId);
+      collectionIds.splice(index, 1);
+      console.log(collectionIds);
+      message.warning('已取消收藏');
+      this.setState({isCollected: false});
+    }else {
+      collectionIds.push(this.repoId);
+      message.success('收藏成功');
+      this.setState({isCollected: true});
     }
-
-    let collectionIds = userInfo.collectedReposIds;
-    collectionIds.push(this.repoId);
 
     modifyUserInfo(userId, userInfo).then(data => {
       console.log(data);
-      message.success('收藏成功');
     })
   }
 

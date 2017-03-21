@@ -137,10 +137,12 @@ function isChild(childCardIndex, cardIndex, cards) {
 @DropTarget(CARD_TYPE, cardTarget, connect => ({
   connectDropTarget: connect.dropTarget()
 }))
+
 @DragSource(CARD_TYPE, cardSource, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging()
 }))
+
 class Card extends Component {
   constructor() {
     super();
@@ -155,6 +157,7 @@ class Card extends Component {
     return connectDragSource(connectDropTarget(
       <div className={styles.card} style={drapingSytle}>
         {text}
+        <div className="dotted-line"></div>
       </div>
     ));
   }

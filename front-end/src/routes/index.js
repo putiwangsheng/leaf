@@ -41,7 +41,6 @@ class Routes extends Component {
           <Route path="/person" component={Personal} />
           <Route path="/person/edit" component={EditPersonInfo} />
 
-
           {/* repo: */}
           <Route path="/repo/create" component={CreateRepo} />
           <Route path="/repo" component={Repo} />

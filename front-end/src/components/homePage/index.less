@@ -1,3 +1,17 @@
+:global {
+  body .ant-btn.ant-btn-primary.ant-btn-lg {
+    display: none;
+  }
+
+  body .ant-modal-content {
+    text-align: center;
+  }
+
+  .anticon-info-circle:before {
+    display: none;
+  }
+}
+
 .container{
   :global{
     .ant-row > div {
@@ -6,6 +20,23 @@
 
     .ant-card{
       margin-bottom: 30px;
+    }
+  }
+}
+
+.modal {
+  :global {
+    .qq {
+      margin-left: 110px;
+      margin-top: 30px;
+      width: 48px;
+      height: 48px;
+      background-image: url('../../images/qq.svg');
+    }
+
+    .notice {
+      position: relative;
+      left: -22px;
     }
   }
 }
