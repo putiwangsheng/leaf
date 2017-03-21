@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 const compress = require('compression');
+const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const config = require('./config');
@@ -11,9 +12,11 @@ setHeader(app);
 
 // use mid
 app.use(compress())
+  .use(cookieParser())
   .use(bodyParser.json())
   .use(express.static(__dirname + '/public'));
 
+require('./routes')(app);
 
 const model = require('./model');
 model.setRestApi(app);
@@ -39,13 +42,11 @@ function setHeader(app) {
   });
 }
 
-
-app.get('/*', function (req, res) {
+app.get('/', function (req, res) {
   res.render('index', function (err, html) {
     res.send(html);
   });
 });
-
 
 app.listen(config.port);
 console.log(`started @ ${config.port}`);
