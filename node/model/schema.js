@@ -1,17 +1,20 @@
 const mongoose = require('mongoose');
 
+// 用户信息表结构
 exports.userSchema = new mongoose.Schema({
   info: {
     avatar: { type: String },
-    nickName: { type: String, unique: true, require: true },
+    nickName: { type: String, require: true },
     name: { type: String },
-    email: { type: String, unique: true, require: true},
+    email: { type: String, unique: true },
     job: { type: String },
     department: { type: String }
   },
+  openId: { type: String, unique: true, require: true },
   collectedReposIds: [{type: String}]
 });
 
+// 团队信息表结构
 exports.teamSchema = new mongoose.Schema({
   membersIds: [{ type: String, require: true }],
   name: {type: String, require: true},
@@ -20,6 +23,7 @@ exports.teamSchema = new mongoose.Schema({
   isPrivate: {type: Boolean, default: false}
 });
 
+// 仓库信息表结构
 exports.repoSchema = new mongoose.Schema({
   creatorId: { type: String, require: true },
   repoName: { type: String, require: true },
@@ -33,6 +37,7 @@ exports.repoSchema = new mongoose.Schema({
   ]
 });
 
+// 文档信息表结构
 exports.docSchema = new mongoose.Schema({
   repoId: { type: String, require: true },
   creatorId: { type: String, require: true },

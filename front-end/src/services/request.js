@@ -1,5 +1,9 @@
 import fetch from 'isomorphic-fetch';
 
+const API = 'http://changqi.site';
+
+export { API };
+
 export function request(option) {
   let { url, method, body } = option;
 
@@ -9,7 +13,7 @@ export function request(option) {
 
   let fetchOption = {
     method: method,
-    // credentials: 'include'
+    credentials: 'include'
   };
 
   if(method !== 'get' && method !== 'delete'){

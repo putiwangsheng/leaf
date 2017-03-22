@@ -3,13 +3,36 @@ import {Row, Col, Form, Input, Checkbox, Button} from 'antd';
 import {browserHistory} from 'react-router';
 
 import styles from './CreateRepo.less';
-import { createRepo } from '../../services/fetchData';
+
+import { request, API } from '../../services/request';
 
 const FormItem = Form.Item;
 
 class CreateRepo extends Component {
   constructor(props) {
     super(props);
+
+    this.userId = this.props.location.query.userId;
+  }
+
+  // 创建仓库
+  handleSubmit(e){
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        values.creatorId = this.userId;
+
+        request({
+          url: `${API}/api/repo`,
+          method: 'post',
+          body: values
+        }).then(data => {
+          console.log(data);
+          browserHistory.push(`${API}/`);
+        });
+      }
+    });
   }
 
   render() {
@@ -68,20 +91,6 @@ class CreateRepo extends Component {
         </Form>
       </div>
     );
-  }
-
-  handleSubmit(e){
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-        values.creatorId = '58b27acd766cf80822353e7f';
-        createRepo(values).then(data => {
-          console.log(data);
-          browserHistory.push(`${API}/`);
-        });
-      }
-    });
   }
 }
 

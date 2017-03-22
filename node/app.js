@@ -30,7 +30,8 @@ app.set('views', path.join(__dirname, 'public'));
 function setHeader(app) {
   app.all('*', function(req, res, next) {
     // for local dev
-    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Origin', 'http://changqi.site');
+    res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Methods','PUT,POST,GET,DELETE,OPTIONS');
     res.header('Access-Control-Allow-Headers',
       'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');

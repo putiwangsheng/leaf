@@ -2,13 +2,38 @@ import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
 import {Form, Input, Checkbox, Button} from 'antd';
 import styles from './CreateTeam.less';
-import { API, createTeam } from '../../services/fetchData';
+
+import { request, API } from '../../services/request';
 
 const FormItem = Form.Item;
 
 class CreateTeam extends Component {
   constructor(props) {
     super(props);
+
+    this.userId = this.props.location.query.userId;
+  }
+
+  // 创建团队
+  handleSubmit(e){
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        console.log('Received values of form: ', values);
+        values.avatar = 'https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg';
+        values.membersIds = [this.userId];
+
+        request({
+          url: `${API}/api/team`,
+          method: 'post',
+          body: values
+        }).then(data => {
+          console.log(data);
+          browserHistory.push(`${API}/`);
+        });
+
+      }
+    });
   }
 
   render() {
@@ -61,21 +86,6 @@ class CreateTeam extends Component {
         </Form>
       </div>
     );
-  }
-
-  handleSubmit(e){
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-        values.avatar = 'https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg';
-        values.membersIds = ['58b27acd766cf80822353e7f'];
-        createTeam(values).then(data => {
-          console.log(data);
-          browserHistory.push(`${API}/`);
-        });
-      }
-    });
   }
 }
 

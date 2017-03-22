@@ -1,31 +1,60 @@
 import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
 import {Form, Input, Button} from 'antd';
-import { API, modifyUserInfo, getUserInfo } from '../../services/fetchData';
+
 import styles from './EditPersonInfo.less';
+
+import { request, API } from '../../services/request';
 
 const FormItem = Form.Item;
 
 class EditPersonInfo extends Component {
   constructor(props) {
     super(props);
-    this.userId = this.props.location.query.userid;
+    this.userId = this.props.location.query.userId;
+
     this.state = {
       userInfo: {}
     };
   }
 
   componentDidMount(){
-    getUserInfo(this.userId).then(data => {
+    // 用户信息
+    request({
+      url: `${API}/api/user/${this.userId}`,
+    }).then(data => {
       this.setState({
         userInfo: data.info
       });
     });
   }
 
+  // 修改个人信息
+  handleSubmit(e){
+    e.preventDefault();
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        let body = {
+          collectedReposIds:[],
+          info: values
+        };
+
+        request({
+          url: `${API}/api/user/${this.userId}`,
+          method: 'put',
+          body: body
+        }).then(data => {
+          console.log(data);
+          browserHistory.push(`${API}/person?userId=${this.userId}`);
+        });
+      }
+    });
+  }
+
   render() {
     let { userInfo } = this.state;
     const { getFieldDecorator  } = this.props.form;
+
     const formItemLayout = {
       labelCol: { span: 6 },
       wrapperCol: { span: 14 },
@@ -38,7 +67,13 @@ class EditPersonInfo extends Component {
         </p>
         <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
           <FormItem label="头像" {...formItemLayout}>
-            <Input placeholder="头像"/>
+              {
+                getFieldDecorator ('avatar', {
+                  initialValue: userInfo.avatar,
+                  rules: [{ required: false, message: '请输入头像地址' }],
+                })
+                (<Input placeholder="头像"/>)
+              }
           </FormItem>
 
           <FormItem label="昵称" {...formItemLayout}>
@@ -92,32 +127,13 @@ class EditPersonInfo extends Component {
             span: 14,
             offset: 6
           }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className="modify-button">
               修改
             </Button>
           </FormItem>
         </Form>
       </div>
     );
-  }
-
-  handleSubmit(e){
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        values.avatar = 'https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg';
-
-        let body = {
-          collectedReposIds:[],
-          info: values
-        };
-
-        modifyUserInfo(this.userId, body).then(data => {
-          console.log(data);
-          browserHistory.push(`${API}/`);
-        });
-      }
-    });
   }
 }
 

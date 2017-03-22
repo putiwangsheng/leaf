@@ -8,13 +8,14 @@ import {
   Tag
 } from 'antd';
 import styles from './TeamInfo.less';
-import {getTeamInfo, getUserInfo, modifyTeamInfo} from '../../services/fetchData';
+
+import {request, API} from '../../services/request';
+
 const FormItem = Form.Item;
 
 class TeamInfo extends Component {
   constructor(props) {
     super(props);
-    this.teamId = this.props.location.query.teamid;
 
     this.state = {
       members: [],
@@ -22,10 +23,107 @@ class TeamInfo extends Component {
       visible: false,
       isRepo: true
     };
+
+    this.teamId = this.props.location.query.teamid;
   }
 
   componentDidMount() {
-    this.fetchData();
+    this.fetchTeamData();
+  }
+
+  fetchTeamData() {
+    request({
+      url: `${API}/api/team/${this.teamId}`,
+    }).then(teamData => {
+      let memberIds = teamData.membersIds;
+
+      let memberArr = [];
+      memberIds.forEach(item => {
+        memberArr.push(this.getUserInfo(item));
+      });
+
+      Promise.all(memberArr).then(data => {
+        this.setState({members: data, teamInfo: teamData});
+      });
+    });
+  }
+
+  // 获取用户信息
+  getUserInfo(userId) {
+    if(!userId){
+      userId = '';
+    }
+    return request({
+      url: `${API}/api/user/${userId}`,
+    });
+  }
+
+  changeTab(key) {
+    if (key === '2') {
+      this.setState({isRepo: false});
+    } else {
+      this.setState({isRepo: true});
+    }
+  }
+
+  addMember() {
+    this.setState({visible: true});
+  }
+
+  handleOk() {
+    this.setState({visible: false});
+
+    let that = this;
+
+    this.props.form.validateFields((err, values) => {
+      if (!err) {
+        this.getUserInfo().then(allMembers => {
+          allMembers.forEach(item => {
+            if (item.info.nickName === values.memberName || item.info.name === values.memberName) {
+              let addMemberId = item._id;
+              let body = that.state.teamInfo;
+              body.membersIds.push(addMemberId);
+
+              request({
+                url: `${API}/api/team/${body._id}`,
+                method: 'put',
+                body: body
+              }).then(data => {
+                console.log(data);
+                that.fetchTeamData();
+              });
+            }
+          });
+        });
+
+      }
+    });
+  }
+
+  handleCancel(e) {
+    console.log(e);
+    this.props.form.resetFields();
+    this.setState({visible: false});
+  }
+
+  deleteMember(memberId) {
+    let memberIds = this.state.teamInfo.membersIds;
+    let index;
+    memberIds.forEach((item, itemIndex) => {
+      if (item === memberId) {
+        index = itemIndex;
+      }
+    });
+    memberIds.splice(index, 1);
+
+    request({
+      url: `${API}/api/team/${this.state.teamInfo._id}`,
+      method: 'put',
+      body: this.state.teamInfo
+    }).then(data => {
+      console.log(data);
+      this.fetchTeamData();
+    });
   }
 
   render() {
@@ -124,79 +222,6 @@ class TeamInfo extends Component {
         </Form>
       </Modal>
     );
-  }
-
-  fetchData(){
-    getTeamInfo(this.teamId).then(teamData => {
-      let memberIds = teamData.membersIds;
-
-      let memberArr = [];
-      memberIds.forEach(item => {
-        memberArr.push(getUserInfo(item));
-      });
-
-      Promise.all(memberArr).then(data => {
-        this.setState({members: data, teamInfo: teamData});
-      });
-    });
-  }
-
-  changeTab(key) {
-    if (key === '2') {
-      this.setState({isRepo: false});
-    } else {
-      this.setState({isRepo: true});
-    }
-  }
-
-  addMember() {
-    this.setState({visible: true});
-  }
-
-  handleOk() {
-    this.setState({visible: false});
-
-    let that = this;
-
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        getUserInfo().then(allMembers => {
-          allMembers.forEach(item => {
-            if(item.info.nickName === values.memberName || item.info.name === values.memberName) {
-              let addMemberId = item._id;
-              let body = that.state.teamInfo;
-              body.membersIds.push(addMemberId);
-              modifyTeamInfo(body._id, body).then(data => {
-                console.log(data);
-                that.fetchData();
-              });
-            }
-          });
-        });
-
-      }
-    });
-  }
-
-  handleCancel(e) {
-    console.log(e);
-    this.props.form.resetFields();
-    this.setState({visible: false});
-  }
-
-  deleteMember(memberId){
-    let memberIds = this.state.teamInfo.membersIds;
-    let index;
-    memberIds.forEach((item, itemIndex) => {
-      if(item === memberId){
-        index = itemIndex;
-      }
-    });
-    memberIds.splice(index, 1);
-    modifyTeamInfo(this.state.teamInfo._id, this.state.teamInfo).then(data => {
-      console.log(data);
-      this.fetchData();
-    });
   }
 }
 

@@ -61,7 +61,11 @@ module.exports = function(app) {
         let openIdTemp = openIdString.split(':')[1];
         openId = openIdTemp.split('"')[1];
 
-        res.cookie('openId', openId);
+        res.cookie('openId', openId, {
+          domain: '.changqi.site',
+          expires: new Date(Date.now() + 24 * 3600 * 1000),
+          httpOnly: false
+        });
 
         getUserInfo((err, userInfo) => {
           if (err) {
@@ -71,6 +75,12 @@ module.exports = function(app) {
               message: err
             })
           }
+
+          res.cookie('user', userInfo, {
+            domain: '.changqi.site',
+            expires: new Date(Date.now() + 24 * 3600 * 1000),
+            httpOnly: false
+          });
 
           res.json({
             code: 200,

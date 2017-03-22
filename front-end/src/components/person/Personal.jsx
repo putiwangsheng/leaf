@@ -2,25 +2,25 @@ import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {Tabs, Icon} from 'antd';
 import styles from './Personal.less';
-import {getRepoList, getTeamInfo, getUserInfo} from '../../services/fetchData';
 
-const userId = '58b27acd766cf80822353e7f';
+import { request, API } from '../../services/request';
 
 class Personal extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       repoList: [],
       teams: [],
-      userInfo: {},
+      userInfo: '',
       collections: [],
-      allRepos: [],
-      userId: ''
+      allRepos: []
     };
+
+    this.userId = this.props.location.query.userId;
   }
 
   componentDidMount() {
-    Promise.all([getRepoList(userId), getTeamInfo(), getUserInfo(userId), getRepoList()]).then(data => {
+    Promise.all([this.getRepoList(this.userId), this.getTeamInfo(), this.getUserInfo(), this.getRepoList()]).then(data => {
       let teamsArr = getAllMyTeams(data[2]._id, data[1]);
 
       this.setState({
@@ -28,15 +28,43 @@ class Personal extends Component {
         teams: teamsArr,
         userInfo: data[2].info,
         collections: data[2].collectedReposIds,
-        allRepos: data[3],
-        userId: data[2]._id
+        allRepos: data[3]
       });
+    }, (err) => {
+      console.log(err);
+    });
+  }
+
+  // 获取用户信息
+  getUserInfo() {
+    return request({
+      url: `${API}/api/user/${this.userId}`,
+    });
+  }
+
+  // 获取仓库列表
+  getRepoList(creatorId) {
+    let url = `${API}/api/repo?creatorId=${creatorId}`;
+
+    if(!creatorId) {
+      url = `${API}/api/repo`;
+    }
+
+    return request({
+      url
+    });
+  }
+
+  // 获取团队信息
+  getTeamInfo() {
+    return request({
+      url: `${API}/api/team`,
     });
   }
 
   renderCollectionList() {
     let collections = getCollectedRepos(this.state.collections, this.state.allRepos);
-    console.log(this.state.collections, this.state.allRepos)
+
     return collections.map((item, index) => {
       return (
         <Link to={`/repo?repoid=${item._id}`} key={item._id}>
@@ -47,31 +75,37 @@ class Personal extends Component {
   }
 
   render() {
-    let {repoList, teams, userInfo, userId} = this.state;
-
-    const jobLabel = userInfo.job ? (<span>职位：</span>) : '';
-    const depLabel = userInfo.department ? (<span>部门：</span>) : '';
+    let {repoList, teams, userInfo} = this.state;
 
     return (
       <div className={styles.container}>
         <div className="left-side">
           <div className="personal-info">
-            <Link to={`/person/edit?userid=${userId}`}>
+            <Link to={`/person/edit?userId=${this.userId}`}>
               <Icon type="edit" className="icon-edit"/>
             </Link>
             <p className="name">
-              {userInfo.nickName}（{userInfo.name}）
+              {userInfo.nickName}
+              {
+                userInfo.name ? (<span>（{userInfo.name}）</span>) : null
+              }
             </p>
             <p>
-              <span>邮箱：</span>
+              {
+                userInfo.email ? (<span>邮箱：</span>) : null
+              }
               <span>{userInfo.email}</span>
             </p>
             <p>
-              {jobLabel}
+              {
+                userInfo.job ? (<span>职位：</span>) : null
+              }
               <span>{userInfo.job}</span>
             </p>
             <p>
-              {depLabel}
+              {
+                userInfo.department ? (<span>部门：</span>) : null
+              }
               <span>{userInfo.department}</span>
             </p>
           </div>

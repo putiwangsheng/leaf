@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import styles from './DocContent.less';
 import '../../lib/github-markdown.css';
 import '../../lib/hybrid.css';
-import {getDocInfo} from '../../services/fetchData';
+
 import marked from 'marked';
+
+import { request, API } from '../../services/request';
 
 class DocContent extends Component {
   constructor(props) {
@@ -18,7 +20,9 @@ class DocContent extends Component {
   }
 
   componentDidMount() {
-    getDocInfo(this.docId).then(data => {
+    request({
+      url: `${API}/api/doc/${this.docId}`,
+    }).then(data => {
       console.log(data);
       marked.setOptions({
         highlight: function (code) {
