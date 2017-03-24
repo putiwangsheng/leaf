@@ -7,7 +7,7 @@ import update from 'react/lib/update';
 
 import Card from './Card';
 
-import { getRepoInfo, API, request } from '../../../services/fetchData.js';
+import { request, API } from '../../../services/request';
 
 import styles from './index.less';
 
@@ -18,15 +18,19 @@ class EditContentTable extends Component {
   constructor() {
     super();
 
-    this.state = {};
+    this.state = {
+      cards: []
+    };
   }
 
   componentDidMount() {
     const that = this;
+    request({
+      url: `${API}/api/repo/${this.props.repoId}`
+    }).then(repo => {
+      let { tableOfContents } = repo;
 
-    getRepoInfo(this.props.repoId)
-      .then(repo => {
-        let { tableOfContents } = repo;
+      if(tableOfContents.length > 0) {
         const docsIds = tableOfContents.map(item => item.docId);
 
         const qureyStr = `?_id__in=${docsIds.join(',')}&select=info`;
@@ -34,7 +38,6 @@ class EditContentTable extends Component {
         return request({
           url: `${API}/api/doc${qureyStr}`
         }).then(docs => {
-          console.log(tableOfContents);
           return tableOfContents.map(item => {
             return {
               id: item.docId,
@@ -48,7 +51,10 @@ class EditContentTable extends Component {
             cards: tableOfContents
           })
         })
-      })
+      }
+
+    });
+
   }
 
   changeHoverStyle(style, index) {
@@ -195,10 +201,18 @@ class EditContentTable extends Component {
   render() {
     return (
       <div className={styles.container}>
-        <p className="notice">
-          <span className="star">*</span>拖动可进行目录设置
-        </p>
-        {this.renderContentList()}
+        {
+          this.state.cards.length > 0 ? (
+            <div className="">
+              <p className="notice">
+                <span className="star">*</span>拖动可进行目录设置
+              </p>
+
+              {this.renderContentList()}
+            </div>
+          ) : (<p className="notice-mssage">暂无文档，赶快去创建吧~~</p>)
+        }
+
       </div>
     );
   }

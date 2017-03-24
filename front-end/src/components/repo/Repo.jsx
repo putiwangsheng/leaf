@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router';
-import {Button, Tabs, Icon, Popconfirm, message, Tooltip } from 'antd';
+import { Link, browserHistory } from 'react-router';
+import { Button, Tabs, Icon, Popconfirm, message, Tooltip } from 'antd';
 
 import EditContentTable from './EditContentTable';
 
@@ -19,7 +19,7 @@ class Repo extends Component {
       isCollected: false
     };
 
-    this.repoId = this.props.location.query.repoid;
+    this.repoId = this.props.location.query.repoId;
     this.userId = this.props.location.query.userId;
   }
 
@@ -37,7 +37,7 @@ class Repo extends Component {
   // 获取用户信息
   getUserInfo() {
     return request({
-      url: `${API}/api/user/${this.userId}`,
+      url: `${API}/api/user/${this.userId}`
     });
   }
 
@@ -78,7 +78,7 @@ class Repo extends Component {
     if(isCollected) {
       let index = collectionIds.indexOf(this.repoId);
       collectionIds.splice(index, 1);
-      console.log(collectionIds);
+
       message.warning('已取消收藏');
       this.setState({isCollected: false});
     }else {
@@ -110,19 +110,22 @@ class Repo extends Component {
   renderDraftDocList() {
     return this.state.draftDocs.map(item => {
       return (
-        <Link to={`/doc/view?docid=${item._id}&flag=draft`} key={item._id}>
-          <p>
-            {item.info.title}
+        <div className="" key={item._id}>
+          <Link to={`/doc/view?repoId=${this.repoId}&docId=${item._id}&flag=draft`}>
+            <span>
+              {item.info.title}
+            </span>
+          </Link>
 
-            <Popconfirm title="确定删除该文档吗？" onConfirm={this.confirmDelete.bind(this, item._id)} okText="Yes" cancelText="No">
-              <Icon type="close" className="icon-delete-doc"/>
-            </Popconfirm>
+          <Popconfirm title="确定删除该文档吗？" onConfirm={this.confirmDelete.bind(this, item._id)} okText="Yes" cancelText="No">
+            <Icon type="close" className="icon-delete-doc"/>
+          </Popconfirm>
 
-            <Link to={`/doc/edit?repoid=${this.repoId}&docid=${item._id}&flag=e`}>
-              <Icon type="edit" className="icon-edit-doc"/>
-            </Link>
-          </p>
-        </Link>
+          <Link to={`/doc/edit?repoId=${this.repoId}&docId=${item._id}&userId=${this.userId}&flag=e`}>
+            <Icon type="edit" className="icon-edit-doc"/>
+          </Link>
+
+        </div>
       );
     });
   }
@@ -134,7 +137,7 @@ class Repo extends Component {
 
     return (
       <div className={styles.repoContainer}>
-        <Link to={`/doc/edit?repoid=${this.repoId}&flag=c`}>
+        <Link to={`/doc/edit?repoId=${this.repoId}&userId=${this.userId}&flag=c`}>
           <Button type="primary" className="create-doc-button">
             新建文档
           </Button>

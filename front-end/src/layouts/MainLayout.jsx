@@ -133,12 +133,13 @@ class MainLayout extends Component {
           <p className="title">
             <Link to='/'>青 叶</Link>
           </p>
-          <Row className="right">
-            <Col span="8">
+
+          <Row className="right" gutter={24}>
+            <Col span={5}>
               <Link to='/'>探索</Link>
             </Col>
 
-            <Col span="8">
+            <Col span={5}>
               <Dropdown overlay={menu}>
                 <a className="ant-dropdown-link" href="#">
                   <Icon type="plus"/>
@@ -146,7 +147,7 @@ class MainLayout extends Component {
               </Dropdown>
             </Col>
 
-            <Col span="8" className="user">
+            <Col span={10} className="user">
               {
                 userInfo ? (<Link to={`/person?userId=${userId}`}>
                   <img src={userInfo.figureurl_qq_1} alt="avatar" />

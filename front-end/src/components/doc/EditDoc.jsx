@@ -16,9 +16,11 @@ class EditDoc extends Component {
       title: ''
     };
 
-    this.repoId = this.props.location.query.repoid;
-    this.docId = this.props.location.query.docid;
-    this.flag = this.props.location.query.flag;
+    const query = this.props.location.query;
+    this.repoId = query.repoId;
+    this.userId = query.userId;
+    this.docId = query.docId;
+    this.flag = query.flag;
   }
 
   componentDidMount() {
@@ -96,7 +98,7 @@ class EditDoc extends Component {
       }).then(data => {
         console.log(data);
         message.success('保存成功');
-        browserHistory.push(`${API}/repo?repoid=${this.repoId}`);
+        browserHistory.push(`${API}/repo?repoId=${this.repoId}&userId=${this.userId}`);
       });
 
     } else if (this.flag === 'e') {

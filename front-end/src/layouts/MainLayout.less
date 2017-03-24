@@ -1,38 +1,14 @@
+:global {
+  body .ant-confirm .ant-btn.ant-btn-primary.ant-btn-lg {
+    display: none;
+  }
 
-.head {
-  margin-bottom: 50px;
-  height: 45px;
-  line-height: 45px;
-  padding-left: 185px;
-  padding-right: 200px;
-  background: #21c97e;
-  color: #fff;
+  body .ant-confirm.ant-confirm-info {
+    text-align: center;
+  }
 
-  :global{
-    .title{
-      display: inline-block;
-      font-size: 17px;
-    }
-
-    .right{
-      float: right;
-      width: 200px;
-      font-size: 14px;
-    }
-
-    .user img {
-      margin-top: 8px;
-      margin-right: 8px;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-    }
-
-    .nickname {
-      display: inline-block;
-      position: relative;
-      top: -8px;
-    }
+  body .ant-confirm .anticon-info-circle:before {
+    display: none;
   }
 }
 
@@ -50,6 +26,43 @@
 .foot {
   margin-top: 20px;
   padding: 8px;
+}
+
+.head {
+  margin-bottom: 50px;
+  height: 45px;
+  line-height: 45px;
+  padding-left: 145px;
+  padding-right: 100px;
+  background: #21c97e;
+  color: #fff;
+
+  :global{
+    .title{
+      display: inline-block;
+      font-size: 17px;
+    }
+
+    .right{
+      float: right;
+      width: 400px;
+      font-size: 14px;
+    }
+
+    .user img {
+      margin-top: 8px;
+      margin-right: 8px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
+
+    .nickname {
+      display: inline-block;
+      position: relative;
+      top: -8px;
+    }
+  }
 }
 
 .modal {

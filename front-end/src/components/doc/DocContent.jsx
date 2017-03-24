@@ -12,36 +12,57 @@ class DocContent extends Component {
     super(props);
 
     this.state = {
-      docContent: {}
+      docContent: {},
+      tableContent: []
     };
 
-    this.docId = this.props.location.query.docid;
+    this.docId = this.props.location.query.docId;
+    this.repoId = this.props.location.query.repoId;
     this.flag = this.props.location.query.flag;
   }
 
   componentDidMount() {
-    request({
-      url: `${API}/api/doc/${this.docId}`,
-    }).then(data => {
-      console.log(data);
-      marked.setOptions({
-        highlight: function (code) {
-          return require('highlight.js').highlightAuto(code).value;
-        }
-      });
+    Promise.all([this.getDocInfo(), this.getRepoTableContent()])
+      .then(data => {
+        console.log(data);
 
-      if (this.flag === 'publish') {
-        data.info.publishContent = marked(data.info.publishContent);
-      } else if (this.flag === 'draft') {
-        data.info.draftContent = marked(data.info.draftContent);
-        console.log(typeof(marked(data.info.draftContent)));
-      }
-      this.setState({docContent: data.info});
-    });
+        const docInfo = data[0];
+        const tableContent = data[1];
+
+        marked.setOptions({
+          highlight: function (code) {
+            return require('highlight.js').highlightAuto(code).value;
+          }
+        });
+
+        if (this.flag === 'publish') {
+          docInfo.info.publishContent = marked(docInfo.info.publishContent);
+        } else if (this.flag === 'draft') {
+          docInfo.info.draftContent = marked(docInfo.info.draftContent);
+        }
+
+        this.setState({docContent: docInfo.info, tableContent});
+      }, (err) => {
+        console.log(err);
+      })
+  }
+
+  // 获取仓库目录
+  getRepoTableContent() {
+    return request({
+      url: `${API}/api/repo/${this.repoId}`
+    })
+  }
+
+  // 获取文档信息
+  getDocInfo() {
+    return request({
+      url: `${API}/api/doc/${this.docId}`
+    })
   }
 
   render() {
-    let {docContent} = this.state;
+    let { docContent, tableContent } = this.state;
 
     let content;
     if (this.flag === 'publish') {
@@ -52,7 +73,10 @@ class DocContent extends Component {
 
     return (
       <div className={styles.container}>
-        <div className="catalog"></div>
+        <div className="catalog">
+
+        </div>
+
         <div className="doc">
           <p className="title">{docContent.title}</p>
 

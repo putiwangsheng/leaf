@@ -20,8 +20,11 @@ class CreateTeam extends Component {
     this.props.form.validateFields((err, values) => {
       if (!err) {
         console.log('Received values of form: ', values);
-        values.avatar = 'https://ooo.0o0.ooo/2017/01/15/587b32a8cd8ba.jpg';
-        values.membersIds = [this.userId];
+        let obj = {
+          authority: 'Owner',
+          userId: this.userId
+        }
+        values.members = [obj];
 
         request({
           url: `${API}/api/team`,
@@ -29,7 +32,7 @@ class CreateTeam extends Component {
           body: values
         }).then(data => {
           console.log(data);
-          browserHistory.push(`${API}/`);
+          browserHistory.push(`${API}/person?userId=${this.userId}`);
         });
 
       }
@@ -46,7 +49,13 @@ class CreateTeam extends Component {
         </p>
         <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
           <FormItem label="头像">
-            <Input placeholder="头像"/>
+            {
+              getFieldDecorator ('avatar', {
+                rules: [{ required: false, message: '请输入头像地址' }],
+              })
+              (<Input placeholder="头像"/>)
+            }
+
           </FormItem>
 
           <FormItem label="团队名称">
@@ -79,7 +88,7 @@ class CreateTeam extends Component {
           <FormItem wrapperCol={{
             span: 8
           }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" className="team-button">
               创 建
             </Button>
           </FormItem>

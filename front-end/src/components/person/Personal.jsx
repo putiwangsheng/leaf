@@ -67,7 +67,7 @@ class Personal extends Component {
 
     return collections.map((item, index) => {
       return (
-        <Link to={`/repo?repoid=${item._id}`} key={item._id}>
+        <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`} key={item._id}>
           {item.repoName}
         </Link>
       )
@@ -117,7 +117,7 @@ class Personal extends Component {
               {
                 teams.map(item => {
                   return (
-                    <Link to={`/team?teamid=${item._id}`} key={item._id}><img src={item.avatar} alt="" className="team-avatar"/>
+                    <Link to={`/team?teamId=${item._id}&userId=${this.userId}`} key={item._id}><img src={item.avatar} alt="" className="team-avatar"/>
                     </Link>
                   );
                 })
@@ -134,7 +134,7 @@ class Personal extends Component {
                   repoList.map(item => {
                     return (
                       <p key={item._id}>
-                        <Link to={`/repo?repoid=${item._id}`} >
+                        <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`} >
                           {item.repoName}
                         </Link>
                       </p>
@@ -158,11 +158,12 @@ class Personal extends Component {
 function getAllMyTeams(userId, teams){
   let teamsArr = [];
   teams.forEach(team => {
-    let membersIds = team.membersIds;
-    console.log(membersIds, userId)
-    if(membersIds.indexOf(userId) !== -1){
-      teamsArr.push(team);
-    }
+    let membersInfo = team.members;
+    membersInfo.forEach(item => {
+      if(item.userId === userId) {
+        teamsArr.push(team);
+      }
+    })
   });
 
   return teamsArr;

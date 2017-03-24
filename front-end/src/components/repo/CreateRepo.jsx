@@ -75,7 +75,7 @@ class CreateRepo extends Component {
           <FormItem wrapperCol={{
             span: 8
           }}>
-            <Row gutter={16}>
+            <Row gutter={16} className="repo-button">
               <Col span={12}>
                 <Button type="primary" htmlType="submit">
                   创 建

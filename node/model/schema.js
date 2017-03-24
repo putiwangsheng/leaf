@@ -16,7 +16,12 @@ exports.userSchema = new mongoose.Schema({
 
 // 团队信息表结构
 exports.teamSchema = new mongoose.Schema({
-  membersIds: [{ type: String, require: true }],
+  members: [
+    {
+      authority: { type: String, require: true },
+      userId: { type: String, require: true }
+    }
+  ],
   name: {type: String, require: true},
   avatar: {type: String},
   intro: {type: String},
