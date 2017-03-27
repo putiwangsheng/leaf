@@ -1,4 +1,7 @@
 import React, {Component} from 'react';
+
+import { Link, browserHistory } from 'react-router';
+
 import styles from './DocContent.less';
 import '../../lib/github-markdown.css';
 import '../../lib/hybrid.css';
@@ -19,15 +22,18 @@ class DocContent extends Component {
     this.docId = this.props.location.query.docId;
     this.repoId = this.props.location.query.repoId;
     this.flag = this.props.location.query.flag;
+
+    this.pageView = 0;
   }
 
   componentDidMount() {
-    Promise.all([this.getDocInfo(), this.getRepoTableContent()])
+    Promise.all([this.getDocInfo(this.docId), this.getRepoInfo(), this.getAllDocs()])
       .then(data => {
-        console.log(data);
-
         const docInfo = data[0];
-        const tableContent = data[1];
+        const tableContent = data[1].tableOfContents;
+        const docs = data[2];
+
+        this.pageView = docInfo.pageView;
 
         marked.setOptions({
           highlight: function (code) {
@@ -41,23 +47,75 @@ class DocContent extends Component {
           docInfo.info.draftContent = marked(docInfo.info.draftContent);
         }
 
+        // 为目录数据增加题目(by docId)
+        tableContent.forEach(item => {
+          docs.forEach(subItem => {
+            if(item.docId === subItem._id) {
+              item.title = subItem.info.title;
+            }
+          })
+        })
+
+        this.countPageView(docInfo);
+
         this.setState({docContent: docInfo.info, tableContent});
       }, (err) => {
         console.log(err);
       })
   }
 
+  // 存储浏览量
+  countPageView(docInfo) {
+    docInfo.pageView = this.pageView + 1;
+
+    request({
+      url: `${API}/api/doc/${this.docId}`,
+      method: 'put',
+      body: docInfo
+    }).then(data => {
+      console.log(data);
+    });
+  }
+
   // 获取仓库目录
-  getRepoTableContent() {
+  getRepoInfo() {
     return request({
       url: `${API}/api/repo/${this.repoId}`
     })
   }
 
-  // 获取文档信息
-  getDocInfo() {
+  // 获取单个文档信息
+  getDocInfo(docId) {
     return request({
-      url: `${API}/api/doc/${this.docId}`
+      url: `${API}/api/doc/${docId}`
+    })
+  }
+
+  // 获取所有文档
+   getAllDocs() {
+    return request({
+      url: `${API}/api/doc`
+    })
+  }
+
+  // 切换文档
+  changeDoc(docId) {
+    browserHistory.push(`/doc/view?repoId=${this.repoId}&docId=${docId}&flag=${this.flag}`);
+    this.docId = docId;
+
+    this.getDocInfo(docId)
+      .then(docInfo => {
+        this.pageView = docInfo.pageView;
+
+        if (this.flag === 'publish') {
+          docInfo.info.publishContent = marked(docInfo.info.publishContent);
+        } else if (this.flag === 'draft') {
+          docInfo.info.draftContent = marked(docInfo.info.draftContent);
+        }
+
+        this.countPageView(docInfo);
+        
+        this.setState({docContent: docInfo.info});
     })
   }
 
@@ -74,7 +132,15 @@ class DocContent extends Component {
     return (
       <div className={styles.container}>
         <div className="catalog">
+          <p className="repoName">{docContent.repoName}</p>
 
+          {
+            tableContent.map((item, index) => {
+              return (
+                <p key={index} className={`catalog-title ${item.rank === 2 ? 'rank2Style' : 'rank1Style'} ${item.docId === this.docId ? 'current' : ''}`} onClick={this.changeDoc.bind(this, item.docId)}>{item.title}</p>
+              )
+            })
+          }
         </div>
 
         <div className="doc">

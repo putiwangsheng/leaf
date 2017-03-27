@@ -1,29 +1,62 @@
-.container{
-  :global{
-    .doc{
+.container {
+  :global {
+    .doc {
       width: 90%;
-      margin-left: auto;
-      margin-right: auto;
+      margin-left: 15%;
       padding: 10px 20px;
       background-color: #fff;
       border: 1px solid #eee;
       border-radius: 5px;
     }
 
-    .doc .title{
+    .doc .title {
       text-align: center;
       font-size: 2.5rem;
       font-weight: bold;
     }
 
-    .content{
+    .content {
       margin-top: 20px;
       line-height: 1.6;
       font-size: 15px;
     }
 
-    .content img{
+    .content img {
       width: 100%;
+    }
+
+    .catalog {
+      position: absolute;
+      left: 0;
+      padding: 10px 15px;
+      width: 18%;
+      background-color: #fff;
+      border: 1px solid #eee;
+    }
+
+    .repoName {
+      margin-top: 10px;
+      font-size: 12px;
+      border-radius: 0 5px 5px 0;
+    }
+
+    .catalog-title {
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .rank1Style {
+      margin-top: 5px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .rank2Style {
+      margin-left: 15px;
+    }
+
+    .current {
+      color: #4fc08d;
     }
   }
 }

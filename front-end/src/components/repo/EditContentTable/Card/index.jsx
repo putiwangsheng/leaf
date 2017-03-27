@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { DragSource, DropTarget } from 'react-dnd';
+
 import styles from './index.less';
 
 const CARD_TYPE = 'CARD';
@@ -156,7 +157,7 @@ class Card extends Component {
 
     return connectDragSource(connectDropTarget(
       <div className={styles.card} style={drapingSytle}>
-        {text}
+        <span>{text}</span>
         <div className="dotted-line"></div>
       </div>
     ));

@@ -26,6 +26,7 @@ const models = [
   }
 ];
 
+// link db
 const db = mongoose.connect(mongoUrl);
 
 // init models

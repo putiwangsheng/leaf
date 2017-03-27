@@ -33,6 +33,7 @@ exports.repoSchema = new mongoose.Schema({
   creatorId: { type: String, require: true },
   repoName: { type: String, require: true },
   intro: { type: String },
+  isBelongToTeam: { type: Boolean, default: false },
   isPrivate: { type: Boolean, default: false },
   tableOfContents: [
     {
@@ -46,9 +47,12 @@ exports.repoSchema = new mongoose.Schema({
 exports.docSchema = new mongoose.Schema({
   repoId: { type: String, require: true },
   creatorId: { type: String, require: true },
+  pageView: { type: Number, default: 0 },
   info: {
     title: { type: String },
     publishContent: { type: String },
-    draftContent: { type: String }
+    draftContent: { type: String },
+    publishTime: { type: String },
+    saveTime: { type: String }
   }
 });

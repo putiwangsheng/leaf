@@ -1,9 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { Router, Route, IndexRoute } from 'react-router';
 
+import NotFound from '../common/NotFound';
+
 import MainLayout from '../layouts/MainLayout';
 
-import NotFound from '../common/NotFound';
 import EditDoc from '../components/doc/EditDoc';
 import DocContent from '../components/doc/DocContent';
 
@@ -11,6 +12,7 @@ import Catagory from '../components/homePage/index';
 
 import CreateTeam from '../components/team/CreateTeam';
 import TeamInfo from '../components/team/TeamInfo';
+import MemberList from '../components/team/MemberList';
 
 import CreateRepo from '../components/repo/CreateRepo';
 import Repo from '../components/repo/Repo';
@@ -36,6 +38,7 @@ class Routes extends Component {
           {/* team: */}
           <Route path="/team/create" component={CreateTeam} />
           <Route path="/team" component={TeamInfo} />
+          <Route path="/team/member" component={MemberList} />
 
           {/* person: */}
           <Route path="/person" component={Personal} />

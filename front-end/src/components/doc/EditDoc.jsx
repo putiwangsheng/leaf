@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
 import SimpleMDE from 'react-simplemde-v1';
-
+import moment from 'moment';
 import {Button, Input, message} from 'antd';
 
 import styles from './EditDoc.less';
@@ -30,6 +30,51 @@ class EditDoc extends Component {
         url: `${API}/api/doc/${this.docId}`,
       }).then(data => {
         this.setState({docContent: data.info.draftContent, title: data.info.title});
+      });
+    }
+  }
+
+  getTitle(e) {
+    this.setState({title: e.target.value});
+  }
+
+  handleSaveDoc(flag) {
+    let {title, docContent} = this.state;
+    let body = {
+      repoId: this.repoId,
+      creatorId: this.userId,
+      info: {
+        title,
+        draftContent: docContent,
+        saveTime: moment(new Date()).format('YYYY-MM-DD')
+      }
+    };
+
+    if (flag === 'publish') {
+      body.info.publishContent = docContent;
+      body.info.publishTime = moment(new Date()).format('YYYY-MM-DD');
+    }
+
+    if (this.flag === 'c') {
+      // 保存文档
+      request({
+        url: `${API}/api/doc`,
+        method: 'post',
+        body: body
+      }).then(data => {
+        console.log(data);
+        message.success('保存成功');
+        browserHistory.push(`${API}/repo?repoId=${this.repoId}&userId=${this.userId}`);
+      });
+
+    } else if (this.flag === 'e') {
+      // 修改文档
+      request({
+        url: `${API}/api/doc/${this.docId}`,
+        method: 'put',
+        body: body
+      }).then(data => {
+        console.log(data);
       });
     }
   }
@@ -68,50 +113,6 @@ class EditDoc extends Component {
 
       </div>
     );
-  }
-
-  getTitle(e) {
-    this.setState({title: e.target.value});
-  }
-
-  handleSaveDoc(flag) {
-    let {title, docContent} = this.state;
-    let body = {
-      repoId: this.repoId,
-      creatorId: '58b27acd766cf80822353e7f',
-      info: {
-        title,
-        draftContent: docContent
-      }
-    };
-
-    if (flag === 'publish') {
-      body.info.publishContent = docContent;
-    }
-
-    if (this.flag === 'c') {
-      // 保存文档
-      request({
-        url: `${API}/api/doc`,
-        method: 'post',
-        body: body
-      }).then(data => {
-        console.log(data);
-        message.success('保存成功');
-        browserHistory.push(`${API}/repo?repoId=${this.repoId}&userId=${this.userId}`);
-      });
-
-    } else if (this.flag === 'e') {
-      console.log(body);
-      // 修改文档
-      request({
-        url: `${API}/api/doc/${this.docId}`,
-        method: 'put',
-        body: body
-      }).then(data => {
-        console.log(data);
-      });
-    }
   }
 }
 

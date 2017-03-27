@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
+import { Link, browserHistory } from 'react-router';
 
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -39,10 +40,12 @@ class EditContentTable extends Component {
           url: `${API}/api/doc${qureyStr}`
         }).then(docs => {
           return tableOfContents.map(item => {
+            let docInfo = docs.filter(doc => item.docId === doc._id)[0];
+
             return {
               id: item.docId,
               rank: item.rank,
-              title: docs.filter(doc => item.docId === doc._id)[0].info.title,
+              title: docInfo ? docInfo.info.title : '',
               hoverStyle: undefined
           }})
         }).then(tableOfContents => {
@@ -225,19 +228,23 @@ class EditContentTable extends Component {
     return this.state.cards.map((item, i) => {
       return (
         <div className={`rank${item.rank}${this.getHoverClass(item)}`} key={i}>
-          <Card
-            key={item.id}
-            index={i}
-            id={item.id}
-            text={item.title}
-            cards={this.state.cards}
-            moveCard={this.moveCard.bind(this)}
-            getMoveInfo={this.getMoveInfo.bind(this)}
-            getHoverInfo={this.getHoverInfo.bind(this)}
-            hoverStyles={styles}
-            changeHoverStyle={this.changeHoverStyle.bind(this)}
-            resetHoverStyle={this.resetHoverStyle.bind(this)}
-            isHasChild={this.isHasChild.bind(this)} />
+          <Link to={`/doc/view?repoId=${this.props.repoId}&docId=${item.id}&flag=publish`}>
+            <Card
+              key={item.id}
+              index={i}
+              id={item.id}
+              text={item.title}
+              cards={this.state.cards}
+              moveCard={this.moveCard.bind(this)}
+              getMoveInfo={this.getMoveInfo.bind(this)}
+              getHoverInfo={this.getHoverInfo.bind(this)}
+              hoverStyles={styles}
+              changeHoverStyle={this.changeHoverStyle.bind(this)}
+              resetHoverStyle={this.resetHoverStyle.bind(this)}
+              isHasChild={this.isHasChild.bind(this)} />
+
+            <span className="catalog-index">{item.rank === 1 ? i + 1 : `1.${i}`}</span>
+          </Link>
         </div>
       );
     });

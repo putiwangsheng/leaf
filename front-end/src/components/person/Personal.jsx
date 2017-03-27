@@ -13,7 +13,8 @@ class Personal extends Component {
       teams: [],
       userInfo: '',
       collections: [],
-      allRepos: []
+      allRepos: [],
+      showMessage: 'none'
     };
 
     this.userId = this.props.location.query.userId;
@@ -28,7 +29,8 @@ class Personal extends Component {
         teams: teamsArr,
         userInfo: data[2].info,
         collections: data[2].collectedReposIds,
-        allRepos: data[3]
+        allRepos: data[3],
+        showMessage: teamsArr.length > 0 ? 'none' : 'block'
       });
     }, (err) => {
       console.log(err);
@@ -62,20 +64,23 @@ class Personal extends Component {
     });
   }
 
+  // 渲染收藏列表
   renderCollectionList() {
     let collections = getCollectedRepos(this.state.collections, this.state.allRepos);
 
     return collections.map((item, index) => {
       return (
-        <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`} key={item._id}>
-          {item.repoName}
-        </Link>
+        <div className="collections-wrap" key={item._id}>
+          <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`}>
+            {item.repoName}
+          </Link>
+        </div>
       )
     })
   }
 
   render() {
-    let {repoList, teams, userInfo} = this.state;
+    let {repoList, teams, userInfo, showMessage} = this.state;
 
     return (
       <div className={styles.container}>
@@ -110,26 +115,34 @@ class Personal extends Component {
             </p>
           </div>
           <div className="personal-team">
-            <p className="title">
-              团队
-            </p>
-            <div className="avatars">
-              {
-                teams.map(item => {
-                  return (
-                    <Link to={`/team?teamId=${item._id}&userId=${this.userId}`} key={item._id}><img src={item.avatar} alt="" className="team-avatar"/>
-                    </Link>
-                  );
-                })
-              }
-            </div>
+            {
+              teams.length > 0 ? (
+                <div className="">
+                  <p className="title">
+                    团队
+                  </p>
+                  <div className="avatars">
+                    {
+                      teams.map(item => {
+                        return (
+                          <Link to={`/team?teamId=${item._id}&userId=${this.userId}&flag=repos`} key={item._id}><img src={item.avatar} alt="" className="team-avatar"/>
+                          </Link>
+                        );
+                      })
+                    }
+                  </div>
+                </div>
+              ) : null
+            }
+
+            <p className="notice" style={{display: showMessage}}>暂且没有加入任何团队哦</p>
           </div>
         </div>
 
         <div className="right-side">
           <Tabs defaultActiveKey="1" onChange={this.changeTab.bind(this)}>
             <Tabs.TabPane tab="仓库列表" key="1">
-              <div className="repos">
+              <div className="repos-wrap">
                 {
                   repoList.map(item => {
                     return (
@@ -142,9 +155,11 @@ class Personal extends Component {
                   })
                 }
               </div>
-
             </Tabs.TabPane>
-            <Tabs.TabPane tab="收藏列表" key="2">{this.renderCollectionList()}</Tabs.TabPane>
+
+            <Tabs.TabPane tab="收藏列表" key="2">
+              {this.renderCollectionList()}
+            </Tabs.TabPane>
           </Tabs>
         </div>
       </div>

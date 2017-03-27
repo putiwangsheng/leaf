@@ -117,14 +117,17 @@ class Repo extends Component {
             </span>
           </Link>
 
-          <Popconfirm title="确定删除该文档吗？" onConfirm={this.confirmDelete.bind(this, item._id)} okText="Yes" cancelText="No">
-            <Icon type="close" className="icon-delete-doc"/>
-          </Popconfirm>
+          <div className="operate-area">
+            <Link to={`/doc/edit?repoId=${this.repoId}&docId=${item._id}&userId=${this.userId}&flag=e`}>
+              <Icon type="edit" className="icon-edit-doc"/>
+            </Link>
 
-          <Link to={`/doc/edit?repoId=${this.repoId}&docId=${item._id}&userId=${this.userId}&flag=e`}>
-            <Icon type="edit" className="icon-edit-doc"/>
-          </Link>
+            <Popconfirm title="确定删除该文档吗？" onConfirm={this.confirmDelete.bind(this, item._id)} okText="Yes" cancelText="No">
+              <Icon type="close" className="icon-delete-doc"/>
+            </Popconfirm>
 
+            <span className="date">{item.info.saveTime}</span>
+          </div>
         </div>
       );
     });
@@ -171,8 +174,6 @@ class Repo extends Component {
                 </div>
               </div>
             </Tabs.TabPane>
-
-            <Tabs.TabPane tab="设置" key="3">Content of Tab Pane 3</Tabs.TabPane>
           </Tabs>
         </div>
       </div>

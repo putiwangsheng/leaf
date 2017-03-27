@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react';
 import {Row, Col, Menu, Dropdown, Icon, Modal} from 'antd';
 import {Link} from 'react-router';
 import styles from './MainLayout.less';
+import faceIcon from '../images/face.svg';
 
 import { request, API } from '../services/request';
 
@@ -37,6 +38,8 @@ class MainLayout extends Component {
       request({url: `${API}/api/user?openId=${openId}`})
         .then(data => {
           this.setState({userInfo, userId: data[0]._id});
+        }, (err) => {
+          console.log(err);
         });
     }
 
@@ -91,6 +94,10 @@ class MainLayout extends Component {
             this.saveUserInfo(userInfo, openId).then(data => {
               console.log(data);
             });
+          } else {
+            this.setState({
+              userId: data[0]._id
+            })
           }
         });
     })
@@ -110,6 +117,8 @@ class MainLayout extends Component {
       url: `${API}/api/user`,
       method: 'post',
       body: body
+    }).then(data => {
+      console.log(data);
     });
   }
 
@@ -152,7 +161,7 @@ class MainLayout extends Component {
                 userInfo ? (<Link to={`/person?userId=${userId}`}>
                   <img src={userInfo.figureurl_qq_1} alt="avatar" />
                   <span className="nickname">{userInfo.nickname}</span>
-                </Link>) : null
+                </Link>) : (<img src={faceIcon} alt="avatar" />)
               }
               </Col>
           </Row>
