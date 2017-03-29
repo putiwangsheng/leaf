@@ -13,6 +13,8 @@ class CreateRepo extends Component {
     super(props);
 
     this.userId = this.props.location.query.userId;
+    this.teamId = this.props.location.query.teamId;
+    this.isBelongToTeam = Boolean(this.props.location.query.belongTeam);
   }
 
   // 创建仓库
@@ -23,13 +25,21 @@ class CreateRepo extends Component {
         console.log('Received values of form: ', values);
         values.creatorId = this.userId;
 
+        if(this.isBelongToTeam) {
+          values.teamId = this.teamId;
+          values.isBelongToTeam = true;
+        }
+
         request({
           url: `${API}/api/repo`,
           method: 'post',
           body: values
         }).then(data => {
           console.log(data);
-          browserHistory.push(`${API}/`);
+          if(this.isBelongToTeam) {
+            browserHistory.push(`/team??teamId=${this.teamId}&userId=${this.userId}&flag=repos`);
+          }
+          browserHistory.push(`/`);
         });
       }
     });

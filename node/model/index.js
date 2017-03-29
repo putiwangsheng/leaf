@@ -23,6 +23,11 @@ const models = [
     name: 'team',
     schema: schemas.teamSchema,
     dbModel: undefined, // defined in init models
+  },
+  {
+    name: 'label',
+    schema: schemas.labelSchema,
+    dbModel: undefined, // defined in init models
   }
 ];
 

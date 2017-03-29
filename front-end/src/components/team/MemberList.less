@@ -1,7 +1,7 @@
 .container{
   :global{
     .button-wrapper{
-      width: 64%;
+      width: 86%;
     }
 
     .add-button{
@@ -48,8 +48,7 @@
       transition: all .2s ease;
     }
 
-    .left-side,
-    .right-side{
+    .member-body{
       margin-top: 10px;
       display: inline-block;
       vertical-align: top;
@@ -59,27 +58,18 @@
       clear: both;
     }
 
-    .left-side{
-      margin-left: 14%;
-      margin-right: 7%;
-      width: 50%;
+    .member-body {
+      margin-left: 16%;
+      width: 70%;
       padding: 10px 15px;
     }
 
-    .right-side{
-      padding-top: 10px;
-      width: 25%;
+    .member{
+      margin-bottom: 8px;
     }
 
-    .tag-member{
-      padding-bottom: 5px;
-      padding-left: 15px;
-      border-bottom: 1px solid #eee;
+    .member-list{
       font-size: 14px;
-    }
-
-    .members{
-      padding: 10px 15px;
     }
 
     .avatars{
@@ -87,6 +77,36 @@
       height: 35px;
       margin-right: 10px;
       border-radius: 50%;
+    }
+
+    .user-avatar{
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+      margin-right: 10px;
+      border-radius: 50%;
+    }
+
+    .nickName{
+      display: inline-block;
+      width: 37%;
+    }
+
+    .icon-edit-doc {
+      margin-left: 10px;
+    }
+
+    .icon-edit-doc:hover {
+      cursor: pointer;
+      color: #21c97e;
+    }
+
+    .delete{
+      float: right;
+      margin-right: 10px;
+      color: #ccc;
+      font-size: 10px;
+      cursor: pointer;
     }
   }
 }

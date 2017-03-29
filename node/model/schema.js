@@ -30,9 +30,11 @@ exports.teamSchema = new mongoose.Schema({
 
 // 仓库信息表结构
 exports.repoSchema = new mongoose.Schema({
-  creatorId: { type: String, require: true },
   repoName: { type: String, require: true },
+  label: { type: Array, default: ['其他'] },
   intro: { type: String },
+  creatorId: { type: String, require: true },
+  teamId: { type: String },
   isBelongToTeam: { type: Boolean, default: false },
   isPrivate: { type: Boolean, default: false },
   tableOfContents: [
@@ -56,3 +58,8 @@ exports.docSchema = new mongoose.Schema({
     saveTime: { type: String }
   }
 });
+
+// 标签表结构
+exports.labelSchema = new mongoose.Schema({
+   labelName: { type: String, default: '其他' }
+})

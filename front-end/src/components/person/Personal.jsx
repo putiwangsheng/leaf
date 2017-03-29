@@ -125,7 +125,7 @@ class Personal extends Component {
                     {
                       teams.map(item => {
                         return (
-                          <Link to={`/team?teamId=${item._id}&userId=${this.userId}&flag=repos`} key={item._id}><img src={item.avatar} alt="" className="team-avatar"/>
+                          <Link to={`/team?teamId=${item._id}&userId=${this.userId}`} key={item._id}><img src={item.avatar} alt="" className="team-avatar"/>
                           </Link>
                         );
                       })

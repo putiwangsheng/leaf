@@ -144,8 +144,12 @@ class MainLayout extends Component {
           </p>
 
           <Row className="right" gutter={24}>
-            <Col span={5}>
+            <Col span={4}>
               <Link to='/'>探索</Link>
+            </Col>
+
+            <Col span={5}>
+              <Link to={`/analyze/view?userId=${userId}`}>数据分析</Link>
             </Col>
 
             <Col span={5}>

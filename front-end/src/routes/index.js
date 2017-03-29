@@ -20,6 +20,7 @@ import Repo from '../components/repo/Repo';
 import Personal from '../components/person/Personal';
 import EditPersonInfo from '../components/person/EditPersonInfo';
 
+import PageView from '../components/analyze/PageView';
 
 class Routes extends Component {
   constructor() {
@@ -47,6 +48,9 @@ class Routes extends Component {
           {/* repo: */}
           <Route path="/repo/create" component={CreateRepo} />
           <Route path="/repo" component={Repo} />
+
+          {/* view: */}
+          <Route path="/analyze/view" component={PageView} />
 
         </Route>
         <Route path="*" component={NotFound}/>

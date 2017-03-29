@@ -13,7 +13,7 @@ import {
   Icon
 } from 'antd';
 
-import styles from './TeamInfo.less';
+import styles from './MemberList.less';
 
 import {request, API} from '../../services/request';
 
@@ -303,11 +303,15 @@ class MemberList extends Component {
         {this.renderModal()}
 
         <div className="catalog">
-          <p><Link to={`/team?teamId=${this.teamId}&userId=${this.userId}&flag=repos`}>仓库列表</Link></p>
-          <p><Link to={`/team/member?teamId=${this.teamId}&userId=${this.userId}&flag=members`}>成员权限</Link></p>
+          <div className="nav-body">
+            <div className="highlight" style={{top: 22}}></div>
+              <p><Link to={`/team?teamId=${this.teamId}&userId=${this.userId}`}>仓库列表</Link></p>
+
+              <p className="current"><Link to={`/team/member?teamId=${this.teamId}&userId=${this.userId}`}>成员权限</Link></p>
+          </div>
         </div>
 
-        <div className="left-side">
+        <div className="member-body">
           <div className="member-list">
             {
               this.renderMemberList(memberList)

@@ -9,6 +9,8 @@
     "babel-runtime": "^6.6.1",
     "classnames": "^2.2.3",
     "es3ify-loader": "^0.2.0",
+    "g2": "^2.2.6",
+    "g2-react": "^1.2.0",
     "highlight.js": "^9.9.0",
     "history": "^2.0.1",
     "isomorphic-fetch": "^2.2.1",

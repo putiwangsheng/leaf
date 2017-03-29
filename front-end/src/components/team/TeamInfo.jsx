@@ -26,23 +26,22 @@ class TeamInfo extends Component {
 
     this.state = {
       memberList: [],
-      teamInfo: {}
+      teamRepos: []
     };
 
     this.teamId = this.props.location.query.teamId;
     this.userId = this.props.location.query.userId;
-    this.current = this.props.location.query.flag;
   }
 
   componentDidMount() {
-    this.fetchTeamData();
-  }
+    Promise.all([this.fetchTeamData(), this.fetchTeamRepos()]).then(data => {
+      let teamData = data[0];
+      let teamRepos = data[1];
+      console.log(data)
+      // 团队仓库
+      this.setState({teamRepos});
 
-  // 获取团队成员信息
-  fetchTeamData() {
-    request({
-      url: `${API}/api/team/${this.teamId}`,
-    }).then(teamData => {
+      // 团队成员信息
       let memberArr = teamData.members;
 
       let memberArrTemp = [];
@@ -52,9 +51,25 @@ class TeamInfo extends Component {
       });
 
       Promise.all(memberArrTemp).then(data => {
-        this.setState({memberList: data, teamInfo: teamData});
+        this.setState({memberList: data});
       });
-    });
+    }, (err) => {
+      console.log(err);
+    })
+  }
+
+  // 获取团队仓库
+  fetchTeamRepos() {
+    return request({
+      url: `${API}/api/repo?teamId=${this.teamId}`,
+    })
+  }
+
+  // 获取团队成员信息
+  fetchTeamData() {
+    return request({
+      url: `${API}/api/team/${this.teamId}`,
+    })
   }
 
   // 获取用户信息
@@ -69,11 +84,11 @@ class TeamInfo extends Component {
 
   // 创建团队仓库
   addTeamRepo() {
-    browserHistory.push(`/repo/create?userId=${this.userId}`);
+    browserHistory.push(`/repo/create?userId=${this.userId}&teamId=${this.teamId}&belongTeam=true`);
   }
 
   render() {
-    let { memberList } = this.state;
+    let { memberList, teamRepos } = this.state;
 
     let addButton;
     addButton = (
@@ -87,14 +102,32 @@ class TeamInfo extends Component {
         </div>
 
         <div className="catalog">
-          <p><Link to={`/team?teamId=${this.teamId}&userId=${this.userId}&flag=repos`}>仓库列表</Link></p>
-          <p><Link to={`/team/member?teamId=${this.teamId}&userId=${this.userId}&flag=members`}>成员权限</Link></p>
+          <div className="nav-body">
+            <div className="highlight" style={{top: 0}}></div>
+
+            <p className="current"><Link to={`/team?teamId=${this.teamId}&userId=${this.userId}`}>仓库列表</Link></p>
+            <p><Link to={`/team/member?teamId=${this.teamId}&userId=${this.userId}`}>成员权限</Link></p>
+          </div>
         </div>
 
         <div className="left-side">
           <p>
             团队仓库列表
           </p>
+
+          <div className="repos">
+            {
+              teamRepos.length > 0 ? teamRepos.map((item => {
+                return (
+                  <p key={item._id}>
+                    <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`}>
+                      {item.repoName}
+                    </Link>
+                  </p>
+                )
+              })) : null
+            }
+          </div>
         </div>
 
         <div className="right-side">
