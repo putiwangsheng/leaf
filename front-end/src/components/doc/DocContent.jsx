@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-
 import { Link, browserHistory } from 'react-router';
+import moment from 'moment';
 
 import styles from './DocContent.less';
 import '../../lib/github-markdown.css';
@@ -24,6 +24,7 @@ class DocContent extends Component {
     this.flag = this.props.location.query.flag;
 
     this.pageView = 0;
+    this.todayPageView = 0;
   }
 
   componentDidMount() {
@@ -33,7 +34,15 @@ class DocContent extends Component {
         const tableContent = data[1].tableOfContents;
         const docs = data[2];
 
+        // 总浏览量
         this.pageView = docInfo.pageView;
+
+        let datePageView = docInfo.datePageView.filter(item => {
+          return item.date === moment(new Date()).format('YYYY-MM-DD');
+        })
+
+        // 当天的浏览量
+        this.todayPageView = datePageView[0] ? datePageView[0].pageView : 0;
 
         marked.setOptions({
           highlight: function (code) {
@@ -56,7 +65,7 @@ class DocContent extends Component {
           })
         })
 
-        this.countPageView(docInfo);
+        this.updatePageView(docInfo);
 
         this.setState({docContent: docInfo.info, tableContent});
       }, (err) => {
@@ -64,9 +73,13 @@ class DocContent extends Component {
       })
   }
 
-  // 存储浏览量
-  countPageView(docInfo) {
+  // 更新浏览量
+  updatePageView(docInfo) {
     docInfo.pageView = this.pageView + 1;
+
+    docInfo.datePageView.forEach(item => {
+      item.pageView = this.todayPageView + 1;
+    })
 
     request({
       url: `${API}/api/doc/${this.docId}`,
@@ -107,14 +120,18 @@ class DocContent extends Component {
       .then(docInfo => {
         this.pageView = docInfo.pageView;
 
+        docInfo.datePageView.forEach(item => {
+          item.pageView = this.todayPageView + 1;
+        })
+
         if (this.flag === 'publish') {
           docInfo.info.publishContent = marked(docInfo.info.publishContent);
         } else if (this.flag === 'draft') {
           docInfo.info.draftContent = marked(docInfo.info.draftContent);
         }
 
-        this.countPageView(docInfo);
-        
+        this.updatePageView(docInfo);
+
         this.setState({docContent: docInfo.info});
     })
   }

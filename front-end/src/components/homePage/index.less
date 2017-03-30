@@ -1,4 +1,12 @@
-.container{
+:global {
+  .none-notice {
+    color: #4fc08d;
+  }
+}
+
+.container {
+  padding: 0 30px;
+
   :global{
     .ant-row > div {
       padding: 0 15px;
@@ -6,6 +14,16 @@
 
     .ant-card{
       margin-bottom: 30px;
+    }
+
+    .ant-card-body {
+      height: 100px;
+    }
+
+    .title {
+      margin-bottom: 70px;
+      text-align: center;
+      font-size: 22px;
     }
   }
 }

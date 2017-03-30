@@ -31,7 +31,12 @@ exports.teamSchema = new mongoose.Schema({
 // 仓库信息表结构
 exports.repoSchema = new mongoose.Schema({
   repoName: { type: String, require: true },
-  label: { type: Array, default: ['其他'] },
+  labels: [
+    {
+      labelId: { type: String },
+      labelName: { type: String }
+    }
+  ],
   intro: { type: String },
   creatorId: { type: String, require: true },
   teamId: { type: String },
@@ -50,6 +55,12 @@ exports.docSchema = new mongoose.Schema({
   repoId: { type: String, require: true },
   creatorId: { type: String, require: true },
   pageView: { type: Number, default: 0 },
+  datePageView: [
+    {
+      pageView: { type: Number, default: 0 },
+      date: { type: String }
+    }
+  ],
   info: {
     title: { type: String },
     publishContent: { type: String },
@@ -61,5 +72,7 @@ exports.docSchema = new mongoose.Schema({
 
 // 标签表结构
 exports.labelSchema = new mongoose.Schema({
-   labelName: { type: String, default: '其他' }
+   labelName: { type: String, default: '其他' },
+   index: { type: Number, default: 9},
+   description: { type: String, default: '油盐酱醋，诗酒花茶'}
 })

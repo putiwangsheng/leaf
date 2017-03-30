@@ -1,36 +1,61 @@
 import React, {Component} from 'react';
+import { Link, browserHistory } from 'react-router';
+
 import {Card, Col, Row, Modal, Button} from 'antd';
 import styles from './index.less';
+
+import {request, API} from '../../services/request';
 
 class Catagory extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      labels: []
+    }
+    console.log(this.props);
+  }
+
+  componentDidMount() {
+    request({
+      url: `${API}/api/label`
+    }).then(labelData => {
+      // 标签排序
+      labelData.sort((a, b) => {
+        return a.index - b.index;
+      })
+
+      this.setState({
+        labels: labelData
+      })
+    }, (err) => {
+      console.log(err);
+    })
+  }
+
+  goRepos(labelId) {
+    browserHistory.push(`/type/repos?labelId=${labelId}`);
   }
 
   render() {
+    let { labels } = this.state;
+
     return (
-      <div style={{
-        padding: '30px'
-      }} className={styles.container}>
+      <div className={styles.container}>
+        <div className="title">
+          <p>探索青叶小世界，发现你的大世界</p>
+        </div>
+
         <Row>
-          <Col span="8">
-            <Card title="编程开发">Card content</Card>
-          </Col>
-          <Col span="8">
-            <Card title="UI设计">Card content</Card>
-          </Col>
-          <Col span="8">
-            <Card title="产品文档">Card content</Card>
-          </Col>
-          <Col span="8">
-            <Card title="阅读">Card content</Card>
-          </Col>
-          <Col span="8">
-            <Card title="工具资源">Card content</Card>
-          </Col>
-          <Col span="8">
-            <Card title="其他">Card content</Card>
-          </Col>
+          {
+            labels.map((item) => {
+              return (
+                <Col span="8" key={item._id} onClick={this.goRepos.bind(this, item._id)}>
+                  <Card title={item.labelName}>{item.description}</Card>
+                </Col>
+              )
+            })
+          }
         </Row>
       </div>
     );

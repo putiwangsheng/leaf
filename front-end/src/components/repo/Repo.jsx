@@ -30,7 +30,12 @@ class Repo extends Component {
       this.getUserInfo()
     ]).then(data => {
       let isCollected = this.judgeIsCollected(data[2]);
-      this.setState({repoData: data[0], draftDocs: data[1], userInfo: data[2], isCollected});
+      this.setState({
+        repoData: data[0],
+        draftDocs: data[1],
+        userInfo: data[2],
+        isCollected
+      });
     });
   }
 

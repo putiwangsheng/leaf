@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Checkbox, Button} from 'antd';
+import {Row, Col, Form, Input, Checkbox, Button, Select} from 'antd';
 import {browserHistory} from 'react-router';
 
 import styles from './CreateRepo.less';
@@ -7,14 +7,36 @@ import styles from './CreateRepo.less';
 import { request, API } from '../../services/request';
 
 const FormItem = Form.Item;
+const Option = Select.Option;
 
 class CreateRepo extends Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      labels: []
+    }
+
     this.userId = this.props.location.query.userId;
     this.teamId = this.props.location.query.teamId;
     this.isBelongToTeam = Boolean(this.props.location.query.belongTeam);
+  }
+
+  componentDidMount() {
+    request({
+      url: `${API}/api/label`
+    }).then(labelData => {
+      // 标签排序
+      labelData.sort((a, b) => {
+        return a.index - b.index;
+      })
+
+      this.setState({
+        labels: labelData
+      })
+    }, (err) => {
+      console.log(err);
+    })
   }
 
   // 创建仓库
@@ -30,6 +52,21 @@ class CreateRepo extends Component {
           values.isBelongToTeam = true;
         }
 
+        let labels = values.labels;
+        let labelArr = [];
+        labels.forEach(labelItem => {
+          this.state.labels.forEach(item => {
+            if(item._id === labelItem) {
+              labelArr.push({
+                labelId: labelItem,
+                labelName: item.labelName
+              })
+            }
+          })
+        })
+
+        values.labels = labelArr;
+
         request({
           url: `${API}/api/repo`,
           method: 'post',
@@ -37,7 +74,7 @@ class CreateRepo extends Component {
         }).then(data => {
           console.log(data);
           if(this.isBelongToTeam) {
-            browserHistory.push(`/team??teamId=${this.teamId}&userId=${this.userId}&flag=repos`);
+            browserHistory.push(`/team?teamId=${this.teamId}&userId=${this.userId}&flag=repos`);
           }
           browserHistory.push(`/`);
         });
@@ -46,7 +83,13 @@ class CreateRepo extends Component {
   }
 
   render() {
-    const { getFieldDecorator  } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
+    let { labels } = this.state;
+
+    const children = [];
+    labels.forEach(item => {
+      children.push(<Option key={item._id}>{item.labelName}</Option>);
+    })
 
     return (
       <div className={styles.container}>
@@ -60,6 +103,20 @@ class CreateRepo extends Component {
                 rules: [{ required: true, message: '请输入仓库名称' }],
               })
               (<Input placeholder="仓库名称"/>)
+            }
+          </FormItem>
+
+          <FormItem label="标签">
+            {
+              getFieldDecorator ('labels', {
+                rules: [{ required: true, message: '请选择仓库标签' }],
+              })
+              (<Select
+                  multiple
+                  style={{ width: '100%' }}
+                  placeholder="选择标签">
+                  {children}
+                </Select>)
             }
           </FormItem>
 
