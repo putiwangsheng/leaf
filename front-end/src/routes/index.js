@@ -13,6 +13,7 @@ import Catagory from '../components/homePage/index';
 import CreateTeam from '../components/team/CreateTeam';
 import TeamInfo from '../components/team/TeamInfo';
 import MemberList from '../components/team/MemberList';
+import Activity from '../components/team/Activity';
 
 import CreateRepo from '../components/repo/CreateRepo';
 import Repo from '../components/repo/Repo';
@@ -42,6 +43,7 @@ class Routes extends Component {
           <Route path="/team/create" component={CreateTeam} />
           <Route path="/team" component={TeamInfo} />
           <Route path="/team/member" component={MemberList} />
+          <Route path="/team/activity" component={Activity} />
 
           {/* person: */}
           <Route path="/person" component={Personal} />

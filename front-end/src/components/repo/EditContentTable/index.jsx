@@ -201,6 +201,47 @@ class EditContentTable extends Component {
     });
   }
 
+  computeRankOneIndex(cards, rank, index) {
+    if(index === 0) {
+      return 0;
+    }
+
+    if(rank === 1 && index > 0) {
+      let cardsSliced = cards.slice(0, index);
+      let rankTwoArr = cardsSliced.filter((item) => {
+        return item.rank === 2;
+      })
+
+      return rankTwoArr.length;
+    }
+  }
+
+  computeRankTwoIndex(cards, index) {
+    if(index < 1) {
+      return `${1.1}`;
+    }
+
+    let cardsSliced = cards.slice(0, index);
+    let rankOneArr = cardsSliced.filter((item) => {
+      return item.rank === 1;
+    });
+
+    let subOneIndex = rankOneArr.length;
+    let arrayIndex;
+    cards.forEach((item, index) => {
+      if(item.title === rankOneArr[rankOneArr.length - 1].title) {
+        arrayIndex = index;
+      }
+    })
+
+    let rankTwoArr = cardsSliced.slice(arrayIndex, index).filter((item) => {
+      return item.rank === 2;
+    })
+
+    let subIndex = `${subOneIndex}.${rankTwoArr.length + 1}`;
+    return subIndex;
+  }
+
   render() {
     return (
       <div className={styles.container}>
@@ -226,6 +267,9 @@ class EditContentTable extends Component {
     }
 
     return this.state.cards.map((item, i) => {
+      let rankOneIndex = i + 1 - this.computeRankOneIndex(this.state.cards, item.rank, i);
+      let rankTwoIndex = this.computeRankTwoIndex(this.state.cards, i);
+
       return (
         <div className={`rank${item.rank}${this.getHoverClass(item)}`} key={i}>
           <Link to={`/doc/view?repoId=${this.props.repoId}&docId=${item.id}&flag=publish`}>
@@ -243,7 +287,9 @@ class EditContentTable extends Component {
               resetHoverStyle={this.resetHoverStyle.bind(this)}
               isHasChild={this.isHasChild.bind(this)} />
 
-            <span className="catalog-index">{item.rank === 1 ? i + 1 : `1.${i}`}</span>
+            <div className="index-wrapper">
+              <span className="catalog-index">{item.rank === 1 ? `${rankOneIndex}` : `${rankTwoIndex}`}</span>
+            </div>
           </Link>
         </div>
       );

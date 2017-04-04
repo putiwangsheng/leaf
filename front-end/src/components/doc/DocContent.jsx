@@ -78,8 +78,21 @@ class DocContent extends Component {
     docInfo.pageView = this.pageView + 1;
 
     docInfo.datePageView.forEach(item => {
-      item.pageView = this.todayPageView + 1;
+      if(item.date === moment(new Date()).format('YYYY-MM-DD')) {
+        item.pageView = this.todayPageView + 1;
+      }
     })
+
+    let datePageView = docInfo.datePageView.filter(item => {
+      return item.date === moment(new Date()).format('YYYY-MM-DD');
+    })
+
+    if(!datePageView[0]) {
+      docInfo.datePageView.push({
+        date: moment(new Date()).format('YYYY-MM-DD'),
+        pageView: this.todayPageView + 1
+      })
+    }
 
     request({
       url: `${API}/api/doc/${this.docId}`,

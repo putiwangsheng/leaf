@@ -9,6 +9,7 @@ import {
   Select,
   Input,
   Tag,
+  Card,
   message,
   Icon
 } from 'antd';
@@ -111,41 +112,38 @@ class TeamInfo extends Component {
         </div>
 
         <div className="left-side">
-          <p>
-            团队仓库列表
-          </p>
-
-          <div className="repos">
+          <Card title="团队仓库列表" className="repo-list">
             {
               teamRepos.length > 0 ? teamRepos.map((item => {
                 return (
-                  <p key={item._id}>
+                  <div key={item._id} className="repo-item">
                     <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`}>
                       {item.repoName}
                     </Link>
-                  </p>
+
+                    <div>
+                      <Tag color="purple">{item.labels[0].labelName}</Tag>
+                    </div>
+                  </div>
                 )
               })) : null
             }
-          </div>
+          </Card>
         </div>
 
         <div className="right-side">
-          <p className="tag-member">
-            成员
-          </p>
-
-          <div className="members">
+          <Card title="成员" className="member-list" extra={<a href={`/team/activity?teamId=${this.teamId}`}>活跃度</a>}>
             {
               memberList.map((item, index) => {
-              return (
-                <Link to={`/person?userId=${item._id}`} key={index}>
-                  <img src={item.info.avatar} alt="avatar" className="avatars"/>
-                </Link>
-              );
-            })
-          }
-          </div>
+                return (
+                  <Link to={`/person?userId=${item._id}`} key={index}>
+                    <img src={item.info.avatar} alt="avatar" className="avatars"/>
+                  </Link>
+                );
+              })
+            }
+          </Card>
+
         </div>
       </div>
     );

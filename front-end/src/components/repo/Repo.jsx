@@ -152,7 +152,14 @@ class Repo extends Component {
         </Link>
 
         <div className="repo-content">
-          <div><Icon type="smile-o" className={`icon-collect ${iconColorClass}`} onClick={this.handleCollectRepo.bind(this)}/><p className="word-collect">收藏</p></div>
+          <div>
+            <Icon type="smile-o" className={`icon-collect ${iconColorClass}`} onClick={this.handleCollectRepo.bind(this)}/>
+            {
+              isCollected ? (<p className="word-collect word-collected">已收藏</p>) : (
+                <p className="word-collect">收藏</p>
+              )
+            }
+          </div>
 
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="目录" key="1">

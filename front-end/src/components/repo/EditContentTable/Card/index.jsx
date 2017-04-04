@@ -157,7 +157,7 @@ class Card extends Component {
 
     return connectDragSource(connectDropTarget(
       <div className={styles.card} style={drapingSytle}>
-        <span>{text}</span>
+        <span className="title">{text}</span>
         <div className="dotted-line"></div>
       </div>
     ));
