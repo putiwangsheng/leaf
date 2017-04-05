@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import {Tabs, Icon} from 'antd';
+
 import styles from './Personal.less';
+
+import Bread from '../../common/Bread.jsx';
 
 import { request, API } from '../../services/request';
 
@@ -82,8 +85,16 @@ class Personal extends Component {
   render() {
     let {repoList, teams, userInfo, showMessage} = this.state;
 
+    const dataSource = [
+      {
+        name: '个人管理'
+      }
+    ]
+
     return (
       <div className={styles.container}>
+        <Bread dataSource={dataSource} />
+
         <div className="left-side">
           <div className="personal-info">
             <Link to={`/person/edit?userId=${this.userId}`}>

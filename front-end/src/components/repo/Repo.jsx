@@ -3,6 +3,7 @@ import { Link, browserHistory } from 'react-router';
 import { Button, Tabs, Icon, Popconfirm, message, Tooltip } from 'antd';
 
 import EditContentTable from './EditContentTable';
+import Bread from '../../common/Bread.jsx';
 
 import styles from './Repo.less';
 

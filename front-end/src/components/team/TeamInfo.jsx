@@ -15,6 +15,7 @@ import {
 } from 'antd';
 
 import styles from './TeamInfo.less';
+import Bread from '../../common/Bread.jsx';
 
 import {request, API} from '../../services/request';
 
@@ -91,6 +92,14 @@ class TeamInfo extends Component {
   render() {
     let { memberList, teamRepos } = this.state;
 
+    const dataSource = [
+      {
+        name: '团队'
+      }, {
+        name: '团队信息'
+      }
+    ];
+
     let addButton;
     addButton = (
       <Button type="primary" className="add-button" onClick={this.addTeamRepo.bind(this)}>创建团队仓库</Button>
@@ -98,6 +107,8 @@ class TeamInfo extends Component {
 
     return (
       <div className={styles.container}>
+        <Bread dataSource={dataSource} />
+
         <div className="button-wrapper">
           {addButton}
         </div>
@@ -132,7 +143,7 @@ class TeamInfo extends Component {
         </div>
 
         <div className="right-side">
-          <Card title="成员" className="member-list" extra={<a href={`/team/activity?teamId=${this.teamId}`}>活跃度</a>}>
+          <Card title="成员" className="member-list" extra={<Link to={`/team/activity?teamId=${this.teamId}&userId=${this.userId}`}>活跃度</Link>}>
             {
               memberList.map((item, index) => {
                 return (

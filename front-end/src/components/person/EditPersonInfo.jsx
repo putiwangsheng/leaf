@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
-import {Form, Input, Button} from 'antd';
+import {Form, Input, Button, Card} from 'antd';
 
 import styles from './EditPersonInfo.less';
+
+import Bread from '../../common/Bread.jsx';
 
 import { request, API } from '../../services/request';
 
@@ -56,82 +58,100 @@ class EditPersonInfo extends Component {
     const { getFieldDecorator  } = this.props.form;
 
     const formItemLayout = {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 14 },
+      labelCol: { span: 3 },
+      wrapperCol: { span: 7 },
     };
+
+    const dataSource = [
+      {
+        path: `/person?userId=${this.userId}`,
+        name: '个人管理'
+      }, {
+        name: '编辑信息'
+      }
+    ]
 
     return (
       <div className={styles.container}>
-        <p className="title">
-          修改个人信息
-        </p>
-        <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
-          <FormItem label="头像" {...formItemLayout}>
-              {
-                getFieldDecorator ('avatar', {
-                  initialValue: userInfo.avatar,
-                  rules: [{ required: false, message: '请输入头像地址' }],
-                })
-                (<Input placeholder="头像"/>)
-              }
-          </FormItem>
+        <Bread dataSource={dataSource} />
 
-          <FormItem label="昵称" {...formItemLayout}>
-            {
-              getFieldDecorator ('nickName', {
-                initialValue: userInfo.nickName,
-                rules: [{ required: true, message: '请输入昵称' }],
-              })
-              (<Input placeholder="昵称"/>)
-            }
-          </FormItem>
+        <Card style={{
+          width: "100%",
+          minHeight: "560px"
+        }}>
+          <div className="form-wrapper">
+            <p className="title">
+              修改个人信息
+            </p>
+            <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
+              <FormItem label="头像" {...formItemLayout}>
+                  {
+                    getFieldDecorator ('avatar', {
+                      initialValue: userInfo.avatar,
+                      rules: [{ required: false, message: '请输入头像地址' }],
+                    })
+                    (<Input placeholder="头像"/>)
+                  }
+              </FormItem>
 
-          <FormItem label="姓名" {...formItemLayout}>
-            {
-              getFieldDecorator('name', {
-                initialValue: userInfo.name,
-              })
-              (<Input placeholder="姓名"/>)
-            }
-          </FormItem>
+              <FormItem label="昵称" {...formItemLayout}>
+                {
+                  getFieldDecorator ('nickName', {
+                    initialValue: userInfo.nickName,
+                    rules: [{ required: true, message: '请输入昵称' }],
+                  })
+                  (<Input placeholder="昵称"/>)
+                }
+              </FormItem>
 
-          <FormItem label="邮箱" {...formItemLayout}>
-            {
-              getFieldDecorator('email', {
-                initialValue: userInfo.email,
-                rules: [{ required: true, message: '请输入邮箱' }],
-              })
-              (<Input placeholder="邮箱"/>)
-            }
-          </FormItem>
+              <FormItem label="姓名" {...formItemLayout}>
+                {
+                  getFieldDecorator('name', {
+                    initialValue: userInfo.name,
+                  })
+                  (<Input placeholder="姓名"/>)
+                }
+              </FormItem>
 
-          <FormItem label="职位" {...formItemLayout}>
-            {
-              getFieldDecorator('job', {
-                initialValue: userInfo.job,
-              })
-              (<Input placeholder="职位"/>)
-            }
-          </FormItem>
+              <FormItem label="邮箱" {...formItemLayout}>
+                {
+                  getFieldDecorator('email', {
+                    initialValue: userInfo.email,
+                    rules: [{ required: true, message: '请输入邮箱' }],
+                  })
+                  (<Input placeholder="邮箱"/>)
+                }
+              </FormItem>
 
-          <FormItem label="所属部门" {...formItemLayout}>
-            {
-              getFieldDecorator('department', {
-                initialValue: userInfo.department,
-              })
-              (<Input placeholder="所属部门"/>)
-            }
-          </FormItem>
+              <FormItem label="职位" {...formItemLayout}>
+                {
+                  getFieldDecorator('job', {
+                    initialValue: userInfo.job,
+                  })
+                  (<Input placeholder="职位"/>)
+                }
+              </FormItem>
 
-          <FormItem wrapperCol={{
-            span: 14,
-            offset: 6
-          }}>
-            <Button type="primary" htmlType="submit" className="modify-button">
-              修改
-            </Button>
-          </FormItem>
-        </Form>
+              <FormItem label="所属部门" {...formItemLayout}>
+                {
+                  getFieldDecorator('department', {
+                    initialValue: userInfo.department,
+                  })
+                  (<Input placeholder="所属部门"/>)
+                }
+              </FormItem>
+
+              <FormItem wrapperCol={{
+                span: 7,
+                offset: 3
+              }}>
+                <Button type="primary" htmlType="submit" className="modify-button">
+                  修改
+                </Button>
+              </FormItem>
+            </Form>
+          </div>
+        </Card>
       </div>
     );
   }

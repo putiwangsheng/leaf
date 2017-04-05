@@ -5,8 +5,9 @@ import moment from 'moment';
 import styles from './DocContent.less';
 import '../../lib/github-markdown.css';
 import '../../lib/hybrid.css';
-
 import marked from 'marked';
+
+import Bread from '../../common/Bread.jsx';
 
 import { request, API } from '../../services/request';
 

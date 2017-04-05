@@ -6,6 +6,7 @@ import { Stat, Frame } from 'g2';
 
 import { Row, Col, Table, DatePicker, Spin } from 'antd';
 import styles from './Activity.less';
+import Bread from '../../common/Bread.jsx';
 
 import {request, API} from '../../services/request';
 
@@ -42,6 +43,7 @@ class Activity extends Component {
     }
 
     this.teamId = this.props.location.query.teamId;
+    this.userId = this.props.location.query.userId;
 
     this.columns = [
       {
@@ -216,6 +218,17 @@ class Activity extends Component {
   render() {
     let { data, chartData } = this.state;
 
+    const dataSource = [
+      {
+        name: '团队'
+      }, {
+        path: `/team?teamId=${this.teamId}&userId=${this.userId}`,
+        name: '团队信息'
+      }, {
+        name: '团队活跃度'
+      }
+    ];
+
     let frame = new Frame(chartData);
     frame = Frame.sort(frame, 'publishCount');
 
@@ -237,6 +250,8 @@ class Activity extends Component {
 
     return (
       <div className={styles.container}>
+        <Bread dataSource={dataSource} />
+
         <div className="chart">
           {bar}
         </div>

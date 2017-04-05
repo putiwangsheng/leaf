@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
 import SimpleMDE from 'react-simplemde-v1';
 import moment from 'moment';
+
 import {Button, Input, message} from 'antd';
+import Bread from '../../common/Bread.jsx';
 
 import styles from './EditDoc.less';
 
@@ -98,8 +100,18 @@ class EditDoc extends Component {
       simplemde = (<SimpleMDE option={option} text="" onEvents={onEvents} />);
     }
 
+    const dataSource = [
+      {
+        name: '仓库'
+      }, {
+        name: '编辑仓库文档'
+      }
+    ];
+
     return (
       <div className={styles.container}>
+        <Bread dataSource={dataSource} />
+
         <Input placeholder="请输入标题" style={{
           width: 300
         }} value={this.state.title} className="title" onChange={this.getTitle.bind(this)}/>

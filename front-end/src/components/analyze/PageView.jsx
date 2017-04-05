@@ -5,6 +5,8 @@ import createG2 from 'g2-react';
 import { Stat } from 'g2';
 
 import { Row, Col, Button, DatePicker, Input, Spin, message } from 'antd';
+import Bread from '../../common/Bread.jsx';
+
 import styles from './PageView.less';
 
 import {request, API} from '../../services/request';

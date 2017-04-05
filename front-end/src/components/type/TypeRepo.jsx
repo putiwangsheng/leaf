@@ -5,9 +5,11 @@ import {
   Button,
   Card,
   message,
+  Alert
 } from 'antd';
 
 import styles from './TypeRepo.less';
+import Bread from '../../common/Bread.jsx';
 
 import {request, API} from '../../services/request';
 
@@ -22,11 +24,16 @@ class TypeRepo extends Component {
     };
 
     this.labelId = this.props.location.query.labelId;
+    this.labelName = '';
   }
 
   componentDidMount() {
-    Promise.all([this.fetchTypeRepos()]).then(data => {
+    Promise.all([this.fetchTypeRepos(), this.fetchLabelName()]).then(data => {
       let repos = data[0];
+      let label = data[1];
+
+      this.labelName = label.labelName;
+
       let repoList = [];
 
       // 属于当前标签的仓库
@@ -70,15 +77,34 @@ class TypeRepo extends Component {
   // 获取团队信息
   fetchTeamData(teamId) {
     return request({
-      url: `${API}/api/team/${teamId}`,
+      url: `${API}/api/team/${teamId}`
+    })
+  }
+
+  // 获取标签名称
+  fetchLabelName() {
+    return request({
+      url: `${API}/api/label/${this.labelId}`
     })
   }
 
   render() {
     let { repoList, teamList, displayNotice } = this.state;
 
+    let typeMessage = (
+      <div className="">
+        <p className="subHeader-title">{this.labelName}</p>
+        <p>
+          2个仓库，1个团队
+        </p>
+      </div>
+    )
+
     return (
       <div className={styles.container}>
+        <div className="subHeader">
+          <Alert message={typeMessage} type="success" />
+        </div>
 
         <div className="left-side">
           <Card title="仓库列表">
@@ -86,9 +112,9 @@ class TypeRepo extends Component {
               repoList.length > 0 ? (
                 <ul>
                   {
-                    repoList.map(item => {
+                    repoList.map((item, index) => {
                       return (
-                        <li key={item._id}><Link to={`/repo?repoId=${item._id}&userId=${item.teamId}`}>{item.repoName}</Link></li>
+                        <li key={index}><Link to={`/repo?repoId=${item._id}&userId=${item.teamId}`}>{item.repoName}</Link></li>
                       )
                     })
                   }
@@ -106,9 +132,9 @@ class TypeRepo extends Component {
               teamList.length > 0 ? (
                 <ul>
                   {
-                    teamList.map(item => {
+                    teamList.map((item, index) => {
                       return (
-                        <li key={item._id}>{item.name}</li>
+                        <li key={index}>{item.name}</li>
                       )
                     })
                   }

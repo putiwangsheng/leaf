@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {Row, Col, Form, Input, Checkbox, Button, Select} from 'antd';
+import {Row, Col, Form, Input, Checkbox, Button, Select, Card} from 'antd';
 import {browserHistory} from 'react-router';
 
 import styles from './CreateRepo.less';
+
+import Bread from '../../common/Bread.jsx';
 
 import { request, API } from '../../services/request';
 
@@ -86,6 +88,28 @@ class CreateRepo extends Component {
     const { getFieldDecorator } = this.props.form;
     let { labels } = this.state;
 
+    const formItemLayout = {
+      labelCol: { span: 3 },
+      wrapperCol: { span: 7 },
+    };
+
+    let dataSource = !this.isBelongToTeam ? [
+      {
+        name: '新建仓库'
+      }
+    ]: [
+      {
+        name: '团队'
+      },
+      {
+        path: `/team?teamId=${this.teamId}&userId=${this.userId}`,
+        name: '团队信息'
+      },
+      {
+        name: '新建团队仓库'
+      }
+    ]
+
     const children = [];
     labels.forEach(item => {
       children.push(<Option key={item._id}>{item.labelName}</Option>);
@@ -93,69 +117,83 @@ class CreateRepo extends Component {
 
     return (
       <div className={styles.container}>
-        <p className="title">
-          新建仓库
-        </p>
-        <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
-          <FormItem label="仓库名称">
-            {
-              getFieldDecorator ('repoName', {
-                rules: [{ required: true, message: '请输入仓库名称' }],
-              })
-              (<Input placeholder="仓库名称"/>)
-            }
-          </FormItem>
+        <Bread dataSource={dataSource} />
 
-          <FormItem label="标签">
-            {
-              getFieldDecorator ('labels', {
-                rules: [{ required: true, message: '请选择仓库标签' }],
-              })
-              (<Select
-                  multiple
-                  style={{ width: '100%' }}
-                  placeholder="选择标签">
-                  {children}
-                </Select>)
-            }
-          </FormItem>
+        <Card style={{
+          width: "100%",
+          minHeight: "560px"
+        }}>
+          <div className="form-wrapper">
+            <p className="title">
+              新建仓库
+            </p>
 
-          <FormItem label="简介">
-            {
-              getFieldDecorator('intro')
+            <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
+              <FormItem label="仓库名称" {...formItemLayout}>
+                {
+                  getFieldDecorator ('repoName', {
+                    rules: [{ required: true, message: '请输入仓库名称' }],
+                  })
+                  (<Input placeholder="仓库名称"/>)
+                }
+              </FormItem>
 
-              (<Input type="textarea" placeholder="简介" rows={6}/>)
-            }
-          </FormItem>
+              <FormItem label="标签" {...formItemLayout}>
+                {
+                  getFieldDecorator ('labels', {
+                    rules: [{ required: true, message: '请选择仓库标签' }],
+                  })
+                  (<Select
+                      multiple
+                      style={{ width: '100%' }}
+                      placeholder="选择标签">
+                      {children}
+                    </Select>)
+                }
+              </FormItem>
 
-          <FormItem style={{ marginBottom: 8 }}>
-            {
-              getFieldDecorator ('isPrivate', {
-                initialValue: false,
-                valuePropName: 'checked',
-              })
+              <FormItem label="简介" {...formItemLayout}>
+                {
+                  getFieldDecorator('intro')
 
-              (<Checkbox>是否设为私密</Checkbox>)
-            }
-          </FormItem>
+                  (<Input type="textarea" placeholder="简介" rows={6}/>)
+                }
+              </FormItem>
 
-          <FormItem wrapperCol={{
-            span: 8
-          }}>
-            <Row gutter={16} className="repo-button">
-              <Col span={12}>
-                <Button type="primary" htmlType="submit">
-                  创 建
-                </Button>
-              </Col>
-              <Col span={12}>
-                <Button type="Default">
-                  删 除
-                </Button>
-              </Col>
-          </Row>
-          </FormItem>
-        </Form>
+              <FormItem style={{ marginBottom: 8 }} wrapperCol={{
+                span: 24,
+                offset: 3
+              }}>
+                {
+                  getFieldDecorator ('isPrivate', {
+                    initialValue: false,
+                    valuePropName: 'checked',
+                  })
+
+                  (<Checkbox>是否设为私密</Checkbox>)
+                }
+              </FormItem>
+
+              <FormItem wrapperCol={{
+                span: 3,
+                offset: 3
+              }}>
+                <Row gutter={16} className="repo-button">
+                  <Col span={12}>
+                    <Button type="primary" htmlType="submit">
+                      创 建
+                    </Button>
+                  </Col>
+                  <Col span={12}>
+                    <Button type="Default">
+                      删 除
+                    </Button>
+                  </Col>
+                </Row>
+              </FormItem>
+            </Form>
+          </div>
+        </Card>
       </div>
     );
   }

@@ -22,7 +22,7 @@ class Bread extends React.Component {
               <Breadcrumb.Item key={item.name}>
                 { !item.path ?
                   (<span>{item.name}</span>) :
-                  (<Link to={`/${item.path}`}>{item.name}</Link>)
+                  (<Link to={item.path}>{item.name}</Link>)
                 }
                 </Breadcrumb.Item>
             )
@@ -45,4 +45,4 @@ class Bread extends React.Component {
   }
 }
 
-export default Bread
+export default Bread;

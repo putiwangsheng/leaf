@@ -44,6 +44,8 @@ class Catagory extends Component {
       <div className={styles.container}>
         <div className="title">
           <p>探索青叶小世界，发现你的大世界</p>
+          <div className="earth">
+          </div>
         </div>
 
         <Row>
