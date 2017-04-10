@@ -31,6 +31,11 @@ class Repo extends Component {
       this.getUserInfo()
     ]).then(data => {
       let isCollected = this.judgeIsCollected(data[2]);
+
+      data[1].sort((a, b) => {
+        return new Date(b.info.saveTime).getTime() - new Date(a.info.saveTime).getTime();
+      })
+
       this.setState({
         repoData: data[0],
         draftDocs: data[1],

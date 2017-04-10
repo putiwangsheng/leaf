@@ -13,6 +13,8 @@ import Bread from '../../common/Bread.jsx';
 
 import {request, API} from '../../services/request';
 
+const userId = sessionStorage.getItem('userId');
+
 class TypeRepo extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +27,8 @@ class TypeRepo extends Component {
 
     this.labelId = this.props.location.query.labelId;
     this.labelName = '';
+    this.repoNumber = '';
+    this.teamNumber = '';
   }
 
   componentDidMount() {
@@ -35,7 +39,6 @@ class TypeRepo extends Component {
       this.labelName = label.labelName;
 
       let repoList = [];
-
       // 属于当前标签的仓库
       repos.forEach((item) => {
         let labels = item.labels;
@@ -44,11 +47,13 @@ class TypeRepo extends Component {
         })
 
         if(label.length > 0) {
-          if(!item.isPrivate) {
+          if(!item.isPrivate && item.isBelongToTeam) {
             repoList.push(item);
           }
         }
       })
+
+      this.repoNumber = repoList.length;
 
       let getTeamArr = [];
       // 团队
@@ -59,6 +64,7 @@ class TypeRepo extends Component {
       })
 
       Promise.all(getTeamArr).then(teamsData => {
+        this.teamNumber = teamsData.length;
         let displayNotice = repoList.length > 0 ? 'none' : 'block';
         this.setState({repoList, teamList: teamsData, displayNotice});
       })
@@ -95,7 +101,7 @@ class TypeRepo extends Component {
       <div className="">
         <p className="subHeader-title">{this.labelName}</p>
         <p>
-          2个仓库，1个团队
+          {this.repoNumber}个仓库，{this.teamNumber}个团队
         </p>
       </div>
     )
@@ -114,7 +120,7 @@ class TypeRepo extends Component {
                   {
                     repoList.map((item, index) => {
                       return (
-                        <li key={index}><Link to={`/repo?repoId=${item._id}&userId=${item.teamId}`}>{item.repoName}</Link></li>
+                        <li key={index}><Link to={`/repo?repoId=${item._id}&userId=${userId}`}>{item.repoName}</Link></li>
                       )
                     })
                   }
@@ -134,7 +140,7 @@ class TypeRepo extends Component {
                   {
                     teamList.map((item, index) => {
                       return (
-                        <li key={index}>{item.name}</li>
+                        <li key={index}><Link to={`/team?teamId=${item._id}&userId=${userId}`}><img src={item.avatar} alt="" />{item.name}</Link></li>
                       )
                     })
                   }

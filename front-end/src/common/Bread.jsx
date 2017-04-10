@@ -8,8 +8,7 @@ class Bread extends React.Component {
     super(props);
 
     this.state = {
-      visiable: false,
-      dataSource: this.props.dataSource || []
+      visiable: false
     }
   }
 
@@ -17,7 +16,7 @@ class Bread extends React.Component {
     return (
       <Breadcrumb>
         {
-          dataSource.map(item => {
+          dataSource && dataSource.length > 0 ? dataSource.map(item => {
             return (
               <Breadcrumb.Item key={item.name}>
                 { !item.path ?
@@ -26,14 +25,14 @@ class Bread extends React.Component {
                 }
                 </Breadcrumb.Item>
             )
-          })
+          }) : null
         }
       </Breadcrumb>
     )
   }
 
   render() {
-    const { dataSource } = this.state;
+    const dataSource = this.props.dataSource || [];
 
     return (
       <div className="" style={{margin: "20px auto"}}>

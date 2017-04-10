@@ -17,7 +17,9 @@ class DocContent extends Component {
 
     this.state = {
       docContent: {},
-      tableContent: []
+      tableContent: [],
+      repoName: '',
+      currentDoc: ''
     };
 
     this.docId = this.props.location.query.docId;
@@ -33,6 +35,7 @@ class DocContent extends Component {
       .then(data => {
         const docInfo = data[0];
         const tableContent = data[1].tableOfContents;
+        const repoName = data[1].repoName;
         const docs = data[2];
 
         // 总浏览量
@@ -68,7 +71,7 @@ class DocContent extends Component {
 
         this.updatePageView(docInfo);
 
-        this.setState({docContent: docInfo.info, tableContent});
+        this.setState({docContent: docInfo.info, tableContent, repoName, currentDoc: docInfo.info.title});
       }, (err) => {
         console.log(err);
       })
@@ -135,7 +138,9 @@ class DocContent extends Component {
         this.pageView = docInfo.pageView;
 
         docInfo.datePageView.forEach(item => {
-          item.pageView = this.todayPageView + 1;
+          if(item.date === moment(new Date()).format('YYYY-MM-DD')) {
+            item.pageView = this.todayPageView + 1;
+          }
         })
 
         if (this.flag === 'publish') {
@@ -146,12 +151,12 @@ class DocContent extends Component {
 
         this.updatePageView(docInfo);
 
-        this.setState({docContent: docInfo.info});
+        this.setState({docContent: docInfo.info, currentDoc: docInfo.info.title});
     })
   }
 
   render() {
-    let { docContent, tableContent } = this.state;
+    let { docContent, tableContent, repoName, currentDoc } = this.state;
 
     let content;
     if (this.flag === 'publish') {
@@ -160,11 +165,19 @@ class DocContent extends Component {
       content = docContent.draftContent;
     }
 
+    const dataSource = [
+      {
+        name: repoName
+      }, {
+        name: currentDoc
+      }
+    ]
+
     return (
       <div className={styles.container}>
-        <div className="catalog">
-          <p className="repoName">{docContent.repoName}</p>
+        <Bread dataSource={dataSource} />
 
+        <div className="catalog">
           {
             tableContent.map((item, index) => {
               return (

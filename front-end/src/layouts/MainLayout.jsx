@@ -37,6 +37,7 @@ class MainLayout extends Component {
 
       request({url: `${API}/api/user?openId=${openId}`})
         .then(data => {
+          sessionStorage.setItem('userId', data[0]._id);
           this.setState({userInfo, userId: data[0]._id});
         }, (err) => {
           console.log(err);
@@ -95,6 +96,8 @@ class MainLayout extends Component {
               console.log(data);
             });
           } else {
+            sessionStorage.setItem('userId', data[0]._id);
+            
             this.setState({
               userId: data[0]._id
             })
@@ -145,7 +148,7 @@ class MainLayout extends Component {
 
           <Row className="right" gutter={24}>
             <Col span={4}>
-              <Link to='/'>探索</Link>
+              <Link to='/'>指南</Link>
             </Col>
 
             <Col span={5}>
