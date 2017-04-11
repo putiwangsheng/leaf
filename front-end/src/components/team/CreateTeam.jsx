@@ -66,7 +66,7 @@ class CreateTeam extends Component {
               创建团队
             </p>
             <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
-              <FormItem label="头像" {...formItemLayout}>
+              <FormItem label="头像地址" {...formItemLayout}>
                 {
                   getFieldDecorator ('avatar', {
                     rules: [{ required: false, message: '请输入头像地址' }],

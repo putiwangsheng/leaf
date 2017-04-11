@@ -53,7 +53,7 @@ class DocContent extends Component {
             return require('highlight.js').highlightAuto(code).value;
           }
         });
-
+        
         if (this.flag === 'publish') {
           docInfo.info.publishContent = marked(docInfo.info.publishContent);
         } else if (this.flag === 'draft') {

@@ -84,7 +84,7 @@ class EditPersonInfo extends Component {
               修改个人信息
             </p>
             <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
-              <FormItem label="头像" {...formItemLayout}>
+              <FormItem label="头像地址" {...formItemLayout}>
                   {
                     getFieldDecorator ('avatar', {
                       initialValue: userInfo.avatar,

@@ -8,6 +8,8 @@ import Bread from '../../common/Bread.jsx';
 
 import { request, API } from '../../services/request';
 
+const currentUserId = sessionStorage.getItem('userId');
+
 class Personal extends Component {
   constructor(props) {
     super(props);

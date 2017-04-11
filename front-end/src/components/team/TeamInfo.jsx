@@ -89,6 +89,36 @@ class TeamInfo extends Component {
     browserHistory.push(`/repo/create?userId=${this.userId}&teamId=${this.teamId}&belongTeam=true`);
   }
 
+  // 便签颜色对应
+  mapColor(labelName) {
+    let color;
+    if(labelName === '编程开发') {
+      color = 'purple';
+    }
+
+    if(labelName === 'UI设计') {
+      color = 'cyan';
+    }
+
+    if(labelName === '产品文档') {
+      color = 'blue';
+    }
+
+    if(labelName === '工具资源') {
+      color = 'green';
+    }
+
+    if(labelName === '阅读') {
+      color = '#aad8e3';
+    }
+
+    if(labelName === '其他') {
+      color = '#ebf8f2';
+    }
+
+    return color;
+  }
+
   render() {
     let { memberList, teamRepos } = this.state;
 
@@ -133,7 +163,7 @@ class TeamInfo extends Component {
                     </Link>
 
                     <div>
-                      <Tag color="purple">{item.labels[0].labelName}</Tag>
+                      <Tag color={this.mapColor(item.labels[0].labelName)}>{item.labels[0].labelName}</Tag>
                     </div>
                   </div>
                 )

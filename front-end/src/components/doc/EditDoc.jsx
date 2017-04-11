@@ -42,6 +42,7 @@ class EditDoc extends Component {
 
   handleSaveDoc(flag) {
     let {title, docContent} = this.state;
+
     let body = {
       repoId: this.repoId,
       creatorId: this.userId,
@@ -66,7 +67,7 @@ class EditDoc extends Component {
       }).then(data => {
         console.log(data);
         message.success('保存成功');
-        browserHistory.push(`${API}/repo?repoId=${this.repoId}&userId=${this.userId}`);
+        browserHistory.push(`/repo?repoId=${this.repoId}&userId=${this.userId}`);
       });
 
     } else if (this.flag === 'e') {
@@ -77,6 +78,8 @@ class EditDoc extends Component {
         body: body
       }).then(data => {
         console.log(data);
+        message.success('修改成功');
+        browserHistory.push(`/repo?repoId=${this.repoId}&userId=${this.userId}`);
       });
     }
   }
