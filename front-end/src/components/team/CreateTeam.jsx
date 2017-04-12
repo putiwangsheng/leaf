@@ -107,7 +107,7 @@ class CreateTeam extends Component {
               </FormItem>
 
               <FormItem wrapperCol={{
-                span: 8,
+                span: 3,
                 offset: 3
               }}>
                 <Button type="primary" htmlType="submit" className="team-button">

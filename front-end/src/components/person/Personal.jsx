@@ -26,18 +26,22 @@ class Personal extends Component {
   }
 
   componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
     Promise.all([this.getRepoList(this.userId), this.getTeamInfo(), this.getUserInfo(), this.getRepoList()]).then(data => {
       let teamsArr = getAllMyTeams(data[2]._id, data[1]);
 
       this.setState({
-        repoList: data[0],
-        teams: teamsArr,
-        userInfo: data[2].info,
-        collections: data[2].collectedReposIds,
+        repoList: data[0] || [],
+        teams: teamsArr || [],
+        userInfo: data[2].info || {},
+        collections: data[2].collectedReposIds || [],
         allRepos: data[3],
         showMessage: teamsArr.length > 0 ? 'none' : 'block'
       });
-    }, (err) => {
+    }).catch(err => {
       console.log(err);
     });
   }
@@ -72,20 +76,29 @@ class Personal extends Component {
   // 渲染收藏列表
   renderCollectionList() {
     let collections = getCollectedRepos(this.state.collections, this.state.allRepos);
+    if(collections.length) {
+      return collections.map((item, index) => {
+        return (
+          <div className="collections-wrap" key={item._id}>
+            <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`}>
+              {item.repoName}
+            </Link>
+          </div>
+        )
+      })
+    } else {
+      return ((<p className="notice">暂无收藏</p>))
+    }
 
-    return collections.map((item, index) => {
-      return (
-        <div className="collections-wrap" key={item._id}>
-          <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`}>
-            {item.repoName}
-          </Link>
-        </div>
-      )
-    })
   }
 
   render() {
     let {repoList, teams, userInfo, showMessage} = this.state;
+
+    if (this.userId !== this.props.location.query.userId) {
+      this.userId = this.props.location.query.userId;
+      this.fetchData();
+    }
 
     const dataSource = [
       {
@@ -99,9 +112,14 @@ class Personal extends Component {
 
         <div className="left-side">
           <div className="personal-info">
-            <Link to={`/person/edit?userId=${this.userId}`}>
-              <Icon type="edit" className="icon-edit"/>
-            </Link>
+            {
+              currentUserId === this.userId ? (
+                <Link to={`/person/edit?userId=${this.userId}`}>
+                  <Icon type="edit" className="icon-edit"/>
+                </Link>
+              ) : null
+            }
+
             <p className="name">
               {userInfo.nickName}
               {
@@ -154,10 +172,10 @@ class Personal extends Component {
 
         <div className="right-side">
           <Tabs defaultActiveKey="1" onChange={this.changeTab.bind(this)}>
-            <Tabs.TabPane tab="仓库列表" key="1">
+            <Tabs.TabPane tab={currentUserId === this.userId ? '我的仓库' : '他的仓库'} key="1">
               <div className="repos-wrap">
                 {
-                  repoList.map(item => {
+                  repoList.length ? repoList.map(item => {
                     return (
                       <p key={item._id}>
                         <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`} >
@@ -165,12 +183,13 @@ class Personal extends Component {
                         </Link>
                       </p>
                     );
-                  })
+                  }) : (<p className="notice">暂且没有创建任何仓库</p>)
                 }
+
               </div>
             </Tabs.TabPane>
 
-            <Tabs.TabPane tab="收藏列表" key="2">
+            <Tabs.TabPane tab={currentUserId === this.userId ? '我的收藏' : '他的收藏'} key="2">
               {this.renderCollectionList()}
             </Tabs.TabPane>
           </Tabs>

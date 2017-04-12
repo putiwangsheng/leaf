@@ -184,11 +184,6 @@ class CreateRepo extends Component {
                       创 建
                     </Button>
                   </Col>
-                  <Col span={12}>
-                    <Button type="Default">
-                      删 除
-                    </Button>
-                  </Col>
                 </Row>
               </FormItem>
             </Form>

@@ -246,7 +246,7 @@ class PageView extends Component {
     return (
       <div className={styles.container}>
         <div className="line-chart">
-          <p className="title">文章一周浏览量趋势</p>
+          <p className="title">文章浏览量趋势</p>
           <p className="doc-title">{this.docTitle}</p>
 
           <div className="search" style={{float: 'right'}}>
