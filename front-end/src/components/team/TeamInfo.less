@@ -1,17 +1,22 @@
 .container{
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+
   :global{
     .button-wrapper{
-      width: 68.6%;
+      float: right;
+      margin-bottom: 10px
     }
 
-    .add-button{
-      float: right;
+    .ant-card {
+      clear: both;
     }
 
     .catalog {
       position: fixed;
       left: 40px;
-      top: 145px;
+      top: 180px;
       line-height: 1.8;
     }
 
@@ -50,22 +55,20 @@
 
     .left-side,
     .right-side{
-      margin-top: 10px;
       display: inline-block;
       vertical-align: top;
       clear: both;
     }
 
     .left-side{
-      margin-left: 9%;
-      margin-right: 4%;
-      width: 61%;
-      padding: 10px 15px;
+      margin-right: 5%;
+      width: 65%;
+      padding: 10px 0;
     }
 
     .right-side{
-      padding-top: 10px;
-      width: 24%;
+      margin-top: 48px;
+      width: 27%;
     }
 
     .repo-list .ant-card-head {
@@ -120,6 +123,13 @@
 
     .ant-card-extra {
       color: #4fc08d;
+    }
+
+    .anticon.anticon-setting {
+      position: relative;
+      top: 1px;
+      margin-right: 5px;
+      font-size: 14px;
     }
   }
 }

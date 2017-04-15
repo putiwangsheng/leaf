@@ -126,34 +126,25 @@ class TeamInfo extends Component {
       {
         name: '团队'
       }, {
-        name: '团队信息'
+        name: '仓库列表'
       }
     ];
 
     let addButton;
     addButton = (
-      <Button type="primary" className="add-button" onClick={this.addTeamRepo.bind(this)}>创建团队仓库</Button>
+      <Button type="primary" onClick={this.addTeamRepo.bind(this)}>创建团队仓库</Button>
     );
 
     return (
       <div className={styles.container}>
         <Bread dataSource={dataSource} />
 
-        <div className="button-wrapper">
-          {addButton}
-        </div>
-
-        <div className="catalog">
-          <div className="nav-body">
-            <div className="highlight" style={{top: 0}}></div>
-
-            <p className="current"><Link to={`/team?teamId=${this.teamId}&userId=${this.userId}`}>仓库列表</Link></p>
-            <p><Link to={`/team/member?teamId=${this.teamId}&userId=${this.userId}`}>成员权限</Link></p>
-          </div>
-        </div>
-
         <div className="left-side">
-          <Card title="团队仓库列表" className="repo-list">
+          <div className="button-wrapper">
+            {addButton}
+          </div>
+
+          <Card title="团队仓库列表" extra={<Link to={`/team/member?teamId=${this.teamId}&userId=${this.userId}`}><Icon type="setting" />成员权限</Link>} className="repo-list">
             {
               teamRepos.length > 0 ? teamRepos.map((item => {
                 return (

@@ -292,31 +292,37 @@ class MemberList extends Component {
     let { memberList } = this.state;
 
     let addButton = (
-      <Button type="primary" className="add-button" onClick={this.addMember.bind(this)}>添加成员</Button>
+      <Button type="primary" onClick={this.addMember.bind(this)}>添加成员</Button>
     );
+
+    const dataSource = [
+      {
+        name: '团队'
+      },{
+        name: '仓库列表',
+        path: `/team?teamId=${this.teamId}&userId=${this.userId}`
+      }, {
+        name: '成员权限'
+      }
+    ];
 
     return (
       <div className={styles.container}>
-        <div className="button-wrapper">
-          {addButton}
-        </div>
+        <Bread dataSource={dataSource} />
 
         {this.renderModal()}
 
-        <div className="catalog">
-          <div className="nav-body">
-            <div className="highlight" style={{top: 22}}></div>
-              <p><Link to={`/team?teamId=${this.teamId}&userId=${this.userId}`}>仓库列表</Link></p>
-
-              <p className="current"><Link to={`/team/member?teamId=${this.teamId}&userId=${this.userId}`}>成员权限</Link></p>
+        <div className="wrapper">
+          <div className="button-wrapper">
+            {addButton}
           </div>
-        </div>
 
-        <div className="member-body">
-          <div className="member-list">
-            {
-              this.renderMemberList(memberList)
-            }
+          <div className="member-body">
+            <div className="member-list">
+              {
+                this.renderMemberList(memberList)
+              }
+            </div>
           </div>
         </div>
       </div>

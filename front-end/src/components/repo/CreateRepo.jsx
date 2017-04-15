@@ -103,7 +103,7 @@ class CreateRepo extends Component {
       },
       {
         path: `/team?teamId=${this.teamId}&userId=${this.userId}`,
-        name: '团队信息'
+        name: '仓库列表'
       },
       {
         name: '新建团队仓库'

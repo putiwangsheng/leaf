@@ -6,6 +6,8 @@ import faceIcon from '../images/face.svg';
 
 import { request, API } from '../services/request';
 
+import leafLogo from '../images/leaf.png';
+
 const APPID = '101388260';
 const authorize_api = 'https://graph.qq.com/oauth2.0';
 const redirectUri = 'http://changqi.site';
@@ -97,7 +99,7 @@ class MainLayout extends Component {
             });
           } else {
             sessionStorage.setItem('userId', data[0]._id);
-            
+
             this.setState({
               userId: data[0]._id
             })
@@ -140,9 +142,10 @@ class MainLayout extends Component {
     );
 
     return (
-      <div className={styles.container}>
+      <div className=''>
         <div className={styles.head}>
           <p className="title">
+            <img src={leafLogo} alt="" />
             <Link to='/'>青 叶</Link>
           </p>
 
@@ -155,7 +158,7 @@ class MainLayout extends Component {
               <Link to={`/analyze/view?userId=${userId}`}>数据分析</Link>
             </Col>
 
-            <Col span={5}>
+            <Col span={3}>
               <Dropdown overlay={menu}>
                 <a className="ant-dropdown-link" href="#">
                   <Icon type="plus"/>
@@ -163,7 +166,7 @@ class MainLayout extends Component {
               </Dropdown>
             </Col>
 
-            <Col span={10} className="user">
+            <Col span={8} className="user">
               {
                 userInfo ? (<Link to={`/person?userId=${userId}`}>
                   <img src={userInfo.figureurl_qq_1} alt="avatar" />

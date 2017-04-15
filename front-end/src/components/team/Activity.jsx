@@ -223,7 +223,7 @@ class Activity extends Component {
         name: '团队'
       }, {
         path: `/team?teamId=${this.teamId}&userId=${this.userId}`,
-        name: '团队信息'
+        name: '仓库列表'
       }, {
         name: '团队活跃度'
       }
