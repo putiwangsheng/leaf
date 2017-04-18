@@ -37,9 +37,9 @@ class Repo extends Component {
       })
 
       this.setState({
-        repoData: data[0],
-        draftDocs: data[1],
-        userInfo: data[2],
+        repoData: data[0] || {},
+        draftDocs: data[1] || [],
+        userInfo: data[2] || {},
         isCollected
       });
     });
@@ -145,7 +145,7 @@ class Repo extends Component {
   }
 
   render() {
-    let {repoData, isCollected} = this.state;
+    let {repoData, isCollected, draftDocs} = this.state;
 
     let iconColorClass = isCollected ? 'collected' : '';
 
@@ -187,8 +187,13 @@ class Repo extends Component {
                 <p className="repoName">
                   {repoData.repoName}
                 </p>
+                <p className="repoIntro">
+                  {repoData.intro}
+                </p>
                 <div className="docs">
-                  {this.renderDraftDocList()}
+                  {
+                    draftDocs.length ? this.renderDraftDocList() : (<p className="none-notice">暂无文档</p>)
+                  }
                 </div>
               </div>
             </Tabs.TabPane>

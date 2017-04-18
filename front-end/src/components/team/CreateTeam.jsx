@@ -53,6 +53,8 @@ class CreateTeam extends Component {
       }
     ];
 
+    const extraAvatar =(<p><a href="https://sm.ms/">点击此处</a>可以上传图片获得地址</p>);
+
     return (
       <div className={styles.container}>
         <Bread dataSource={dataSource} />
@@ -66,7 +68,7 @@ class CreateTeam extends Component {
               创建团队
             </p>
             <Form horizontal onSubmit={this.handleSubmit.bind(this)}>
-              <FormItem label="头像地址" {...formItemLayout}>
+              <FormItem label="头像地址" {...formItemLayout} extra={extraAvatar}>
                 {
                   getFieldDecorator ('avatar', {
                     rules: [{ required: false, message: '请输入头像地址' }],

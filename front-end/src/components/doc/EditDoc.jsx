@@ -15,7 +15,8 @@ class EditDoc extends Component {
     super(props);
     this.state = {
       docContent: '',
-      title: ''
+      title: '',
+      data: []
     };
 
     const query = this.props.location.query;
@@ -31,7 +32,7 @@ class EditDoc extends Component {
       request({
         url: `${API}/api/doc/${this.docId}`,
       }).then(data => {
-        this.setState({docContent: data.info.draftContent, title: data.info.title});
+        this.setState({docContent: data.info.draftContent, title: data.info.title, data});
       });
     }
   }
@@ -41,7 +42,19 @@ class EditDoc extends Component {
   }
 
   handleSaveDoc(flag) {
-    let {title, docContent} = this.state;
+    let { title, docContent, data } = this.state;
+
+    if(!docContent) {
+      message.warning("请填写内容！");
+      return;
+    }
+
+    if(!title) {
+      message.warning("请填写标题！");
+      return;
+    }
+
+    let info = data.info ? data.info : {};
 
     let body = {
       repoId: this.repoId,
@@ -49,6 +62,8 @@ class EditDoc extends Component {
       info: {
         title,
         draftContent: docContent,
+        publishContent: info.publishContent || '',
+        publishTime: info.publishTime || '',
         saveTime: moment(new Date()).format('YYYY-MM-DD')
       }
     };

@@ -21,8 +21,7 @@ class TypeRepo extends Component {
 
     this.state = {
       repoList: [],
-      teamList: [],
-      displayNotice: 'none'
+      teamList: []
     };
 
     this.labelId = this.props.location.query.labelId;
@@ -47,7 +46,7 @@ class TypeRepo extends Component {
         })
 
         if(label.length > 0) {
-          if(!item.isPrivate && item.isBelongToTeam) {
+          if(!item.isPrivate) {
             repoList.push(item);
           }
         }
@@ -65,8 +64,7 @@ class TypeRepo extends Component {
 
       Promise.all(getTeamArr).then(teamsData => {
         this.teamNumber = teamsData.length;
-        let displayNotice = repoList.length > 0 ? 'none' : 'block';
-        this.setState({repoList, teamList: teamsData, displayNotice});
+        this.setState({repoList, teamList: teamsData});
       })
     }, (err) => {
       console.log(err);
@@ -95,7 +93,7 @@ class TypeRepo extends Component {
   }
 
   render() {
-    let { repoList, teamList, displayNotice } = this.state;
+    let { repoList, teamList } = this.state;
 
     let typeMessage = (
       <div className="">
@@ -115,7 +113,7 @@ class TypeRepo extends Component {
         <div className="left-side">
           <Card title="仓库列表">
             {
-              repoList.length > 0 ? (
+              repoList.length ? (
                 <ul>
                   {
                     repoList.map((item, index) => {
@@ -125,17 +123,15 @@ class TypeRepo extends Component {
                     })
                   }
                 </ul>
-              ) : null
+              ) : (<p className="none-notice">暂时没有该类型的仓库</p>)
             }
-
-            <p className="none-notice" style={{display: displayNotice}}>暂时没有该类型的仓库</p>
           </Card>
         </div>
 
         <div className="right-side">
           <Card title="团队">
             {
-              teamList.length > 0 ? (
+              teamList.length ? (
                 <ul>
                   {
                     teamList.map((item, index) => {
@@ -145,10 +141,10 @@ class TypeRepo extends Component {
                     })
                   }
                 </ul>
-              ) : null
+              ) : (<p className="none-notice">暂无团队</p>)
             }
 
-            <p className="none-notice" style={{display: displayNotice}}>暂无团队</p>
+
           </Card>
         </div>
       </div>

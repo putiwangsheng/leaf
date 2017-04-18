@@ -33,8 +33,16 @@ class Personal extends Component {
     Promise.all([this.getRepoList(this.userId), this.getTeamInfo(), this.getUserInfo(), this.getRepoList()]).then(data => {
       let teamsArr = getAllMyTeams(data[2]._id, data[1]);
 
+      let repoList = data[0] || [];
+      
+      if(currentUserId !== this.userId) {
+        repoList = data[0].filter((item) => {
+          return !item.isPrivate;
+        })
+      }
+
       this.setState({
-        repoList: data[0] || [],
+        repoList,
         teams: teamsArr || [],
         userInfo: data[2].info || {},
         collections: data[2].collectedReposIds || [],
