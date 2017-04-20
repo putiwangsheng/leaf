@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {browserHistory} from 'react-router';
+import {browserHistory, withRouter} from 'react-router';
 import SimpleMDE from 'react-simplemde-v1';
 import moment from 'moment';
 
@@ -16,7 +16,11 @@ class EditDoc extends Component {
     this.state = {
       docContent: '',
       title: '',
-      data: []
+      data: [],
+      value: '0',
+      titleTemp: '',
+      contentTemp: '',
+      saved: false
     };
 
     const query = this.props.location.query;
@@ -32,8 +36,28 @@ class EditDoc extends Component {
       request({
         url: `${API}/api/doc/${this.docId}`,
       }).then(data => {
-        this.setState({docContent: data.info.draftContent, title: data.info.title, data});
+        this.setState({
+          data,
+          docContent: data.info.draftContent,
+          title: data.info.title,
+          contentTemp: data.info.draftContent,
+          titleTemp: data.info.title
+        });
       });
+    }
+    
+    this.props.router.setRouteLeaveHook(
+      this.props.route,
+      this.routerWillLeave.bind(this)
+    )
+  }
+
+  routerWillLeave(nextLocation) {
+    const { saved, docContent, contentTemp, title, titleTemp } = this.state;
+
+    if (!saved && (docContent !== contentTemp || title !== titleTemp)) {
+      message.warning("请先保存", 2);
+      return false;
     }
   }
 
@@ -73,6 +97,8 @@ class EditDoc extends Component {
       body.info.publishTime = moment(new Date()).format('YYYY-MM-DD');
     }
 
+    this.setState({saved: true});
+
     if (this.flag === 'c') {
       // 保存文档
       request({
@@ -105,16 +131,19 @@ class EditDoc extends Component {
 
     const onEvents = {
       'change': function() {
-        that.setState({docContent: this.value()});
+        that.setState({
+          docContent: this.value(),
+          value: this.value()
+        });
       }
     };
 
     let simplemde;
-    if(this.flag === 'e' && this.state.docContent){
+    if(this.flag === 'e' && this.state.docContent) {
       simplemde = (<SimpleMDE option={option} text={this.state.docContent} onEvents={onEvents} />);
     }
 
-    if(this.flag === 'c'){
+    if(this.flag === 'c' || !this.state.value){
       simplemde = (<SimpleMDE option={option} text="" onEvents={onEvents} />);
     }
 
@@ -134,7 +163,7 @@ class EditDoc extends Component {
           width: 300
         }} value={this.state.title} className="title" onChange={this.getTitle.bind(this)}/>
 
-      <Button type="primary" size="small" className="publish" onClick={this.handleSaveDoc.bind(this, 'publish')}>发布文档</Button>
+        <Button type="primary" size="small" className="publish" onClick={this.handleSaveDoc.bind(this, 'publish')}>发布文档</Button>
         <Button type="primary" size="small" className="save" onClick={this.handleSaveDoc.bind(this, 'save')}>保存草稿</Button>
 
         <div className="editor">
@@ -146,4 +175,4 @@ class EditDoc extends Component {
   }
 }
 
-export default EditDoc;
+export default withRouter(EditDoc);

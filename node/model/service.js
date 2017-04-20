@@ -17,13 +17,17 @@ exports.createService = function(models) {
         // res.locals.bundle 很重要，是当前请求的资源的数据，通过它可以读写数据
         const docId = res.locals.bundle._id;
 
-        docs[0].tableOfContents.push({
-          docId
-        });
+        docDbModel.find({_id: docId}, (err, doc) => {
+          if(doc[0].info.publishContent) {
+            docs[0].tableOfContents.push({
+              docId
+            });
 
-        docs[0].save();
+            docs[0].save();
+          }
 
-        next(); // Don't forget to call next!
+          next(); // Don't forget to call next!
+        })
       });
     });
   }

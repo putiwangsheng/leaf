@@ -45,10 +45,9 @@ class TypeRepo extends Component {
           return labelItem.labelId === this.labelId;
         })
 
-        if(label.length > 0) {
-          if(!item.isPrivate) {
-            repoList.push(item);
-          }
+        // 排除私有仓库
+        if(label.length > 0 && !item.isPrivate) {
+          repoList.push(item);
         }
       })
 
@@ -136,14 +135,18 @@ class TypeRepo extends Component {
                   {
                     teamList.map((item, index) => {
                       return (
-                        <li key={index}><Link to={`/team?teamId=${item._id}&userId=${userId}`}><img src={item.avatar} alt="" />{item.name}</Link></li>
+                        <li key={index}>
+                          <Link to={`/team?teamId=${item._id}&userId=${userId}`}>
+                            <img src={item.avatar} alt="" />
+                            <span>{item.name}</span>
+                          </Link>
+                        </li>
                       )
                     })
                   }
                 </ul>
               ) : (<p className="none-notice">暂无团队</p>)
             }
-
 
           </Card>
         </div>

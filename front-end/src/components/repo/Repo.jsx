@@ -17,7 +17,9 @@ class Repo extends Component {
       repoData: {},
       draftDocs: [],
       userInfo: {},
-      isCollected: false
+      isCollected: false,
+      avatar: '',
+      teamRepo: false
     };
 
     this.repoId = this.props.location.query.repoId;
@@ -25,10 +27,14 @@ class Repo extends Component {
   }
 
   componentDidMount() {
+    this.getData();
+  }
+
+  getData() {
     Promise.all([
       this.getRepoInfo(),
       this.getRepoDoc(),
-      this.getUserInfo()
+      this.getUserInfo(this.userId)
     ]).then(data => {
       let isCollected = this.judgeIsCollected(data[2]);
 
@@ -36,19 +42,43 @@ class Repo extends Component {
         return new Date(b.info.saveTime).getTime() - new Date(a.info.saveTime).getTime();
       })
 
+      // 创建人/团队头像
+      if(data[0].isBelongToTeam) {
+        this.getTeamInfo(data[0].teamId).then(teamInfo => {
+          this.setState({
+            avatar: teamInfo.avatar,
+            teamRepo: true
+          });
+        })
+      } else {
+        this.getUserInfo(data[0].creatorId).then(creatorInfo => {
+          this.setState({
+            avatar: creatorInfo.info.avatar
+          });
+        })
+      }
+
       this.setState({
         repoData: data[0] || {},
         draftDocs: data[1] || [],
         userInfo: data[2] || {},
         isCollected
       });
+    }).catch(err => {
+      console.log(err);
     });
   }
 
   // 获取用户信息
-  getUserInfo() {
+  getUserInfo(userId) {
     return request({
-      url: `${API}/api/user/${this.userId}`
+      url: `${API}/api/user/${userId}`
+    });
+  }
+
+  getTeamInfo(teamId) {
+    return request({
+      url: `${API}/api/team/${teamId}`
     });
   }
 
@@ -72,7 +102,6 @@ class Repo extends Component {
       url: `${API}/api/doc/${docId}`,
       method: 'delete'
     }).then(data => {
-      console.log(data);
       message.success('删除成功');
 
       this.getRepoDoc().then(data => {
@@ -144,8 +173,39 @@ class Repo extends Component {
     });
   }
 
+  renderHeader(repoData, avatar) {
+    let showAvatar = null;
+    if(avatar) {
+      showAvatar = (
+        <div className="avatar">
+          <img src={avatar} alt="" />
+        </div>
+      )
+    }
+
+    return (
+      <div className="">
+        <p className="repoName">
+          {repoData.repoName}
+        </p>
+        <p className="repoIntro">
+          {repoData.intro}
+        </p>
+
+        {
+          this.state.teamRepo ? (
+            <Tooltip title="团队仓库">
+              {showAvatar}
+            </Tooltip>
+          ) : showAvatar
+        }
+
+      </div>
+    )
+  }
+
   render() {
-    let {repoData, isCollected, draftDocs} = this.state;
+    let {repoData, isCollected, draftDocs, avatar} = this.state;
 
     let iconColorClass = isCollected ? 'collected' : '';
 
@@ -170,26 +230,18 @@ class Repo extends Component {
           <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab="目录" key="1">
               <div className="tab-pane-content">
-                <p className="repoName">
-                  {repoData.repoName}
-                </p>
-                <p className="repoIntro">
-                  {repoData.intro}
-                </p>
+                {this.renderHeader(repoData, avatar)}
+
                 <div className="docs">
-                  <EditContentTable repoId={this.repoId} />
+                  <EditContentTable repoId={this.repoId}/>
                 </div>
               </div>
             </Tabs.TabPane>
 
             <Tabs.TabPane tab="草稿" key="2">
               <div className="">
-                <p className="repoName">
-                  {repoData.repoName}
-                </p>
-                <p className="repoIntro">
-                  {repoData.intro}
-                </p>
+                {this.renderHeader(repoData, avatar)}
+
                 <div className="docs">
                   {
                     draftDocs.length ? this.renderDraftDocList() : (<p className="none-notice">暂无文档</p>)

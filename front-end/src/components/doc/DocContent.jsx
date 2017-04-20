@@ -11,6 +11,8 @@ import Bread from '../../common/Bread.jsx';
 
 import { request, API } from '../../services/request';
 
+const currentUserId = sessionStorage.getItem('userId');
+
 class DocContent extends Component {
   constructor(props) {
     super(props);
@@ -170,7 +172,8 @@ class DocContent extends Component {
         name: "仓库"
       },
       {
-        name: repoName
+        name: repoName,
+        path: `/repo?repoId=${this.repoId}&userId=${currentUserId}`
       }, {
         name: currentDoc
       }

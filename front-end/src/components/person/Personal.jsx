@@ -34,7 +34,7 @@ class Personal extends Component {
       let teamsArr = getAllMyTeams(data[2]._id, data[1]);
 
       let repoList = data[0] || [];
-      
+
       if(currentUserId !== this.userId) {
         repoList = data[0].filter((item) => {
           return !item.isPrivate;
@@ -179,7 +179,7 @@ class Personal extends Component {
         </div>
 
         <div className="right-side">
-          <Tabs defaultActiveKey="1" onChange={this.changeTab.bind(this)}>
+          <Tabs defaultActiveKey="1">
             <Tabs.TabPane tab={currentUserId === this.userId ? '我的仓库' : '他的仓库'} key="1">
               <div className="repos-wrap">
                 {
@@ -205,8 +205,6 @@ class Personal extends Component {
       </div>
     );
   }
-
-  changeTab() {}
 }
 
 // 获取个人的所有团队

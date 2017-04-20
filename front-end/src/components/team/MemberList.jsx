@@ -10,7 +10,8 @@ import {
   Input,
   Tag,
   message,
-  Icon
+  Icon,
+  Tooltip
 } from 'antd';
 
 import styles from './MemberList.less';
@@ -234,7 +235,13 @@ class MemberList extends Component {
             this.state.isManager && item.authority !== 'Owner' ? (<Icon type="edit" className="icon-edit-doc" onClick={this.modifyAuthority.bind(this, item._id)}/>) : null
           }
 
-          <span className="delete" onClick={this.deleteMember.bind(this, item._id)}>删除</span>
+          {
+            !this.state.isManager ? (
+              <Tooltip title="没有删除权限">
+                <span className="delete">删除</span>
+              </Tooltip>
+            ) : (<span className="delete" onClick={this.deleteMember.bind(this, item._id)}>删除</span>)
+          }
         </div>
       );
     }));
@@ -273,11 +280,13 @@ class MemberList extends Component {
               })
               (
               <div className="">
-                {this.state.memberList.map((item, index) => {
-                  return (
-                    <Tag key={index}>{item.info.nickName}</Tag>
-                  );
-                })}
+                {
+                  this.state.memberList.map((item, index) => {
+                    return (
+                      <Tag key={index}>{item.info.nickName}</Tag>
+                    );
+                  })
+                }
                 <Input placeholder="成员昵称"/>
               </div>
             )

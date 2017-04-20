@@ -25,6 +25,14 @@ class EditContentTable extends Component {
   }
 
   componentDidMount() {
+    this.getTableOfContents();
+  }
+
+  componentWillReceiveProps() {
+    this.getTableOfContents();
+  }
+
+  getTableOfContents() {
     const that = this;
     request({
       url: `${API}/api/repo/${this.props.repoId}`
@@ -55,9 +63,7 @@ class EditContentTable extends Component {
           })
         })
       }
-
     });
-
   }
 
   changeHoverStyle(style, index) {
