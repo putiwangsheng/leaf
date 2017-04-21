@@ -24,6 +24,7 @@ class Repo extends Component {
 
     this.repoId = this.props.location.query.repoId;
     this.userId = this.props.location.query.userId;
+    this.fromlabel = this.props.location.query.fromlabel || '';
   }
 
   componentDidMount() {
@@ -158,12 +159,12 @@ class Repo extends Component {
           </Link>
 
           <div className="operate-area">
-            <Link to={`/doc/edit?repoId=${this.repoId}&docId=${item._id}&userId=${this.userId}&flag=e`}>
-              <Icon type="edit" className="icon-edit-doc"/>
+            <Link to={`/doc/edit?repoId=${this.repoId}&docId=${item._id}&userId=${this.userId}&flag=e&fromlabel=${this.fromlabel}`}>
+              <Icon type="edit" className="icon-edit icon-edit-doc"/>
             </Link>
 
             <Popconfirm title="确定删除该文档吗？" onConfirm={this.confirmDelete.bind(this, item._id)} okText="Yes" cancelText="No">
-              <Icon type="close" className="icon-delete-doc"/>
+              <Icon type="delete" className="icon-delete"/>
             </Popconfirm>
 
             <span className="date">{item.info.saveTime}</span>
@@ -211,11 +212,15 @@ class Repo extends Component {
 
     return (
       <div className={styles.repoContainer}>
-        <Link to={`/doc/edit?repoId=${this.repoId}&userId=${this.userId}&flag=c`}>
-          <Button type="primary" className="create-doc-button">
-            新建文档
-          </Button>
-        </Link>
+        {
+          !this.fromlabel ? (
+            <Link to={`/doc/edit?repoId=${this.repoId}&userId=${this.userId}&flag=c`}>
+              <Button type="primary" className="create-doc-button">
+                新建文档
+              </Button>
+            </Link>
+          ) : null
+        }
 
         <div className="repo-content">
           <div>
@@ -233,22 +238,27 @@ class Repo extends Component {
                 {this.renderHeader(repoData, avatar)}
 
                 <div className="docs">
-                  <EditContentTable repoId={this.repoId}/>
+                  <EditContentTable repoId={this.repoId} fromlabel={this.fromlabel}/>
                 </div>
               </div>
             </Tabs.TabPane>
 
-            <Tabs.TabPane tab="草稿" key="2">
-              <div className="">
-                {this.renderHeader(repoData, avatar)}
+            {
+              !this.fromlabel ? (
+                <Tabs.TabPane tab="草稿" key="2">
+                  <div className="">
+                    {this.renderHeader(repoData, avatar)}
 
-                <div className="docs">
-                  {
-                    draftDocs.length ? this.renderDraftDocList() : (<p className="none-notice">暂无文档</p>)
-                  }
-                </div>
-              </div>
-            </Tabs.TabPane>
+                    <div className="docs">
+                      {
+                        draftDocs.length ? this.renderDraftDocList() : (<p className="none-notice">暂无文档</p>)
+                      }
+                    </div>
+                  </div>
+                </Tabs.TabPane>
+              ) : null
+            }
+
           </Tabs>
         </div>
       </div>

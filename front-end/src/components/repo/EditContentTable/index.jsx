@@ -254,13 +254,17 @@ class EditContentTable extends Component {
         {
           this.state.cards.length > 0 ? (
             <div className="">
-              <p className="notice">
-                <span className="star">*</span>拖动可进行目录设置
-              </p>
+              {
+                !this.props.fromlabel ? (
+                  <p className="notice">
+                    <span className="star">*</span>拖动可进行目录设置
+                  </p>
+                ) : null
+              }
 
               {this.renderContentList()}
             </div>
-          ) : (<p className="notice-mssage">暂无文档，赶快去创建吧~~</p>)
+          ) : (<p className="notice-mssage">暂无文档</p>)
         }
 
       </div>
@@ -278,7 +282,7 @@ class EditContentTable extends Component {
 
       return (
         <div className={`rank${item.rank}${this.getHoverClass(item)}`} key={i}>
-          <Link to={`/doc/view?repoId=${this.props.repoId}&docId=${item.id}&flag=publish`}>
+          <Link to={`/doc/view?repoId=${this.props.repoId}&docId=${item.id}&flag=publish&fromlabel=${this.props.fromlabel}`}>
             <Card
               key={item.id}
               index={i}

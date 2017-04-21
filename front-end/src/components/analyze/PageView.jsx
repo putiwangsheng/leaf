@@ -87,7 +87,8 @@ class PageView extends Component {
     this.state = {
       docs: [],
       lineData: [],
-      pieData: []
+      pieData: [],
+      noData: false
     }
 
     this.userId = this.props.location.query.userId;
@@ -100,6 +101,13 @@ class PageView extends Component {
         let docs = data[0];
         let repos = data[1];
         let labels = data[2];
+        
+        if(!docs.length || !repos.length) {
+          this.setState({
+            noData: true
+          });
+          return;
+        }
 
         // 已经正式发布的文档
         let publishDocs = docs.filter((item) => {
@@ -108,6 +116,7 @@ class PageView extends Component {
 
         // 默认第一篇文档
         let firstDoc = publishDocs[0] ? publishDocs[0] : {};
+        firstDoc.info = firstDoc.info ? firstDoc.info : {};
         this.docTitle = firstDoc.info.title;
         let dataArr = this.formatLineData(firstDoc);
 
@@ -212,7 +221,7 @@ class PageView extends Component {
   }
 
   render() {
-    let { lineData, pieData } = this.state;
+    let { lineData, pieData, noData } = this.state;
 
     const plotCfg = {
       margin: [90, 0, 100, 0]
@@ -227,7 +236,7 @@ class PageView extends Component {
         forceFit={true}
       />)
     } else {
-      line = (<div className="loading"><Spin /></div>);
+      line = noData ? (<p className="notice">暂无数据</p>) : (<div className="loading"><Spin /></div>);
     }
 
     let pie;
@@ -240,7 +249,7 @@ class PageView extends Component {
         forceFit={true}
       />)
     } else {
-      pie = (<div className="loading"><Spin /></div>);
+      pie = noData ? (<p className="notice">暂无数据</p>) : (<div className="loading"><Spin /></div>);
     }
 
     return (
@@ -249,13 +258,18 @@ class PageView extends Component {
           <p className="title">文章浏览量趋势</p>
           <p className="doc-title">{this.docTitle}</p>
 
-          <div className="search" style={{float: 'right'}}>
-            <Search
-              placeholder="搜索文章"
-              style={{ width: 200 }}
-              onSearch={this.handleSearch.bind(this)}
-            />
-          </div>
+          {
+            lineData.length ? (
+              <div className="search" style={{float: 'right'}}>
+                <Search
+                  placeholder="搜索文章"
+                  style={{ width: 200 }}
+                  onSearch={this.handleSearch.bind(this)}
+                />
+              </div>
+            ) : null
+          }
+
           <div className="linechart-wrapper">
             {line}
           </div>

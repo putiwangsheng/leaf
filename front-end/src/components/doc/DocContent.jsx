@@ -27,6 +27,7 @@ class DocContent extends Component {
     this.docId = this.props.location.query.docId;
     this.repoId = this.props.location.query.repoId;
     this.flag = this.props.location.query.flag;
+    this.fromlabel = this.props.location.query.fromlabel || '';
 
     this.pageView = 0;
     this.todayPageView = 0;
@@ -173,7 +174,7 @@ class DocContent extends Component {
       },
       {
         name: repoName,
-        path: `/repo?repoId=${this.repoId}&userId=${currentUserId}`
+        path: `/repo?repoId=${this.repoId}&userId=${currentUserId}&fromlabel=${this.fromlabel}`
       }, {
         name: currentDoc
       }

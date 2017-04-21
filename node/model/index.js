@@ -57,6 +57,10 @@ exports.setRestApi = function (app) {
       service.deleteDocInTOC(resource);
     }
 
+    if (item.name === 'repo') {
+      service.deleteRepoInTOC(resource);
+    }
+
     // must register at end
     resource.register(app, '/api/' + item.name);
   });

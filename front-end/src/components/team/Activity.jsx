@@ -39,7 +39,8 @@ class Activity extends Component {
 
     this.state = {
       data: [],
-      chartData: []
+      chartData: [],
+      noData: false
     }
 
     this.teamId = this.props.location.query.teamId;
@@ -71,6 +72,13 @@ class Activity extends Component {
       .then(resData => {
         let teamMembers = resData[0].members;
         let teamRepos = resData[1];
+
+        if(!teamMembers.length || !teamRepos.length) {
+          this.setState({
+            noData: true
+          })
+          return;
+        }
 
         let getDocFunArr = [];
         teamRepos.forEach((item) => {
@@ -216,7 +224,7 @@ class Activity extends Component {
   }
 
   render() {
-    let { data, chartData } = this.state;
+    let { data, chartData, noData } = this.state;
 
     const dataSource = [
       {
@@ -245,7 +253,7 @@ class Activity extends Component {
         forceFit={true}
       />)
     } else {
-      bar = (<div className="loading"><Spin /></div>);
+      bar = noData ? (<p className="notice">暂无数据</p>) : (<div className="loading"><Spin /></div>);
     }
 
     return (
@@ -253,6 +261,7 @@ class Activity extends Component {
         <Bread dataSource={dataSource} />
 
         <div className="chart">
+          <p className="chart-title">成员发布文章数</p>
           {bar}
         </div>
 

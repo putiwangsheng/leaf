@@ -117,7 +117,7 @@ class TypeRepo extends Component {
                   {
                     repoList.map((item, index) => {
                       return (
-                        <li key={index}><Link to={`/repo?repoId=${item._id}&userId=${userId}`}>{item.repoName}</Link></li>
+                        <li key={index}><Link to={`/repo?repoId=${item._id}&userId=${userId}&fromlabel=true`}>{item.repoName}</Link></li>
                       )
                     })
                   }
@@ -137,8 +137,19 @@ class TypeRepo extends Component {
                       return (
                         <li key={index}>
                           <Link to={`/team?teamId=${item._id}&userId=${userId}`}>
-                            <img src={item.avatar} alt="" />
-                            <span>{item.name}</span>
+                            {
+                              item.avatar ? (
+                                <div className="avatar-wrapper">
+                                  <img src={item.avatar} alt="" className="team-avatar"/>
+                                  <span>{item.name}</span>
+                                </div>
+                              ) : (
+                                <div className="avatar-wrapper">
+                                  <div className="default-avatar">T</div>
+                                  <span>{item.name}</span>
+                                </div>
+                              )
+                            }
                           </Link>
                         </li>
                       )

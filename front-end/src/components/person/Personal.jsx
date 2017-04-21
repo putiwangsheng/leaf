@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import {Tabs, Icon} from 'antd';
+import {Tabs, Icon, Popconfirm, message, Tooltip} from 'antd';
 
 import styles from './Personal.less';
 
@@ -81,6 +81,25 @@ class Personal extends Component {
     });
   }
 
+  // 删除个人仓库
+  confirmDeleteRepo(repoId) {
+    console.log(repoId)
+    request({
+      url: `${API}/api/repo/${repoId}`,
+      method: 'delete'
+    }).then(data => {
+      message.success('删除成功');
+
+      this.getRepoList(this.userId).then(repos => {
+        const repoList = repos || [];
+
+        this.setState({
+          repoList
+        })
+      })
+    });
+  }
+
   // 渲染收藏列表
   renderCollectionList() {
     let collections = getCollectedRepos(this.state.collections, this.state.allRepos);
@@ -97,7 +116,6 @@ class Personal extends Component {
     } else {
       return ((<p className="notice">暂无收藏</p>))
     }
-
   }
 
   render() {
@@ -164,7 +182,18 @@ class Personal extends Component {
                     {
                       teams.map(item => {
                         return (
-                          <Link to={`/team?teamId=${item._id}&userId=${this.userId}`} key={item._id}><img src={item.avatar} alt="" className="team-avatar"/>
+                          <Link to={`/team?teamId=${item._id}&userId=${this.userId}`} key={item._id}>
+                            <Tooltip title={item.name}>
+                              {
+                                item.avatar ? (
+                                  <div className="avatar-wrapper">
+                                    <img src={item.avatar} alt="" className="team-avatar"/>
+                                  </div>
+                                ) : (
+                                  <div className="default-avatar">T</div>
+                                )
+                              }
+                            </Tooltip>
                           </Link>
                         );
                       })
@@ -174,7 +203,7 @@ class Personal extends Component {
               ) : null
             }
 
-            <p className="notice" style={{display: showMessage}}>暂且没有加入任何团队哦</p>
+            <p className="notice" style={{display: showMessage}}>暂且没有加入任何团队</p>
           </div>
         </div>
 
@@ -189,11 +218,19 @@ class Personal extends Component {
                         <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`} >
                           {item.repoName}
                         </Link>
+
+                        {
+                          currentUserId === this.userId ? (
+                            <Popconfirm title="确定删除该仓库吗？" onConfirm={this.confirmDeleteRepo.bind(this, item._id)} okText="Yes" cancelText="No">
+                              <Icon type="delete" className="icon-delete"/>
+                            </Popconfirm>
+                          ) : null
+                        }
+
                       </p>
                     );
                   }) : (<p className="notice">暂且没有创建任何仓库</p>)
                 }
-
               </div>
             </Tabs.TabPane>
 

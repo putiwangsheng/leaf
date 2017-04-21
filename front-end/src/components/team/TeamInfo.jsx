@@ -158,7 +158,7 @@ class TeamInfo extends Component {
                     </div>
                   </div>
                 )
-              })) : null
+              })) : (<p className="notice">暂无仓库</p>)
             }
           </Card>
         </div>

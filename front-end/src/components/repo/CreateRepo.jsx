@@ -74,11 +74,10 @@ class CreateRepo extends Component {
           method: 'post',
           body: values
         }).then(data => {
-          console.log(data);
           if(this.isBelongToTeam) {
             browserHistory.push(`/team?teamId=${this.teamId}&userId=${this.userId}&flag=repos`);
           }
-          browserHistory.push(`/`);
+          browserHistory.push(`/person?userId=${this.userId}`);
         });
       }
     });

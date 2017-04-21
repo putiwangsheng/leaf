@@ -98,39 +98,42 @@ class MemberList extends Component {
     let that = this;
 
     this.props.form.validateFields((err, values) => {
+      console.log(values)
       if (!err) {
         this.getUserInfo().then(allMembers => {
-          allMembers.forEach(item => {
-            if (item.info.nickName === values.memberName || item.info.name === values.memberName) {
-              let addMemberId = item._id;
-              let body = that.state.teamInfo;
-              let memberObj = {
-                authority: 'Member',
-                userId: addMemberId
-              }
-              body.members.push(memberObj);
+          const memberAdded = allMembers.filter((item) => {
+            return item.info.nickName === values.memberName || item.info.name === values.memberName;
+          })
 
-              request({
-                url: `${API}/api/team/${body._id}`,
-                method: 'put',
-                body: body
-              }).then(data => {
-                that.fetchTeamData();
+          if(!memberAdded.length) {
+            message.warning('无法找到该成员的信息！', 2);
+            return;
+          }
 
-                this.setState({visible: false});
-              });
-            } else {
-              message.warning('无法找到该成员的信息！', 2);
-            }
+          let addMemberId = memberAdded[0]._id;
+          let body = that.state.teamInfo;
+          let memberObj = {
+            authority: 'Member',
+            userId: addMemberId
+          }
+          body.members.push(memberObj);
+
+          request({
+            url: `${API}/api/team/${body._id}`,
+            method: 'put',
+            body: body
+          }).then(data => {
+            that.fetchTeamData();
+
+            this.setState({visible: false});
           });
         });
-
       }
     });
   }
 
   handleCancel(e) {
-    this.props.form.resetFields();
+    // this.props.form.resetFields();
     this.setState({visible: false});
   }
 
@@ -150,6 +153,7 @@ class MemberList extends Component {
       method: 'put',
       body: this.state.teamInfo
     }).then(data => {
+      message.warning("删除成功");
       this.fetchTeamData();
     });
   }
@@ -238,9 +242,13 @@ class MemberList extends Component {
           {
             !this.state.isManager ? (
               <Tooltip title="没有删除权限">
-                <span className="delete">删除</span>
+                <Icon type="delete" className="delete icon-delete"/>
               </Tooltip>
-            ) : (<span className="delete" onClick={this.deleteMember.bind(this, item._id)}>删除</span>)
+            ) : item.authority !== 'Owner' ? (<Icon type="delete" className="delete icon-delete" onClick={this.deleteMember.bind(this, item._id)}/>) : (
+              <Tooltip title="无法删除Owner">
+                <Icon type="delete" className="delete"/>
+              </Tooltip>
+            )
           }
         </div>
       );
