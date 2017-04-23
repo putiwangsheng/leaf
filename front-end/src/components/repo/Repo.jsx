@@ -9,6 +9,8 @@ import styles from './Repo.less';
 
 import { request, API } from '../../services/request';
 
+const currentUserId = sessionStorage.getItem('userId');
+
 class Repo extends Component {
   constructor(props) {
     super(props);
@@ -23,8 +25,9 @@ class Repo extends Component {
     };
 
     this.repoId = this.props.location.query.repoId;
-    this.userId = this.props.location.query.userId;
+    this.userId = sessionStorage.getItem('userId');
     this.fromlabel = this.props.location.query.fromlabel || '';
+    this.guide = this.props.location.query.guide || '';
   }
 
   componentDidMount() {
@@ -43,21 +46,12 @@ class Repo extends Component {
         return new Date(b.info.saveTime).getTime() - new Date(a.info.saveTime).getTime();
       })
 
-      // 创建人/团队头像
-      if(data[0].isBelongToTeam) {
-        this.getTeamInfo(data[0].teamId).then(teamInfo => {
-          this.setState({
-            avatar: teamInfo.avatar,
-            teamRepo: true
-          });
-        })
-      } else {
-        this.getUserInfo(data[0].creatorId).then(creatorInfo => {
-          this.setState({
-            avatar: creatorInfo.info.avatar
-          });
-        })
-      }
+      // 创建人头像
+      this.getUserInfo(data[0].creatorId).then(creatorInfo => {
+        this.setState({
+          avatar: creatorInfo.info.avatar
+        });
+      })
 
       this.setState({
         repoData: data[0] || {},
@@ -175,6 +169,10 @@ class Repo extends Component {
   }
 
   renderHeader(repoData, avatar) {
+    const { userInfo } = this.state;
+
+    userInfo.info = userInfo.info || {};
+
     let showAvatar = null;
     if(avatar) {
       showAvatar = (
@@ -194,11 +192,9 @@ class Repo extends Component {
         </p>
 
         {
-          this.state.teamRepo ? (
-            <Tooltip title="团队仓库">
-              {showAvatar}
-            </Tooltip>
-          ) : showAvatar
+          <Tooltip title={userInfo.info.name || userInfo.info.nickName}>
+            {showAvatar}
+          </Tooltip>
         }
 
       </div>
@@ -213,13 +209,13 @@ class Repo extends Component {
     return (
       <div className={styles.repoContainer}>
         {
-          !this.fromlabel ? (
+          this.fromlabel || this.guide ? null : (
             <Link to={`/doc/edit?repoId=${this.repoId}&userId=${this.userId}&flag=c`}>
               <Button type="primary" className="create-doc-button">
                 新建文档
               </Button>
             </Link>
-          ) : null
+          )
         }
 
         <div className="repo-content">
@@ -238,13 +234,13 @@ class Repo extends Component {
                 {this.renderHeader(repoData, avatar)}
 
                 <div className="docs">
-                  <EditContentTable repoId={this.repoId} fromlabel={this.fromlabel}/>
+                  <EditContentTable repoId={this.repoId} fromlabel={this.fromlabel} guide={this.guide}/>
                 </div>
               </div>
             </Tabs.TabPane>
 
             {
-              !this.fromlabel ? (
+              this.fromlabel || this.guide ? null : (
                 <Tabs.TabPane tab="草稿" key="2">
                   <div className="">
                     {this.renderHeader(repoData, avatar)}
@@ -256,7 +252,7 @@ class Repo extends Component {
                     </div>
                   </div>
                 </Tabs.TabPane>
-              ) : null
+              )
             }
 
           </Tabs>

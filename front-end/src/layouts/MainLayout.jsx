@@ -151,7 +151,7 @@ class MainLayout extends Component {
 
           <Row className="right" gutter={24}>
             <Col span={4}>
-              <Link to='/repo?repoId=58f1fea0248938228f1f62f8&userId=58d13a61edf6b423f7c8a966'>指南</Link>
+              <Link to='/repo?repoId=58f1fea0248938228f1f62f8&userId=58d13a61edf6b423f7c8a966&guide=true'>指南</Link>
             </Col>
 
             <Col span={5}>

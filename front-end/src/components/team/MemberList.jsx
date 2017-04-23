@@ -242,7 +242,7 @@ class MemberList extends Component {
           {
             !this.state.isManager ? (
               <Tooltip title="没有删除权限">
-                <Icon type="delete" className="delete icon-delete"/>
+                <Icon type="delete" className="delete"/>
               </Tooltip>
             ) : item.authority !== 'Owner' ? (<Icon type="delete" className="delete icon-delete" onClick={this.deleteMember.bind(this, item._id)}/>) : (
               <Tooltip title="无法删除Owner">

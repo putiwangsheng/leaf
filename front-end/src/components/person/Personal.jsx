@@ -35,8 +35,12 @@ class Personal extends Component {
 
       let repoList = data[0] || [];
 
+      repoList = data[0].filter((item) => {
+        return !item.isBelongToTeam;
+      })
+
       if(currentUserId !== this.userId) {
-        repoList = data[0].filter((item) => {
+        repoList = repoList.filter((item) => {
           return !item.isPrivate;
         })
       }
@@ -53,6 +57,7 @@ class Personal extends Component {
       console.log(err);
     });
   }
+
 
   // 获取用户信息
   getUserInfo() {
@@ -83,7 +88,6 @@ class Personal extends Component {
 
   // 删除个人仓库
   confirmDeleteRepo(repoId) {
-    console.log(repoId)
     request({
       url: `${API}/api/repo/${repoId}`,
       method: 'delete'
@@ -103,11 +107,17 @@ class Personal extends Component {
   // 渲染收藏列表
   renderCollectionList() {
     let collections = getCollectedRepos(this.state.collections, this.state.allRepos);
+
     if(collections.length) {
       return collections.map((item, index) => {
+        let url = `/repo?repoId=${item._id}&userId=${this.userId}`;
+        if(currentUserId !== this.userId && this.state.userInfo.name !== '刘丽佳') {
+          url = `/repo?repoId=${item._id}&userId=${this.userId}&guide=true`;
+        }
+
         return (
           <div className="collections-wrap" key={item._id}>
-            <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`}>
+            <Link to={url}>
               {item.repoName}
             </Link>
           </div>
@@ -213,9 +223,14 @@ class Personal extends Component {
               <div className="repos-wrap">
                 {
                   repoList.length ? repoList.map(item => {
+                    let url = `/repo?repoId=${item._id}&userId=${this.userId}`;
+                    if(currentUserId !== this.userId && userInfo.name !== '刘丽佳') {
+                      url = `/repo?repoId=${item._id}&userId=${this.userId}&guide=true`;
+                    }
+
                     return (
                       <p key={item._id}>
-                        <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`} >
+                        <Link to={url} >
                           {item.repoName}
                         </Link>
 

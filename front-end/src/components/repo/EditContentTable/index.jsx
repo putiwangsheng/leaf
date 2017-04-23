@@ -255,11 +255,11 @@ class EditContentTable extends Component {
           this.state.cards.length > 0 ? (
             <div className="">
               {
-                !this.props.fromlabel ? (
+                this.props.fromlabel || this.props.guide ? null : (
                   <p className="notice">
                     <span className="star">*</span>拖动可进行目录设置
                   </p>
-                ) : null
+                )
               }
 
               {this.renderContentList()}

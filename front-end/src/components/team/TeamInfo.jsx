@@ -113,7 +113,7 @@ class TeamInfo extends Component {
     }
 
     if(labelName === '其他') {
-      color = '#ebf8f2';
+      color = '#ff9499';
     }
 
     return color;

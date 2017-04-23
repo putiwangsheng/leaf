@@ -85,11 +85,13 @@ exports.createService = function(models) {
             if (index === -1) {
               next();
               return;
+            } else {
+              docDbModel.remove({_id: docs[index]._id}, (err) => {
+                console.log(err);
+              })
             }
-
-            docs.splice(index, 1);
           })
-          
+
           next();
         })
       });

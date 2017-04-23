@@ -98,6 +98,13 @@ class Activity extends Component {
             docs = docs.concat(item);
           })
 
+          if(!docs.length) {
+            this.setState({
+              noData: true
+            })
+            return;
+          }
+
           let data = this.formTableData(docs, teamMembers);
 
           Promise.all(getUserFunArr).then(users => {
@@ -209,6 +216,8 @@ class Activity extends Component {
       let personData = data.filter((dataItem) => {
         return item.userId === dataItem.creatorId;
       })
+
+      console.log(personData)
 
       let hasPublishDoc = data.filter((dataItem) => {
         return item.userId === dataItem.creatorId && !!dataItem.docId;
