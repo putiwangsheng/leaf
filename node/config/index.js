@@ -1,4 +1,4 @@
 module.exports = {
   port: '80',
-  mongoUrl: '127.0.0.1:27019/leaf'
+  mongoUrl: '121.40.224.83:27019/leaf'
 }
