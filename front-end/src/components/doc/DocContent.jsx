@@ -57,10 +57,11 @@ class DocContent extends Component {
           }
         });
 
+        let info = JSON.parse(JSON.stringify(docInfo.info));
         if (this.flag === 'publish') {
-          docInfo.info.publishContent = marked(docInfo.info.publishContent);
+          info.publishContent = marked(docInfo.info.publishContent);
         } else if (this.flag === 'draft') {
-          docInfo.info.draftContent = marked(docInfo.info.draftContent);
+          info.draftContent = marked(docInfo.info.draftContent);
         }
 
         // 为目录数据增加题目(by docId)
@@ -74,7 +75,7 @@ class DocContent extends Component {
 
         this.updatePageView(docInfo);
 
-        this.setState({docContent: docInfo.info, tableContent, repoName, currentDoc: docInfo.info.title});
+        this.setState({docContent: info, tableContent, repoName, currentDoc: docInfo.info.title});
       }, (err) => {
         console.log(err);
       })
@@ -146,15 +147,16 @@ class DocContent extends Component {
           }
         })
 
+        let info = JSON.parse(JSON.stringify(docInfo.info));
         if (this.flag === 'publish') {
-          docInfo.info.publishContent = marked(docInfo.info.publishContent);
+          info.publishContent = marked(docInfo.info.publishContent);
         } else if (this.flag === 'draft') {
-          docInfo.info.draftContent = marked(docInfo.info.draftContent);
+          info.draftContent = marked(docInfo.info.draftContent);
         }
 
         this.updatePageView(docInfo);
 
-        this.setState({docContent: docInfo.info, currentDoc: docInfo.info.title});
+        this.setState({docContent: info, currentDoc: docInfo.info.title});
     })
   }
 

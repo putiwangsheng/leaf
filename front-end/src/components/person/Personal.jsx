@@ -191,7 +191,11 @@ class Personal extends Component {
                   <div className="avatars">
                     {
                       teams.map(item => {
-                        return (
+                        const isTeamMember = item.members.some(element => {
+                          return element.userId === currentUserId;
+                        })
+                        
+                        return item.isPrivate && !isTeamMember ? null : (
                           <Link to={`/team?teamId=${item._id}&userId=${this.userId}`} key={item._id}>
                             <Tooltip title={item.name}>
                               {

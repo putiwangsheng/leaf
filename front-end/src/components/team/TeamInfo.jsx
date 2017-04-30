@@ -22,6 +22,8 @@ import {request, API} from '../../services/request';
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+const currentUserId = sessionStorage.getItem('userId');
+
 class TeamInfo extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +41,7 @@ class TeamInfo extends Component {
     Promise.all([this.fetchTeamData(), this.fetchTeamRepos()]).then(data => {
       let teamData = data[0];
       let teamRepos = data[1];
-      console.log(data)
+
       // 团队仓库
       this.setState({teamRepos});
 
@@ -147,7 +149,11 @@ class TeamInfo extends Component {
           <Card title="团队仓库列表" extra={<Link to={`/team/member?teamId=${this.teamId}&userId=${this.userId}`}><Icon type="setting" />成员权限</Link>} className="repo-list">
             {
               teamRepos.length > 0 ? teamRepos.map((item => {
-                return (
+                const isTeamMember = memberList.some(element => {
+                  return element._id === currentUserId;
+                })
+                
+                return item.isPrivate && !isTeamMember ? null : (
                   <div key={item._id} className="repo-item">
                     <Link to={`/repo?repoId=${item._id}&userId=${this.userId}`}>
                       {item.repoName}

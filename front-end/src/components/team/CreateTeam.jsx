@@ -33,7 +33,7 @@ class CreateTeam extends Component {
           body: values
         }).then(data => {
           console.log(data);
-          browserHistory.push(`${API}/person?userId=${this.userId}`);
+          browserHistory.push(`/person?userId=${this.userId}`);
         });
       }
     });
