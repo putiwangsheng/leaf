@@ -43,7 +43,7 @@ function setHeader(app) {
   });
 }
 
-app.get('*', function (req, res) {
+app.get(/^\/(?!api\/).*/, function (req, res) {
   res.render('index', function (err, html) {
     res.send(html);
   });
