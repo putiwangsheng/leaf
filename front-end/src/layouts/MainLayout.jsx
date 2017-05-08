@@ -123,7 +123,15 @@ class MainLayout extends Component {
       method: 'post',
       body: body
     }).then(data => {
-      console.log(data);
+      // 获取生成的 _id
+      request({url: `${API}/api/user?openId=${openId}`})
+        .then(data => {
+          sessionStorage.setItem('userId', data[0]._id);
+
+          this.setState({
+            userId: data[0]._id
+          })
+        });
     });
   }
 

@@ -8,8 +8,6 @@ import Bread from '../../common/Bread.jsx';
 
 import { request, API } from '../../services/request';
 
-const currentUserId = sessionStorage.getItem('userId');
-
 class Personal extends Component {
   constructor(props) {
     super(props);
@@ -23,6 +21,7 @@ class Personal extends Component {
     };
 
     this.userId = this.props.location.query.userId;
+    this.currentUserId = sessionStorage.getItem('userId');
   }
 
   componentDidMount() {
@@ -39,7 +38,7 @@ class Personal extends Component {
         return !item.isBelongToTeam;
       })
 
-      if(currentUserId !== this.userId) {
+      if(this.currentUserId !== this.userId) {
         repoList = repoList.filter((item) => {
           return !item.isPrivate;
         })
@@ -111,7 +110,7 @@ class Personal extends Component {
     if(collections.length) {
       return collections.map((item, index) => {
         let url = `/repo?repoId=${item._id}&userId=${this.userId}`;
-        if(currentUserId !== this.userId && this.state.userInfo.name !== '刘丽佳') {
+        if(this.currentUserId !== this.userId && this.state.userInfo.name !== '刘丽佳') {
           url = `/repo?repoId=${item._id}&userId=${this.userId}&guide=true`;
         }
 
@@ -149,7 +148,7 @@ class Personal extends Component {
         <div className="left-side">
           <div className="personal-info">
             {
-              currentUserId === this.userId ? (
+              this.currentUserId === this.userId ? (
                 <Link to={`/person/edit?userId=${this.userId}`}>
                   <Icon type="edit" className="icon-edit"/>
                 </Link>
@@ -192,9 +191,9 @@ class Personal extends Component {
                     {
                       teams.map(item => {
                         const isTeamMember = item.members.some(element => {
-                          return element.userId === currentUserId;
+                          return element.userId === this.currentUserId;
                         })
-                        
+
                         return item.isPrivate && !isTeamMember ? null : (
                           <Link to={`/team?teamId=${item._id}&userId=${this.userId}`} key={item._id}>
                             <Tooltip title={item.name}>
@@ -223,12 +222,12 @@ class Personal extends Component {
 
         <div className="right-side">
           <Tabs defaultActiveKey="1">
-            <Tabs.TabPane tab={currentUserId === this.userId ? '我的仓库' : '他的仓库'} key="1">
+            <Tabs.TabPane tab={this.currentUserId === this.userId ? '我的仓库' : '他的仓库'} key="1">
               <div className="repos-wrap">
                 {
                   repoList.length ? repoList.map(item => {
                     let url = `/repo?repoId=${item._id}&userId=${this.userId}`;
-                    if(currentUserId !== this.userId && userInfo.name !== '刘丽佳') {
+                    if(this.currentUserId !== this.userId && userInfo.name !== '刘丽佳') {
                       url = `/repo?repoId=${item._id}&userId=${this.userId}&guide=true`;
                     }
 
@@ -239,7 +238,7 @@ class Personal extends Component {
                         </Link>
 
                         {
-                          currentUserId === this.userId ? (
+                          this.currentUserId === this.userId ? (
                             <Popconfirm title="确定删除该仓库吗？" onConfirm={this.confirmDeleteRepo.bind(this, item._id)} okText="Yes" cancelText="No">
                               <Icon type="delete" className="icon-delete"/>
                             </Popconfirm>
@@ -253,7 +252,7 @@ class Personal extends Component {
               </div>
             </Tabs.TabPane>
 
-            <Tabs.TabPane tab={currentUserId === this.userId ? '我的收藏' : '他的收藏'} key="2">
+            <Tabs.TabPane tab={this.currentUserId === this.userId ? '我的收藏' : '他的收藏'} key="2">
               {this.renderCollectionList()}
             </Tabs.TabPane>
           </Tabs>

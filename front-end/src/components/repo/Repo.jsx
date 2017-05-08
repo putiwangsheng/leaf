@@ -9,8 +9,6 @@ import styles from './Repo.less';
 
 import { request, API } from '../../services/request';
 
-const currentUserId = sessionStorage.getItem('userId');
-
 class Repo extends Component {
   constructor(props) {
     super(props);
@@ -21,6 +19,7 @@ class Repo extends Component {
       userInfo: {},
       isCollected: false,
       avatar: '',
+      name: '',
       teamRepo: false
     };
 
@@ -28,6 +27,7 @@ class Repo extends Component {
     this.userId = sessionStorage.getItem('userId');
     this.fromlabel = this.props.location.query.fromlabel || '';
     this.guide = this.props.location.query.guide || '';
+    this.currentUserId = sessionStorage.getItem('userId');
   }
 
   componentDidMount() {
@@ -49,7 +49,8 @@ class Repo extends Component {
       // 创建人头像
       this.getUserInfo(data[0].creatorId).then(creatorInfo => {
         this.setState({
-          avatar: creatorInfo.info.avatar
+          avatar: creatorInfo.info.avatar,
+          name: creatorInfo.info.name || creatorInfo.info.nickName
         });
       })
 
@@ -192,7 +193,7 @@ class Repo extends Component {
         </p>
 
         {
-          <Tooltip title={userInfo.info.name || userInfo.info.nickName}>
+          <Tooltip title={this.state.name} overlayClassName="repo-tooltip">
             {showAvatar}
           </Tooltip>
         }
